@@ -1,0 +1,55 @@
+<?php
+
+return [
+    'why' => 'Why use :name?',
+    'sub_why' => 'Advantages of :name over others?',
+    'adv_1' => 'Thumbnail Options',
+    'adv_desc_1' => 'Only in our service, you get various button options and unique thumbnail feature.',
+    'adv_2' => 'Powerful Servers',
+    'adv_desc_2' => 'We utilize 100% server services from Google, ensuring strong performance with minimal downtime.',
+    'adv_3' => 'No Limits',
+    'adv_desc_3' => 'We have no restrictions on the number of link creations, and all button features are free.',
+    'adv_4' => 'Customizable Buttons',
+    'adv_desc_4' => 'You can customize and name your buttons!',
+    'adv_5' => 'User-Friendly',
+    'adv_desc_5' => 'Very easy to create and share links with others!',
+    'adv_6' => 'Database',
+    'adv_desc_6' => 'We always store all the information you entered, and you can download your last input data.',
+
+    'how_work' => 'How does it work?',
+    'sub_how' => ':name is designed to optimize subscriptions for you.',
+    'step_1' => 'Create Link',
+    'step_desc_1' => 'Generate a link without the need for an account.',
+    'step_2' => 'Share Link',
+    'step_desc_2' => 'Share it in the description or YouTube community page.',
+    'step_3' => 'Gain Subscribers',
+    'step_desc_3' => 'Easily gain a lot of subscribers.',
+
+    'saying' => 'What are they saying?',
+    'sub_saying' => 'Testimonials from some :name users',
+    'saying_1' => ':name is very easy to use; I have gained a lot of subscribers...',
+    'saying_2' => 'The buttons are comprehensive; you rarely find it on other websites.',
+    'saying_3' => 'I can find the links I created before; this is not very easy, is it?',
+    'saying_4' => 'Thanks to :name, I have gained many subscribers.',
+
+    'increase' => 'Increase your subscribers with :name',
+    'sub_increase' => ':name makes your subscriber count grow faster!',
+    'start' => 'Get Started!',
+
+    'faq' => 'Frequently Asked Questions',
+    'sub_faq' => '*Some frequently asked questions from users.',
+    'question_1' => 'Is this website free?',
+    'answer_1' => 'Yes! This website is completely free; everyone can use it anytime.',
+    'question_2' => 'Is this service safe?',
+    'answer_2' => 'Very safe! This service only converts the downloader into completing steps to download.',
+    'question_3' => 'Can we shorten all links?',
+    'answer_3' => 'Yes, you can create links anytime; all links are allowed here.',
+    'question_4' => 'Is there any limit for link creation?',
+    'answer_4' => 'No! We do not set any limits for that; you can create as many links as you want.',
+    'question_5' => '##',
+    'answer_5' => 'Reply: ##',
+    'cookies_description' => 'Our website uses cookies to improve your experience.',
+    'learn_more' => 'Learn more',
+    'accept' => 'Accept!'
+            
+];

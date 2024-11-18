@@ -1,0 +1,1 @@
+{{-- <div class="adB" data-text="Ads go here"></div> --}}

@@ -1,0 +1,279 @@
+/* ===== Google Font Import - Poformsins ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+/* core */
+body {
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: 100vh;
+    overflow-x: hidden;
+}
+svg {
+    width: 28px;
+    height: 28px;
+    fill: #999;
+}
+svg.line, svg .line {
+    fill: none!important;
+    stroke: #999;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+}
+.hide {
+    display: none !important;
+}
+input[disabled], input[readonly] {
+    background: #f8f8f8 !important;
+    cursor: not-allowed;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10+ and Edge */
+    user-select: none; /* Standard syntax */
+}
+.hidden {
+    display: none !important;
+}
+.auth-inner::before {
+    width: 238px;
+    height: 233px;
+    content: " ";
+    position: absolute;
+    z-index: -1;
+    top: -95px;
+    left: -40px;
+    background-image: url("data:image/svg+xml,%3Csvg width='239' height='234' viewBox='0 0 239 234' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='88.5605' y='0.700195' width='149' height='149' rx='19.5' stroke='%237367F0' stroke-opacity='0.16'/%3E%3Crect x='0.621094' y='33.761' width='200' height='200' rx='10' fill='%237367F0' fill-opacity='0.08'/%3E%3C/svg%3E%0A")
+}
+
+.auth-inner::after {
+    width: 180px;
+    height: 180px;
+    content: " ";
+    position: absolute;
+    z-index: -1;
+    bottom: -70px;
+    right: -56px;
+    background-image: url("data:image/svg+xml,%3Csvg width='181' height='181' viewBox='0 0 181 181' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1.30469' y='1.44312' width='178' height='178' rx='19' stroke='%237367F0' stroke-opacity='0.16' stroke-width='2' stroke-dasharray='8 8'/%3E%3Crect x='22.8047' y='22.9431' width='135' height='135' rx='10' fill='%237367F0' fill-opacity='0.08'/%3E%3C/svg%3E")
+}
+.container {
+    width: 100%;
+    margin: auto;
+}
+
+.auth-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 100%;
+    padding: 1.5rem !important;
+    overflow: hidden;
+}
+.auth-wrapper .auth-inner {
+    position: relative;
+    width: 480px;
+}
+
+.form {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(231, 234, 243, 0.7);
+    padding: 30px 25px
+}
+
+/* .container .signup{
+    opacity: 0;
+    transition: opacity 0.09s ease;
+}
+.container.active .signup{
+    opacity: 1;
+    transition: opacity 0.2s ease;
+} */
+
+.form .form-header__title {
+    position: relative;
+    font-size: 27px;
+    font-weight: 600;
+    margin-bottom: 32px;
+}
+
+.form .form-header__title::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 30px;
+    background-color: #377dff;
+    border-radius: 25px;
+}
+.form-label {
+    display: block;
+    margin-bottom: 7px;
+}
+.input-icon {
+    position: relative;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 12px 12px;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.4285714286;
+    outline: 0;
+    color: #182433;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #dce1e7;
+    border-radius: 6px;
+    box-shadow: 0 1px 1px rgba(24, 36, 51, 0.06);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    margin-bottom: 10px;
+}
+
+.input-icon .form-control {
+    padding-right: 2.5rem;
+}
+
+.input-icon .form-control:focus{
+    border-color: #377dff;
+}
+
+.input-icon-addon:last-child {
+    right: 0;
+    left: auto;
+}
+
+.input-icon-addon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    color: #8a97ab;
+    font-size: 1.2em;
+}
+
+.form .form-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    outline: none;
+    border: none;
+    border-radius: 4px;
+    background-color: #377dff;
+    color: #e8ebee;
+    font-size: 17px;
+    font-weight: 500;
+    box-shadow: 0 1px 1px rgba(220, 225, 231, 0.06);
+    transition: all 0.4s;
+}
+
+.form-control + .form-btn {
+    margin-top: 20px;
+}
+.form .form-btn:hover {
+    opacity: 0.8;
+}
+.form .checkbox-text{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.checkbox-text .checkbox-content{
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-content input{
+    margin-right: 10px;
+    accent-color: #377dff;
+}
+
+.form .text{
+    color: #333;
+    font-size: 14px;
+}
+
+.form a.text{
+    color: #377dff;
+    text-decoration: none;
+}
+.form a:hover{
+    text-decoration: underline;
+}
+
+.form .button{
+    margin-top: 35px;
+}
+
+.form .button input{
+    border: none;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    background-color: #377dff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.button input:hover{
+    background-color: #4070f4;
+}
+
+.form .login-signup{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.message {
+    display: block;
+    color: #5841f1;
+    background-color: #f7f5ff;
+    border: 1px solid #5841f1;
+    margin: 20px 0;
+    padding: 15px 12px;
+    border-radius: 5px;
+}
+.message.wr {
+    color: #ff4e8d;
+    background-color: #fff3f3;
+    border: 1px solid #ff4e8d;
+}
+.message.sc {
+    color: #28b600;
+    background-color: #f5fff3;
+    border: 1px solid #28b600;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 50px #fff inset;
+    -webkit-text-fill-color: #333;
+}
+
+.toggle-password {
+    cursor: pointer;
+}
+
+
+
