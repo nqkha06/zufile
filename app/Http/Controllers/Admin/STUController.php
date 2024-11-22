@@ -23,7 +23,7 @@ class STUController extends Controller
      */
     public function index(Request $request)
     {
-        $filterParam = $request->only('keyword', 'username', 'start_date', 'end_date', 'level', 'view', 'revenue', 'status');
+        $filterParam = $request->only('keyword', 'user', 'start_date', 'end_date', 'level', 'view', 'revenue', 'status');
 
         $links = $this->STUService->listAllpaginated($filterParam);
         return view('backend.admin.stu.index', compact('links'));

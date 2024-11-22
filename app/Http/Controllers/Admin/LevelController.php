@@ -70,7 +70,6 @@ class LevelController extends Controller
             'click_limit' => 'required',
             'click_value' => 'required',
             'status' => 'required',
-            'redirect_url' => 'required',
         ]);
 
         $user = Level::where('id', $id)->update([
@@ -80,7 +79,6 @@ class LevelController extends Controller
                     'test_link' => $request->test_link,
                     'status' => $request->status,
                     'description' => $request->description ?? '',
-                    'redirect_url' => $request->redirect_url,
                     'minimum_pages' => $request->minimum_pages,
 
                 ]);
@@ -97,6 +95,7 @@ class LevelController extends Controller
     public function editConfig(string $id)
     {
         $level = Level::find($id);
+
         return view('backend.admin.level.config', compact('level'));
     }
     public function updateConfig(Request $request, string $id)
@@ -105,7 +104,6 @@ class LevelController extends Controller
         $data = array_filter($request->all(), function ($key) {
             return !in_array($key, ['_method', '_token']);
         }, ARRAY_FILTER_USE_KEY);
-        
         
         $updated = Level::where('id', $id)->update([
             'config' => json_encode($data)

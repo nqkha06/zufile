@@ -30,7 +30,7 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        $searchParams = $request->only('keyword', 'type', 'status');
+        $searchParams = $request->only('keyword', 'type', 'status', 'user');
         $invoices = $this->invoiceService->getPaginatedInvoices($searchParams);
         return view('backend.admin.invoice.index', compact('invoices'));
     }

@@ -14,6 +14,18 @@ use App\Http\Controllers\Admin\STUController;
 use App\Http\Controllers\Admin\WidgetController;
 
 Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function () {
+
+    Route::prefix('users')->group( function () {
+        Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('admin.users.create');
+        Route::post('/', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.users.store');
+        Route::get('/{id}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/{id}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.users.update');
+        Route::get('/{id}', [App\Http\Controllers\Admin\UserController::class, 'show'])->name('admin.users.show');
+        Route::get('/{id}/check-fraud', [App\Http\Controllers\Admin\UserController::class, 'checkFraud'])->name('admin.users.check');
+
+    });
+
     Route::get('/', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('admin.index');
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard.index');
 
@@ -45,15 +57,6 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
     Route::prefix('stats')->group( function () {
         Route::get('/access', [App\Http\Controllers\Admin\AccessController::class, 'index'])->name('admin.access.index');
         Route::get('/level', [App\Http\Controllers\Admin\StatController::class, 'level'])->name('admin.stats.level');
-    });
-
-    Route::prefix('users')->group( function () {
-        Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
-        Route::get('/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('admin.users.create');
-        Route::post('/', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.users.store');
-        Route::get('/{id}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.users.edit');
-        Route::put('/{id}', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.users.update');
-        Route::get('/{id}', [App\Http\Controllers\Admin\UserController::class, 'show'])->name('admin.users.show');
     });
 
     Route::prefix('roles')->group( function () {

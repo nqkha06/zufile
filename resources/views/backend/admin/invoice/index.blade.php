@@ -12,10 +12,18 @@
   Thêm mới
 </a>
 @endsection
-
+@php
+    $user = is_numeric(request('user')) ? \App\Models\User::find(request('user')) : null;
+@endphp
+@if ($user)
+@section('note')
+    Bạn đang xem danh sách các hoá đơn của người dùng "<strong>{{ $user->name }}</strong>". 
+@endsection
+@endif
 @section('content')
 <div class="card mb-4">
   <form class="card-body" action="" method="GET">
+    <input type="text" name="user" value="{{ request('user') }}" hidden>
       <div class="row">
           <div class="col-sm-3 mb-3">
               <label class="form-label" for="keyword">Tìm kiếm</label>

@@ -20,21 +20,6 @@ class InvoiceService implements InvoiceServiceInterface
     public function getPaginatedInvoices($searchParams = null, $sortBy = 'created_at', $sortOrder = 'desc', $perPage = 15)
     {
         $search = [];
-        if (!empty($searchParams['keyword'])) {
-            $keyword = $searchParams['keyword'];
-
-            $search[] = ['user', 'HAS', function ($query) use ($keyword) {
-                $query->where('name', 'LIKE', '%'.$keyword.'%');
-            }];
-            $search[] = ['payment_method', 'ORlike', '%'.$keyword.'%'];
-            $search[] = ['payment_account_number', 'ORlike', '%'.$keyword.'%'];
-            $search[] = ['payment_account_name', 'ORlike', '%'.$keyword.'%'];
-            $search[] = ['payment_bank_name', 'ORlike', '%'.$keyword.'%'];
-            $search[] = ['costs', 'ORlike', '%'.$keyword.'%'];
-            $search[] = ['amount', 'ORlike', '%'.$keyword.'%'];
-            $search[] = ['id', 'ORlike', '%'.$keyword.'%'];
-            
-        }
 
         if (!empty($searchParams['type'])) {
             if ($searchParams['type'] == 'fast') {
@@ -49,12 +34,27 @@ class InvoiceService implements InvoiceServiceInterface
             $status = $searchParams['status'];
             $search[] = ['status', '=', $status];
         }
+        if (!empty($searchParams['user'])) {
+            $user = $searchParams['user'];
+            $search[] = ['user_id', '=', $user];
+        }
 
         if (!empty($searchParams['method'])) {
             $payment_method = $searchParams['method'];
             $search[] = ['payment_method', '=', $payment_method];
         }
 
+        if (!empty($searchParams['keyword'])) {
+            $keyword = $searchParams['keyword'];
+
+            $search[] = ['payment_method', 'like', '%'.$keyword.'%'];
+            $search[] = ['payment_details', 'ORlike', '%'.$keyword.'%'];
+            $search[] = ['costs', 'ORlike', '%'.$keyword.'%'];
+            $search[] = ['amount', 'ORlike', '%'.$keyword.'%'];
+            $search[] = ['id', 'ORlike', '%'.$keyword.'%'];
+            
+        }
+        
         return $this->withdrawRopistory->with(['user'])->getAllPaginated($search);
     }
 

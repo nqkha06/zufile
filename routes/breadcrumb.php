@@ -70,6 +70,11 @@ Breadcrumbs::for('admin.users.edit', function (BreadcrumbTrail $trail, $user) {
     $trail->push('Edit User: '.$user->name, route('admin.users.edit', $user->id));
 });
 
+// Admin > Users > [user] > edit
+Breadcrumbs::for('admin.users.check', function (BreadcrumbTrail $trail, $user) {
+    $trail->parent('admin.users.index');
+    $trail->push('Edit User: '.$user->name, route('admin.users.check', $user->id));
+});
 // Admin > Roles > create
 Breadcrumbs::for('admin.roles.add', function (BreadcrumbTrail $trail, $role) {
     $trail->parent('admin.roles.index');

@@ -2,23 +2,29 @@
 
 @section('title', __('Admin: STU'))
 
+@php
+    $user = is_numeric(request('user')) ? \App\Models\User::find(request('user')) : null;
+@endphp
+
+@if ($user)
+@section('note')
+    Bạn đang xem liên kết của người dùng "<strong>{{ $user->name }}</strong>".
+@endsection
+@endif
+
+
 @section('content')
 
 <div class="row row-deck">
     <div class="col-12 mb-4">
         <div class="card p-3">
             <form action="" method="GET">
+                <input type="text" name="user" value="{{ request('user') }}" hidden>
                 <div class="row">
                     <div class="col-sm-3 mb-2">
                         <label class="form-label" for="keyword">Tìm kiếm</label>
                         <input type="text" id="keyword" name="keyword"
                             value="{{ old('keyword', request('keyword')) }}" placeholder="Bí danh (alias).."
-                            class="form-control">
-                    </div>
-                    <div class="col-sm-3 mb-2">
-                        <label class="form-label" for="username">Người dùng</label>
-                        <input type="text" id="username" name="username"
-                            value="{{ old('username', request('username')) }}" placeholder="Tên người dùng.."
                             class="form-control">
                     </div>
                     <div class="col-sm-3 mb-2">

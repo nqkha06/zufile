@@ -49,10 +49,8 @@ class STUService implements STUServiceInterface
             $search[] = ['alias', 'like', '%'.$searchParams['keyword'].'%'];
             $search[] = ['status', 'ORlike', '%'.$searchParams['keyword'].'%'];
         }
-        if (!empty($searchParams['username'])) {
-            $search[] = ['user', 'has', function ($query) use ($searchParams) {
-                $query->where('name', 'like', '%'.$searchParams['username'].'%');
-            }];
+        if (!empty($searchParams['user'])) {
+            $search[] = ['user_id', '=', $searchParams['user']];
         }
         if (!empty($searchParams['status'])) {
             $search[] = ['status', '=', $searchParams['status']];

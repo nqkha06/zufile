@@ -40,7 +40,7 @@
     </div>
 @endsection
 @section('content')
-
+<p>Xem thông tin người dùng: <a href="{{ route('admin.invoices.index').'?user='.$user->id }}">Hoá đơn</a> - <a href="{{ route('admin.stu.index').'?user='.$user->id }}">Links: STU</a> - <a href="{{ route('admin.note.index').'?user='.$user->id }}">Links: NOTE</a> </p>
 <div class="row g-5">
   <div class="col-12 col-xxl-4">
     <div class="row g-3">

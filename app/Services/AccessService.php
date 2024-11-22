@@ -127,4 +127,38 @@ class AccessService implements AccessServiceInterface
             return false;
         }
     }
+
+//     public function checkByUser($user) {
+//         $ipList = DB::table('stu_link_accesses')->pluck('ip_address')->toArray();
+
+//         if (empty($ipList)) {
+//             return response()->json(['message' => 'Không có dữ liệu IP'], 200);
+//         }
+
+//         // Hàm lấy dải mạng (network prefix) từ địa chỉ IP
+//         $getNetworkPrefix = function ($ip, $prefixLength = 3) {
+//             $segments = explode('.', $ip);
+//             return implode('.', array_slice($segments, 0, $prefixLength)); // Lấy 3 phần đầu của IP
+//         };
+
+//         // Tạo mảng lưu các dải mạng và các IP tương ứng
+//         $networkGroups = [];
+//         foreach ($ipList as $ip) {
+//             $networkPrefix = $getNetworkPrefix($ip); // Lấy dải mạng
+//             if (!isset($networkGroups[$networkPrefix])) {
+//                 $networkGroups[$networkPrefix] = [
+//                     'ips' => [],
+//                     'count' => 0, // Số lượng IP ban đầu
+//                 ];
+//             }
+//             $networkGroups[$networkPrefix]['ips'][] = $ip; // Nhóm IP theo dải mạng
+//             $networkGroups[$networkPrefix]['count']++; // Tăng số lượng IP
+//         }
+
+//         // Trả về kết quả
+//         return response()->json([
+//             'total_ips' => count($ipList),
+//             'network_groups' => $networkGroups,
+//         ], 200);
+// }
 }

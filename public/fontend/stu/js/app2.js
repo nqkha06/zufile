@@ -507,7 +507,8 @@
             }
 
             function renderSTU() {          
-                const { direct, setting, next, click } = STATE.config;
+                const { direct, setting, next, click, step } = STATE.config;
+                console.log(step);
                 
                 const { btn, info, oth, lnk } = STATE.data;
                 const totalPages = parseInt(setting?.['total_page'] ?? 1) || 1;
@@ -528,6 +529,31 @@
                     htmlBtn = Object.entries(actions)
                     .map(([key, { ic, url, name }]) => createBtn(key, dcSTU(url), dcSTU(name), dcSTU(ic)))
                     .join('');
+                }
+
+                //Tạo adClick
+
+                if (click && rdmV(click.appr_rate) && __CLICK(dcSTU(oth.lv), 'c')) {
+                    const page_appears = click.page_appear.split(",").map(i => parseInt(i.trim()));
+
+                    if (page_appears.includes(currentPage)) {
+                        let eltAdClick = createAD('ad-click', click.name, 'ad-click', iconSTU[click.icon], iconSTU.chevr);
+
+                        htmlBtn = (click.position == 'last') ? htmlBtn + eltAdClick : eltAdClick + htmlBtn;
+                    }
+                }
+                //Tạo step
+                
+                if (step) {
+                    const page_appears = step.page_appear.split(",").map(i => parseInt(i.trim()));
+                    const link = _rd(step.links.split(","));
+                    console.log(step.icon);
+                    
+                    if (page_appears.includes(currentPage)) {
+                        let eltAdClick = createBtn('ad-step-add', link, step.name, step.icon, iconSTU.chevr);
+
+                        htmlBtn = (step.position == 'last') ? htmlBtn + eltAdClick : eltAdClick + htmlBtn;
+                    }
                 }
 
                 //Tạo dest
@@ -567,17 +593,6 @@
                     htmlDest += `</div><div class='cp'>${IS_PWD ? createPasswordForm() : ''}</div>`;
                 }
                 
-                //Tạo adClick
-                
-                if (click && rdmV(click.appr_rate) && __CLICK(dcSTU(oth.lv), 'c')) {
-                    const page_appears = click.page_appear.split(",").map(i => parseInt(i.trim()));
-
-                    if (page_appears.includes(currentPage)) {
-                        let eltAdClick = createAD('ad-click', click.name, 'ad-click', iconSTU[click.icon], iconSTU.chevr);
-
-                        htmlBtn = (click.position == 'last') ? htmlBtn + eltAdClick : eltAdClick + htmlBtn;
-                    }
-                }
                 
                 const eltThumb = (currentPage == 2 || !oth.thmb) ? '' : createThumb(dcSTU(oth.thmb));
 
@@ -628,7 +643,7 @@
             }
  
             function createBtn(id, link, name, rightIcon, leftIcon=null) {
-                return `  <a class='stu-btn ${rightIcon}' data-id='${id}' href='${link}' data-name='${name}'>
+                return `  <a class='stu-btn ${rightIcon}' data-id='${id}' href='${link}' data-name='${name}' target='_blank'>
                             ${iconSTU[rightIcon]}
                             <span>${name}</span>
                             <i class='lft-i'>${iconSTU.chevr}</i>

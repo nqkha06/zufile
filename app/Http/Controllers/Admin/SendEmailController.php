@@ -36,7 +36,7 @@ class SendEmailController extends Controller
             'body' =>'required|string',
         ]);
 
-        $users = $this->userRepository->findMany(['email' => $request->email]);
+        // $users = $this->userRepository->findMany(['email' => $request->email]);
 
         // if ($users->count() == 0) {
         //     return redirect()->back()->with('error', 'Email người dùng này không tồn tại trên hệ thống!');
@@ -46,25 +46,25 @@ class SendEmailController extends Controller
         $greeting = $request->greeting;
         $body = $request->body;
 
-        foreach ($users as $user) {
-            $replacements = [
-                '{name}' => 'HThu06',
-                '{email}' => 'hongthi2098@gmail.com'
-            ];
+        // foreach ($users as $user) {
+        $replacements = [
+            '{name}' => 'HThu06',
+            '{email}' => 'hongthi2098@gmail.com'
+        ];
 
-            // $replacements = [
-            //     '{name}' => $user->name,
-            //     '{email}' => $user->email
-            // ];
+        // $replacements = [
+        //     '{name}' => $user->name,
+        //     '{email}' => $user->email
+        // ];
 
-            $template = [
-                'subject' => strtr($subject, $replacements),
-                'greeting' => strtr($greeting, $replacements),
-                'body' => strtr($body, $replacements)
-            ];
+        $template = [
+            'subject' => strtr($subject, $replacements),
+            'greeting' => strtr($greeting, $replacements),
+            'body' => strtr($body, $replacements)
+        ];
 
-            Mail::to($request->email)->queue(new SendEmailNotification($template));
-        }
+        Mail::to($request->email)->queue(new SendEmailNotification($template));
+        // }
 
         return redirect()->back()->with('success', 'Email đang được gửi...');
     }
