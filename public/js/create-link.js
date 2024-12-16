@@ -24,6 +24,9 @@ class STU {
             },
             dismissible: true
         });
+
+        this.selector = document.querySelector(this.select)
+
         //
         this.loadSTU();
         this.handleClick();
@@ -85,9 +88,9 @@ class STU {
                                                             <img style="width:100px; display: block" alt="Style Default" class="arlbItem" src="https://t3.ftcdn.net/jpg/05/99/53/58/360_F_599535831_pwQFVG0qtf6ksLXeVTnUwFMvoW5H0WiS.jpg" onclick="return false"/>
                                                                 <input 
                                                                 data-in="${btnId}"
-                                                                class="1hidden stu_fi"
+                                                                class="stu_fi"
                                                                 type="radio"
-                                                                id="${option[0]}_${field.i}" name="${field.i}" value="${option[0]}"/>
+                                                                id="${field.i}_${option[0]}" name="${field.i}" value="${option[0]}"/>
                                                                 <label for="${option[0]}_${field.i}">${option[1]}</label>
 
                                                             </div>`;
@@ -156,12 +159,12 @@ class STU {
             options += `<option value="${STULv[key].id}" min-pages="${STULv[key].minimumPages}">- ${STULv[key].name}</option>`;
         });
 
-        document.querySelector(this.select).innerHTML = `
+        this.selector.innerHTML = `
             <form class="fgSTU" id="fgSTU">
                 <div class="stu_ftr_inp">
                     <div data-cgroup="g_ttl" class="grp a">
                         <div class="grp__item" data-group="g_ttl">
-                            <label class="grp__label" for="i_lnk3">Tiêu đề</label>
+                            <label class="grp__label" for="i_lnk3">${STUtxt.ttl_lb}</label>
                             <div class="grp__input-wrapper">
                                 <input class="grp__input d stu_fi" id="i_ttl" type="text" name="ttl" placeholder="${STUtxt.ttl_ph}" data-in="oth" minlength="4" maxlength="50">
                                 <span class="grp__icon grp__icon--left">${icSTU.ttl}</span>
@@ -171,7 +174,7 @@ class STU {
                     </div>
                     <div data-cgroup="g_ttl" class="grp a">
                         <div class="grp__item" data-group="g_ttl">
-                            <label class="grp__label" for="i_lnk3">Tiêu đề phụ</label>
+                            <label class="grp__label" for="i_lnk3">${STUtxt.sttl_lb}</label>
                             <div class="grp__input-wrapper">
                                 <input class="grp__input d stu_fi" id="i_sttl" type="text" name="sttl" placeholder="${STUtxt.sttl_ph}" data-in="oth" minlength="4" maxlength="400">
                                 <span class="grp__icon grp__icon--left">${icSTU.ttl}</span>
@@ -205,19 +208,26 @@ class STU {
         `;    
     }
     old() {
-        const selector = document.querySelector(this.select)
-
         const oldI = (this.type === 'edit') ? (this.inp || null) : (this.type === 'api') ? (JSON.parse(localStorage.getItem("input_STU_TK")) || null) : (JSON.parse(localStorage.getItem("input_STU")) || null);
         const oldB = (this.type === 'edit') ? (this.btn || null) : (this.type === 'api') ? (JSON.parse(localStorage.getItem("btn_STU_TK")) || null) : (JSON.parse(localStorage.getItem("btn_STU")) || null);
         if (oldI) {
+            console.log(oldI);
+            
             for (const key in oldI) {
-                const s = selector.querySelector("[name=" + key + "]");
+                
+                const s = this.selector.querySelector("[name=" + key + "]");
+                
                 if (s) {
+                    
                     if ("date" == s.type) {
                         if (Date.parse(new Date(oldI[key])) >= Date.parse(new Date().toISOString().split("T")[0])) {
                             s.value = oldI[key];
                             s.classList.add("ok");
                         }
+                    } else if (key == 'sty') {
+                        const eltSty = this.selector.querySelector(`#sty_${oldI[key]}`);
+                        
+                        if (eltSty) eltSty.checked = true;
                     } else {
                         s.value = oldI[key];
                         s.classList.add("ok");
@@ -237,7 +247,7 @@ class STU {
 
         if (oldB) {
             for (const o in oldB) {
-                const l = selector.querySelector("[data-id=" + o + "]");
+                const l = this.selector.querySelector("[data-id=" + o + "]");
                 if (l && !l.classList.contains("a")) {
                     l.click();
                 }
@@ -246,29 +256,26 @@ class STU {
     }
 
     handleClick() {
-        const toastr = this.toastr;
-        const selector = document.querySelector(this.select)
-
-        selector.querySelectorAll(".stu_b_ftr").forEach(button => {
+        this.selector.querySelectorAll(".stu_b_ftr").forEach(button => {
             button.addEventListener("click", () => {
                 
                 let id = button.dataset.id;
                 if (button.classList.contains("a")) {
-                    selector.querySelector(".stu_ftr[data-ftr=" + id + "]").classList.remove("a");
+                    this.selector.querySelector(".stu_ftr[data-ftr=" + id + "]").classList.remove("a");
                     button.classList.remove("a");
                 } else {
-                    selector.querySelector("#stuFtr").dataset.ftr = id;
-                    selector.querySelectorAll(".stu_b_ftr").forEach(b => {
+                    this.selector.querySelector("#stuFtr").dataset.ftr = id;
+                    this.selector.querySelectorAll(".stu_b_ftr").forEach(b => {
                         b.classList.remove("a");
                     });
-                    selector.querySelectorAll(".stu_ftr").forEach(element => {
+                    this.selector.querySelectorAll(".stu_ftr").forEach(element => {
                         element.dataset.ftr == id ? element.classList.add("a") : element.classList.remove("a");
                     });
                     button.classList.add("a");
                 }
             });
         });
-        selector.querySelectorAll(".btn_iftr:not(.d)").forEach(button => {
+        this.selector.querySelectorAll(".btn_iftr:not(.d)").forEach(button => {
             button.addEventListener("click", () => {
                 
                 button.classList.toggle("a");
@@ -276,7 +283,7 @@ class STU {
                 let groupId = button.dataset.id;
 
                 if (groupId) {
-                    selector.querySelectorAll("[data-group=" + groupId + "]").forEach(element => {
+                    this.selector.querySelectorAll("[data-group=" + groupId + "]").forEach(element => {
                         if (element.classList.contains("a")) {
 
                             let requiredInput = element.querySelector("input[data-req]");
@@ -305,15 +312,15 @@ class STU {
                         }
                     });
         
-                    selector.querySelectorAll("[data-cgroup=" + groupId + "]").forEach(element => {
+                    this.selector.querySelectorAll("[data-cgroup=" + groupId + "]").forEach(element => {
                         element.classList.toggle("a");
                     });
                 }
             });
         }); 
 
-        if (selector.querySelector(".stu_fi[data-img]")) {
-            selector.querySelector(".stu_fi[data-img]").addEventListener("change", t => {
+        if (this.selector.querySelector(".stu_fi[data-img]")) {
+            this.selector.querySelector(".stu_fi[data-img]").addEventListener("change", t => {
                 let e = t.target,
                     s = e.parentNode.nextSibling.querySelector("img");
                 if (!e.value) return e.classList.remove("ok"), e.classList.remove("er"), delete e.dataset.fill, s.parentNode.classList.remove("a"), void lsHandlerInp("r", e.name);
@@ -329,18 +336,18 @@ class STU {
                 }
 
                 s.parentNode.classList.add("a"), n ? (s.src = n, e.value = n) : s.src = e.value;
-                let a = toastr.success({
-                    message: '<div class="xldg"><span>Đang tải hình ảnh, vui lòng đợi..</span> ' + icSTU.load + "</div>"
+                let a = this.toastr.success({
+                    message: `<div class="xldg"><span>${ STUtxt?.msg?.["loading_image"] }</span> ${icSTU.load} </div>`
                     , duration: 0
                     , dismissible: false
                     , icon: false
                 });
 
                 setTimeout(() => {
-                    toastr.dismiss(a);
+                    this.toastr.dismiss(a);
 
                     if (s.offsetHeight < 100) {
-                        toastr.error("Liên kết ảnh không hợp lệ.");
+                        this.toastr.error(STUtxt?.msg?.["invalid_image"]);
                         e.classList.add("er");
                         e.classList.remove("ok");
                         s.parentNode.classList.remove("a");
@@ -348,7 +355,7 @@ class STU {
                         e.classList.add("ok");
                         e.classList.remove("er");
                         s.parentNode.classList.remove("a");
-                        toastr.success('Hình ảnh hợp lệ...');
+                        // this.toastr.success('Hình ảnh hợp lệ...');
                     }
                 }, 1500)
 
@@ -357,37 +364,35 @@ class STU {
     }
 
     handleSubmit() {
-        const toastr = this.toastr;
         const type = this.type;
-        const selector = document.querySelector(this.select);
 
-        selector.querySelector("#fgSTU").addEventListener("submit", event => {
+        this.selector.querySelector("#fgSTU").addEventListener("submit", event => {
             event.preventDefault();
-            const elmError = selector.querySelector(".grp.a .er");
-            const totalSteps = selector.querySelectorAll(`.stu_fi[data-fill][type=url]:not([data-in='file'], [data-in='oth'])`).length;
+            const elmError = this.selector.querySelector(".grp.a .er");
+            const totalSteps = this.selector.querySelectorAll(`.stu_fi[data-fill][type=url]:not([data-in='file'], [data-in='oth'])`).length;
             
-            const lvElt = selector.querySelector('#i_level.stu_fi').selectedOptions[0];
+            const lvElt = this.selector.querySelector('#i_level.stu_fi').selectedOptions[0];
             const minPages = lvElt.getAttribute('min-pages');
             
             if (elmError) {
                 elmError.focus();
             } else if (totalSteps < minPages) {
-                toastr.error(`Để sử dụng cấp độ <b>${lvElt.text}</b>, bạn cần tạo ít nhất ${minPages} bước`);
+                this.toastr.error(`Để sử dụng cấp độ <b>${lvElt.text}</b>, bạn cần tạo ít nhất ${minPages} bước`);
             } else {
                 let n = event.target.querySelector("[type=submit]");
                 if (!n.classList.contains("a")) {
                     n.classList.add("a");
                     let ecSTU = t => btoa(encodeURIComponent(t)),
-                        notif = toastr.success({
+                        notif = this.toastr.success({
                             message: 
                             `<div class="xldg">
-                                ${icSTU.gen}<span>Đang tạo liên kết, vui lòng đợi..!</span>
+                                ${icSTU.gen}<span>${STUtxt?.msg?.["generating_link"]}</span>
                             </div>`
                             , duration: 0
                             , dismissible: false
                             , icon: false
                         }); 
-                    selector.querySelector(".stu_rst").classList.remove("a");
+                    this.selector.querySelector(".stu_rst").classList.remove("a");
                     const objParams = {};
                     const selectorsArr = [
                                         [":not([data-in='dest'], [data-in='oth'])", 'btn'],
@@ -396,7 +401,7 @@ class STU {
                                     ];
 
                     selectorsArr.forEach(([selectAr, category]) => {
-                        selector.querySelectorAll(`.grp.a input.ok${selectAr}`).forEach(input => {
+                        this.selector.querySelectorAll(`.grp.a input.ok${selectAr}`).forEach(input => {
 
                                 objParams[category] = objParams[category] || {};
                                 objParams[category][input.name] = ecSTU(input.value);
@@ -404,8 +409,8 @@ class STU {
                         });
                     })
                     if (Object.keys(objParams).length === 0) {
-                        toastr.dismiss(notif);
-                        toastr.error('Vui lòng điền đầy đủ thông tin trước khi tạo link');
+                        this.toastr.dismiss(notif);
+                        this.toastr.error('Vui lòng điền đầy đủ thông tin trước khi tạo link');
                     }
                     const methodXhr = type == 'create' ? 'POST' : 'PUT';
                     const urlXhr = type == 'create' ? '/stu' : '/stu/'+this.alias;
@@ -413,43 +418,40 @@ class STU {
 
                     this.request(methodXhr, urlXhr, CR_TOKEN, objParams)
                         .then((res) => {
-                            console.log(res)
                             // Handle success
                             if (res.status == 'success') {
                                 const shortUrl = STU_URL + '/' + res.alias;
 
                                 setTimeout(() => {
-                                    toastr.dismiss(notif);
+                                    this.toastr.dismiss(notif);
 
                                     if (type == 'edit') {
-                                        toastr.success('Liên kết đã được cập nhật thành công!');
+                                        this.toastr.success('Liên kết đã được cập nhật thành công!');
                                     } else if (type == 'create') {
-                                        toastr.success('Liên kết đã được tạo thành công!');
-                                        selector.querySelector("#i_rst").value = shortUrl;
-                                        selector.querySelector(".stu_rst").classList.add("a");
-                                        selector.querySelector(".stu_rst").scrollIntoView({
+                                        this.toastr.success(STUtxt?.msg?.["link_created"]);
+                                        this.selector.querySelector("#i_rst").value = shortUrl;
+                                        this.selector.querySelector(".stu_rst").classList.add("a");
+                                        this.selector.querySelector(".stu_rst").scrollIntoView({
                                             behavior: "smooth",
                                             block: "center"
                                         });
-                                    } else if (type == 'api') {
-                                        toastr.success('API created successfully');    
                                     }
                                     n.classList.remove("a");
                                 }, 1e3);
                             } else {
                                 setTimeout(() => {
-                                    toastr.dismiss(notif);
-                                    toastr.error('Error: '+ res.message)+'!';
+                                    this.toastr.dismiss(notif);
+                                    this.toastr.error('Error: '+ res.message)+'!';
                                     n.classList.remove("a");
                                 }, 1e3)
                             }
                         })
                         .catch((error) => {
-                            toastr.dismiss(notif);
+                            this.toastr.dismiss(notif);
                             if (error.status) {
-                                toastr.error('Error:', error.message);
+                                this.toastr.error('Error:', error.message);
                             } else {
-                                toastr.error('Network error:', error);
+                                this.toastr.error('Network error:', error);
                             }
                             n.classList.remove("a");
                         });            
@@ -461,41 +463,33 @@ class STU {
     reset() {
         const toastr = this.toastr;
         const type = this.type;
-        const selector = document.querySelector(this.select);
         const func = () => {
-            if (confirm("Bạn chắc chắn muốn đặt lại (reset) mẫu không?")) {
+            if (confirm(STUtxt?.msg?.["confirm_reset_template"])) {
                 if (type == 'create') {
                     localStorage.removeItem('input_STU');
                     localStorage.removeItem('btn_STU');
                 }
                 new STU(this.config)
-                // Show notif
-                toastr.success("Đặt lại thành công!")
+                this.toastr.success(STUtxt?.msg?.["reset_successful"])
             }
         }
                 
-        selector.querySelector("#rsSTU").addEventListener("click", function() {
+        this.selector.querySelector("#rsSTU").addEventListener("click", function() {
             func();
         })
     }
     copy() {
-        const toastr = this.toastr;
-        const selector = document.querySelector(this.select);
-
-        selector.querySelector(".stu_rst input ~ i").addEventListener("click", () => {
-            selector.querySelector("#i_rst").select(), document.execCommand("copy");
+        this.selector.querySelector(".stu_rst input ~ i").addEventListener("click", () => {
+            this.selector.querySelector("#i_rst").select(), document.execCommand("copy");
             if (document.queryCommandSupported("copy")) {
-                toastr.success("Đã sao chép URL thành công.")
+                this.toastr.success(STUtxt?.msg?.["url_copied"])
             } else {
-                toastr.error("Sao chép URL không được hỗ trợ trong trình duyệt này.")
+                this.toastr.error(STUtxt?.msg?.["copy_url_unsupported"])
             }
         });
     }
     validate() {
-        const toastr = this.toastr;
-        const selector = document.querySelector(this.select);
-
-        selector.querySelectorAll(".stu_fi:not(.ndf)").forEach(input => {
+        this.selector.querySelectorAll(".stu_fi:not(.ndf)").forEach(input => {
             input.addEventListener("input", () => {
                 if (input.classList.contains("er")) input.classList.remove("er");
             });
@@ -508,46 +502,6 @@ class STU {
                 let currentElement = element;
                 let idInp = element.getAttribute("id");
                 
-                if (!element.value) {
-                    delete element.dataset.fill;
-                    element.classList.remove("ok", "er");
-                    return;
-                }
-            
-                element.dataset.fill = true;
-            
-                if (currentElement.name === "sty") {
-                    const radios = document.querySelectorAll('input[name="sty"]');
-                    radios.forEach(r => r.classList.remove('ok'));
-
-                    if (currentElement.checked) {
-                        currentElement.classList.add('ok');
-                    }
-                }
-                
-                if (dataIn && currentElement.dataset.df) {
-                    let allowedDomains = fbSTU[dataIn].dt.find(item => item.id == groupId).fi.find(item => item.i == inputName).df;
-                    allowedDomains = allowedDomains || fbSTU[dataIn].df;
-                    
-                    let containsAllowedDomain = (value, domains) => {
-                        return domains.some(domain => value.includes(domain));
-                    };
-            
-                    if (containsAllowedDomain(currentElement.value, allowedDomains)) {
-                        currentElement.classList.remove("er");
-                        currentElement.classList.add("ok");
-                    } else {
-                        currentElement.classList.remove("ok");
-                        currentElement.classList.add("er");
-                        let toast = toastr.error("Nhập url chứa: <b>" + allowedDomains.join(", ") + "</b>");
-                        currentElement.focus();
-                        toast.on("click", () => {
-                            currentElement.focus();
-                            toastr.dismiss(toast);
-                        });
-                    }
-                }
-            
                 if (!currentElement.dataset.df && currentElement.type === "url") {
                     if (currentElement.value.includes("://")) {
                         currentElement.classList.remove("er");
@@ -555,46 +509,69 @@ class STU {
                     } else {
                         currentElement.classList.remove("ok");
                         currentElement.classList.add("er");
-                        let toast = toastr.error("Vui lòng nhập liên kết hợp lệ");
+                        let toast = this.toastr.error(STUtxt.msg.url_required);
                         currentElement.focus();
                     }
                 }
-            
+                
                 if (!currentElement.dataset.df && currentElement.type === "text") {
                     if (currentElement.value.includes("://")) {
                         currentElement.classList.remove("ok");
                         currentElement.classList.add("er");
-                        let toast = toastr.error("Đừng nhập liên kết ở đây..");
+                        let toast = this.toastr.error(STUtxt.msg.url_disallowed);
                         currentElement.focus();
                     } else {
                         currentElement.classList.remove("er");
                         currentElement.classList.add("ok");
                     }
                 }
-            
+                
                 if (currentElement.value && !currentElement.dataset.df && currentElement.type === "datetime-local") {
                     let inputDate = new Date(currentElement.value);
                     let currentDate = new Date();
                     if (inputDate < currentDate) {
                         currentElement.classList.remove("ok");
                         currentElement.classList.add("er");
-                        let toast = toastr.error("Ngày hết hạn không hợp lệ..");
+                        let toast = this.toastr.error(STUtxt.msg.datetime_invalid);
                         currentElement.focus();
                         toast.on("click", () => {
                             currentElement.focus();
-                            toastr.dismiss(toast);
+                            this.toastr.dismiss(toast);
                         });
                     } else {
                         currentElement.classList.remove("er");
                         currentElement.classList.add("ok");
                     }
                 }
+                
+                if (dataIn && currentElement.dataset.df) {
+                    let allowedDomains = fbSTU[dataIn].dt.find(item => item.id == groupId).fi.find(item => item.i == inputName).df;
+                    allowedDomains = allowedDomains || fbSTU[dataIn].df;
+                
+                    let containsAllowedDomain = (value, domains) => {
+                        return domains.some(domain => value.includes(domain));
+                    };
+                
+                    if (containsAllowedDomain(currentElement.value, allowedDomains)) {
+                        currentElement.classList.remove("er");
+                        currentElement.classList.add("ok");
+                    } else {
+                        currentElement.classList.remove("ok");
+                        currentElement.classList.add("er");
+                        let toast = this.toastr.error(
+                            STUtxt.msg.url_allowed_domains.replace(':domains', allowedDomains.join(", "))
+                        );
+                        currentElement.focus();
+                        toast.on("click", () => {
+                            currentElement.focus();
+                            this.toastr.dismiss(toast);
+                        });
+                    }
+                }
             });
         });
     }
     setOld() {
-        const selector = document.querySelector(this.select)
-
         //localStorage
         let lsHandlerBtn = (action, key, value) => {
             let storedData = localStorage.getItem("btn_STU");
@@ -610,7 +587,6 @@ class STU {
             return data;
         }
         let lsHandlerInp = (action, key, value) => {
-
             let storedData = localStorage.getItem("input_STU");
             let data = storedData ? JSON.parse(storedData) : {};
 
@@ -624,13 +600,13 @@ class STU {
             return data;
         }
         
-        selector.querySelectorAll(".stu_fi:not(.ndf)").forEach(t => {
+        this.selector.querySelectorAll(".stu_fi:not(.ndf)").forEach(t => {
             t.addEventListener("change", () => {
                 let e = t.getAttribute("name");
                 t.classList.contains("ok") ? lsHandlerInp("s", e, t.value) : lsHandlerInp("r", e)
             })
         });
-        selector.querySelectorAll(".btn_iftr:not(.d)").forEach(t => {
+        this.selector.querySelectorAll(".btn_iftr:not(.d)").forEach(t => {
             t.addEventListener("click", () => {
                 let e = t.dataset.id;
                 e && (t.classList.contains("a") ? lsHandlerBtn("s", e, !0) : lsHandlerBtn("r", e))
@@ -755,7 +731,7 @@ class NOTE {
                 if (!n.classList.contains("a")) {
                     n.classList.add("a");
                     let ecSTU = t => btoa(encodeURIComponent(t)),
-                        notif = toastr.success({
+                        notif = this.toastr.success({
                             message: 
                             `<div class="xldg">
                                 ${icSTU.gen}<span>Đang tạo liên kết, vui lòng đợi..!</span>
@@ -784,12 +760,12 @@ class NOTE {
                                 const shortUrl = NOTE_URL + '/' + res.alias;
 
                                 setTimeout(() => {
-                                    toastr.dismiss(notif);
+                                    this.toastr.dismiss(notif);
 
                                     if (type == 'edit') {
-                                        toastr.success('Liên kết đã được cập nhật thành công!');
+                                        this.toastr.success('Liên kết đã được cập nhật thành công!');
                                     } else if (type == 'create') {
-                                        toastr.success('Liên kết đã được tạo thành công!');
+                                        this.toastr.success(STUtxt?.msg?.["link_created"]);
                                         selector.querySelector("#i_n_rst").value = shortUrl;
                                         selector.querySelector(".note_rst").classList.add("a");
                                         selector.querySelector(".note_rst").scrollIntoView({
@@ -801,18 +777,18 @@ class NOTE {
                                 }, 1e3);
                             } else {
                                 setTimeout(() => {
-                                    toastr.dismiss(notif);
-                                    toastr.error('Error: '+ res.message)+'!';
+                                    this.toastr.dismiss(notif);
+                                    this.toastr.error('Error: '+ res.message)+'!';
                                     n.classList.remove("a");
                                 }, 1e3)
                             }
                         })
                         .catch((error) => {
-                            toastr.dismiss(notif);
+                            this.toastr.dismiss(notif);
                             if (error.status) {
-                                toastr.error('Error:', error.message);
+                                this.toastr.error('Error:', error.message);
                             } else {
-                                toastr.error('Network error:', error);
+                                this.toastr.error('Network error:', error);
                             }
                             n.classList.remove("a");
                         });            
@@ -863,9 +839,9 @@ class NOTE {
         selector.querySelector(".note_rst input ~ i").addEventListener("click", () => {
             selector.querySelector("#i_n_rst").select(), document.execCommand("copy");
             if (document.queryCommandSupported("copy")) {
-                toastr.success("Đã sao chép URL thành công.")
+                this.toastr.success("Đã sao chép URL thành công.")
             } else {
-                toastr.error("Copying URL is not supported in this browser.")
+                this.toastr.error("Copying URL is not supported in this browser.")
             }
         });
     }
@@ -897,12 +873,12 @@ class NOTE {
                     if (r(t.value, a)) t.classList.remove("er"), t.classList.add("ok");
                     else {
                         t.classList.remove("ok"), t.classList.add("er");
-                        let o = toastr.error("Nhập URL chứa: <b>" + a.join(", ") + "</b>");
+                        let o = this.toastr.error("Nhập URL chứa: <b>" + a.join(", ") + "</b>");
                         o.on("click", ({
                             t: e,
                             v: s
                         }) => {
-                            t.focus(), toastr.dismiss(o)
+                            t.focus(), this.toastr.dismiss(o)
                         })
                     }
                 }
@@ -910,24 +886,24 @@ class NOTE {
                     if (t.value.includes("://")) t.classList.remove("er"), t.classList.add("ok");
                     else {
                         t.classList.remove("ok"), t.classList.add("er");
-                        let l = toastr.error("Please enter links here..");
+                        let l = this.toastr.error("Please enter links here..");
                         l.on("click", ({
                             t: e,
                             v: s
                         }) => {
-                            t.focus(), toastr.dismiss(l)
+                            t.focus(), this.toastr.dismiss(l)
                         })
                     }
                 }
                 if (!t.dataset.df && "text" == t.type) {
                     if (t.value.includes("://")) {
                         t.classList.remove("ok"), t.classList.add("er");
-                        let c = toastr.error("Do not enter links here..");
+                        let c = this.toastr.error("Do not enter links here..");
                         c.on("click", ({
                             t: e,
                             v: s
                         }) => {
-                            t.focus(), toastr.dismiss(c)
+                            t.focus(), this.toastr.dismiss(c)
                         })
                     } else t.classList.remove("er"), t.classList.add("ok")
                 }
@@ -939,7 +915,7 @@ class NOTE {
                             t: e,
                             v: s
                         }) => {
-                            t.focus(), toastr.dismiss(d)
+                            t.focus(), this.toastr.dismiss(d)
                         })
                     } else t.classList.remove("er"), t.classList.add("ok")
                 }

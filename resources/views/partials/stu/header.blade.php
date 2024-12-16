@@ -205,7 +205,7 @@
                         <div class='widget TextList' data-version='2' id='TextList000'>
                             <ul class='headIc'>
                                 <li class='isDrk'>
-                                    <span aria-label='Dark' class='tDark tIc tDL bIc' onclick=''
+                                    <span aria-label='Dark' class='tDark tIc tDL bIc' onclick='darkMode()'
                                         role='button'>
                                         <svg class='line' viewBox='0 0 24 24'>
                                             <g class='d1'>

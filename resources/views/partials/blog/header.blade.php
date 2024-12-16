@@ -19,9 +19,9 @@
                             <h1 class='headH hasSub'>
                                 <span class='headTtl'>
                                     @if (request()->routeIs('blog'))
-                                    {{ env('APP_NAME') }}
+                                    {{ Setting::get('web_name', env('APP_NAME')) }}
                                     @else
-                                    <a href="{{ route('blog') }}">{{ env('APP_NAME') }}</a>
+                                    <a href="{{ route('blog') }}">{{ Setting::get('web_name', env('APP_NAME')) }}</a>
                                     @endif
                                 </span>
                                 <span class='headSub' data-text='blog'></span>

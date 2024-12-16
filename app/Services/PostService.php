@@ -49,4 +49,16 @@ class PostService implements PostServiceInterface
     public function getPopularPosts($take = 5) {
         return $this->postRepository->getPopularPosts($take);
     }
+
+    public function getAllPostLinks() {
+        $links = [];
+
+        $data = $this->postRepository->getAllPublished();
+        
+        foreach ($data as $slug) {
+            $links[] = route('blog.article', ['slug' => $slug]);
+        }
+
+        return $links;
+    }
 }

@@ -20,13 +20,13 @@
                                 <div class="input-box">
                                     <label>{{ __('profile.fullname') }} <span style="color: #f1416c">*</span></label>
                                     <input type="text" name="fullname" placeholder="{{ __('profile.enter_fullname') }}"
-                                        value="{{ Auth::user() && Auth::user()->address->fullname ? Auth::user()->address->fullname : '' }}"
+                                        value="{{ Auth::user()?->address?->fullname ?? '' }}"
                                         required />
                                 </div>
                                 <div class="input-box">
                                     <label>{{ __('profile.email') }} <span style="color: #f1416c">*</span></label>
-                                    <input type="text" name="email" placeholder="{{ __('profile.enter_email') }}"
-                                        value="{{ Auth::user() && Auth::user()->email ? Auth::user()->email : '' }}"
+                                    <input type="text" name="email" placeholder="{{ __('profile.enter_email') }}" readonly
+                                        value="{{ Auth::user()?->email ?? '' }}"
                                         required />
                                 </div>
 
@@ -34,7 +34,7 @@
                                     <label>{{ __('profile.phone_number') }} <span style="color: #f1416c">*</span></label>
                                     <input type="text" name="phonenumber"
                                         placeholder="{{ __('profile.enter_phone_number') }}"
-                                        value="{{ Auth::user() && Auth::user()->address->number_phone ? Auth::user()->address->number_phone : '' }}"
+                                        value="{{ Auth::user()?->address?->number_phone ?? '' }}"
                                         required />
                                 </div>
                                 <div class="input-box">
@@ -47,14 +47,14 @@
                                 <div class="input-box">
                                     <label>{{ __('profile.address') }} <span style="color: #f1416c">*</span></label>
                                     <input type="text" name="address_1" placeholder="{{ __('profile.enter_address') }}"
-                                        value="{{ Auth::user() && Auth::user()->address->address_1 ? Auth::user()->address->address_1 : '' }}"
+                                        value="{{ Auth::user()?->address?->address_1 ?? '' }}"
                                         required />
                                 </div>
                                 <div class="input-box">
                                     <label>{{ __('profile.address_2') }}</label>
                                     <input type="text" name="address_2"
                                         placeholder="{{ __('profile.enter_address_2') }}"
-                                        value="{{ Auth::user() && Auth::user()->address->address_2 ? Auth::user()->address->address_2 : '' }}" />
+                                        value="{{ Auth::user()?->address?->fullname ?? '' }}" />
                                 </div>
 
                                 <div class="input-box">
@@ -62,8 +62,11 @@
 
                                     <div class="select-box">
                                         <select name="country">
-                                            <option hidden="">{{ __('profile.enter_country') }}</option>
-
+                                            <option value="" hidden>{{ __('profile.enter_country') }}</option>
+                                            @foreach (config('app.countries') as $key=>$val)
+                                            <option value="{{ $key }}" @selected($key == Auth::user()?->address?->country)>{{ $val }}</option>
+                                            
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -71,18 +74,18 @@
                                 <div class="input-box">
                                     <label>{{ __('profile.city') }}</label>
                                     <input type="text" name="city" placeholder="{{ __('profile.enter_city') }}"
-                                        value="{{ Auth::user() && Auth::user()->address->city ? Auth::user()->address->city : '' }}" />
+                                        value="{{ Auth::user()?->address?->city ?? '' }}" />
                                 </div>
 
                                 <div class="input-box">
                                     <label>{{ __('profile.region') }}</label>
                                     <input type="text" name="region" placeholder="{{ __('profile.enter_region') }}"
-                                        value="{{ Auth::user() && Auth::user()->address->region ? Auth::user()->address->region : '' }}" />
+                                        value="{{ Auth::user()?->address?->region ?? '' }}" />
                                 </div>
                                 <div class="input-box">
                                     <label>{{ __('profile.zipcode') }}</label>
                                     <input type="text" name="zipcode" placeholder="{{ __('profile.enter_zipcode') }}"
-                                        value="{{ Auth::user() && Auth::user()->address->zipcode ? Auth::user()->address->zipcode : '' }}" />
+                                        value="{{ Auth::user()?->address?->zipcode ?? '' }}" />
                                 </div>
                             </div>
                             <input class="btn-submit" type="submit" name="submit-info" value="{{ __('profile.save') }}">

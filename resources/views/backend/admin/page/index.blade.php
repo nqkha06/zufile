@@ -54,42 +54,7 @@
         }
     </style>
     <div class="row row-deck">
-        {{-- <div class="col-12 mb-4">
-        <div class="card p-3">
-            <form action="" method="GET">
-                <div class="row">
-                    <div class="col-sm-3 mb-2">
-                        <label class="form-label" for="keyword">Tìm kiếm</label>
-                        <input type="text" id="keyword" name="keyword" value="" placeholder="Bí danh (alias).." class="form-control">
-                    </div>
-                    <div class="col-sm-2 mb-2">
-                        <label class="form-label" for="created_at">Ngày tạo</label>
-                        <input type="date" id="created_at" name="created_at" value="" placeholder="created_at" class="form-control">
-                    </div>
-                    <div class="col-sm-2 mb-2">
-                        <label class="form-label" for="username">Người dùng</label>
-                        <input type="text" id="username" name="username" value="" placeholder="Người dùng (username).." class="form-control">
-                    </div>
-                    <div class="col-sm-2 mb-2">
-                        
-                            <label class="form-label" for="level">Cấp độ</label>
-                            <select name="level" id="level" class="form-control" value="">
-                                <option value="-1">[-- Chọn cấp độ --]</option>
-                                <option value="0">Cấp độ 0</option>
-                                <option value="1">Cấp độ 1</option>
-                                <option value="2">Cấp độ 2</option>
-                                <option value="3">Cấp độ 3</option>
-                            </select>
-                        
-                    </div>
-                    <div class="col-sm-2 d-flex align-items-end gap-1 mb-2">
-                        <input type="submit" value="Tìm" class="button auto flex btn btn-w-m btn-primary">
-                        <input type="button" value="Đặt lại" class="button auto flex btn btn-w-m btn-default" onclick="(location.href = location.pathname)">
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> --}}
+ 
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
@@ -100,7 +65,7 @@
                         <thead>
                             <tr>
                                 {{-- <th style="white-space: nowrap">{{ __('links.no') }}</th> --}}
-                                <th style="white-space: nowrap">#Ảnh</th>
+                                {{-- <th style="white-space: nowrap">#Ảnh</th> --}}
                                 <th style="white-space: nowrap">#Tiêu đề</th>
                                 <th style="white-space: nowrap">#Slug</th>
                                 <th style="white-space: nowrap">#Ngày đăng</th>
@@ -114,7 +79,7 @@
                                 @foreach ($pages as $key => $value)
                                     <tr>
                                         {{-- <td>{{ $key+1 }}</td> --}}
-                                        <td><img alt="{{ $value->title }}" src="{{ $value->image }}" /></td>
+                                        {{-- <td><img alt="{{ $value->title }}" src="{{ $value->image }}" /></td> --}}
                                         <td style="overflow: hidden;text-overflow: ellipsis;">{{ $value->title }}</td>
                                         <td>
                                             <div style="display: flex; align-items: center; max-width: 200px;">

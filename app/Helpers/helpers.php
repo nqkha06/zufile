@@ -353,5 +353,11 @@ if (!function_exists('transLang')) {
     }
 }
 
+if (!function_exists('renderStatusInvoice')) {
+    function renderStatusInvoice($status = 0)
+    {
+        return '';
+    }
+}
 
 ?>

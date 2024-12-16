@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\ApiToken;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UploadImageRequest;
 
 use App\Services\Interfaces\StatisticsServiceInterface as StatisticsService;
 use App\Services\Interfaces\DashboardServiceInterface as DashboardService;
@@ -54,8 +57,6 @@ class DashboardController extends Controller
 
         $results = ApiToken::where('user_id', $userId)->where('status', 1)->get();
 
-        
-
         $data['title'] = 'Liên kết nhanh';
         $data['content'] = 'quick-link';
 
@@ -66,5 +67,27 @@ class DashboardController extends Controller
     }
 
  
+    public function upload(Request $request)
+{
+    if ($request->hasFile('upload')) {
+
+        $originName = $request->file('upload')->getClientOriginalName();
+
+        $fileName = pathinfo($originName, PATHINFO_FILENAME);
+
+        $extension = $request->file('upload')->getClientOriginalExtension();
+
+        $fileName = time() . '.' . $extension;
+
+  
+        $request->file('upload')->move(public_path('uploads/notes'), $fileName);
+
+        $url = asset('uploads/notes/' . $fileName);
+
+
+        return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url' => $url]);
+
+    }
+}
 
 }

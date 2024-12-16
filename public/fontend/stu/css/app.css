@@ -452,7 +452,7 @@
     width: max-content;
     font-size: 14px;
     border-radius: 10px;
-    margin: 20px auto 15px;
+    margin: 20px auto 0;
     padding: 9px 20px;
     align-items: center;
     /* border: var(--bdr-stu); */
@@ -558,6 +558,12 @@
     background: var(--bg-stu);
     color: var(--clr-stu);
     border-radius: 12px;
+}
+
+
+/* Khi nhóm C được hiển thị */
+.stu-box-wrap .c.show {
+    animation: fadeIn 0.8s ease-out forwards, opaCity 1s ease-in-out forwards; /* Chạy animation */
 }
 
 /* Keyframes Animation */
@@ -723,6 +729,17 @@
         transform: rotate(1turn)
     }
 }
+
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
 .stu-box-wrap>.d.p .cl {
     display: none

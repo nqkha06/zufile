@@ -225,7 +225,7 @@ e.defer = n = e.Defer, e.deferscript = n.js, e.deferstyle = n.css, e.deferimg = 
 
 
        /*<![CDATA[*/
-       function darkMode() {
+    function darkMode() {
         localStorage.setItem("mode", "darkmode" === localStorage.getItem("mode") ? "light" : "darkmode"), "darkmode" ===
             localStorage.getItem("mode") ? document.querySelector("#mainCont").classList.add("drK") : document
             .querySelector("#mainCont").classList.remove("drK")

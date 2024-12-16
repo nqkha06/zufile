@@ -125,7 +125,7 @@
                 <?php
                     $availableLanguages = array(
                         'en' => 'English',
-                        'vi' => 'VietNam'
+                        'vi' => 'Việt Nam'
                     );
                     
                     foreach ($availableLanguages as $code => $language) {

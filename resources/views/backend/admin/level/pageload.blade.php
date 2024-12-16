@@ -17,9 +17,9 @@
                 $configs = json_decode($level->pageload_config) ?? [];
             @endphp
             @forelse ($configs as $config)
-                @include('backend.tabler.level.components.pageload_form', ['config' => $config])
+                @include('backend.admin.level.components.pageload_form', ['config' => $config])
             @empty
-                @include('backend.tabler.level.components.pageload_form')
+                @include('backend.admin.level.components.pageload_form')
             @endforelse
         </div>
         <button id="add-config" type="button" class="btn btn-success">Thêm config</button>
@@ -32,7 +32,7 @@
 </form>
 
 <script>
-    const configTemplate = `@include('backend.tabler.level.components.pageload_form', ['config' => []])`;
+    const configTemplate = `@include('backend.admin.level.components.pageload_form', ['config' => []])`;
 
     document.getElementById('add-config').addEventListener('click', function() {
         const newConfigForm = document.createElement('div');

@@ -8,13 +8,15 @@ use App\Services\Interfaces\InvoiceServiceInterface as InvoiceService;
 use App\Repositories\Interfaces\WithdrawRepositoryInterface as WithdrawRepository;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\WithdrawNotification;
+use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 
 class InvoiceController extends Controller
 {
     protected $invoiceService;
     protected $withdrawRepository;
+    protected $userRepository;
 
-    public function __construct(InvoiceService $invoiceService, WithdrawRepository $withdrawRepository) {
+    public function __construct(InvoiceService $invoiceService, WithdrawRepository $withdrawRepository, UserRepository $userRepository) {
         $this->middleware('permission:view_all_invoices', ['only' => ['index']]);
         $this->middleware('permission:view_all_invoices', ['only' => ['create', 'store']]);
         $this->middleware('permission:view_all_invoices', ['only' => ['update','edit']]);
@@ -23,6 +25,7 @@ class InvoiceController extends Controller
 
         $this->invoiceService = $invoiceService;
         $this->withdrawRepository = $withdrawRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -40,7 +43,7 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        
+        return view('backend.admin.invoice.create');
     }
 
     /**
@@ -48,7 +51,25 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ], [
+            'email.exists' => 'Email người dùng này không tồn tại trong hệ thống.',
+        ]);
+        $user_data = $this->userRepository->findFirst([
+            'email', '=', $request->email
+        ]);
+
+        $created = $this->withdrawRepository->create([
+            'amount' => $request->amount,
+            'costs' => $request->costs,
+            'type' => $request->type,
+            'user_id' => $user_data->id,
+            'payment_method' => $request->payment_method,
+            'payment_details' => $request->payment_details,
+        ]);
+        return redirect()->route('admin.invoices.index')->with('success', 'Tạo hoá đơn mới thành công!');
+
     }
 
     /**
@@ -81,12 +102,18 @@ class InvoiceController extends Controller
             'payment_method' => 'required',
             'status' => 'required',
             'payment_details' => 'nullable',
+            'submitter' => 'required',
         ]);
 
         $payload = $request->only('amount', 'costs', 'type', 'payment_method', 'status', 'payment_details');
         $this->withdrawRepository->update($id, $payload);
+        
+        if ($request->submitter == 'apply') {
+            return redirect()->back()->with('success', 'Hoá đơn #'. $id . ' đã được cập nhật thành công.');
 
-        return redirect()->route('admin.invoices.index')->with('success', 'Hoá đơn #'. $id . ' đã được cập nhật thành công.');
+        } else {
+            return redirect()->route('admin.invoices.index')->with('success', 'Hoá đơn #'. $id . ' đã được cập nhật thành công.');
+        }
     }
 
     /**
@@ -110,7 +137,7 @@ class InvoiceController extends Controller
         $update = $this->withdrawRepository->update($id, [
             'status' => 'approved'
         ]);
-        $withdraw = $this->withdrawRepository->findById($id);
+        $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
             'subject' => 'Lệnh rút #'.$withdraw->id.' đã được xem xét',
@@ -133,7 +160,7 @@ class InvoiceController extends Controller
             'status' => 'completed',
             'paid_at' => now()
         ]);
-        $withdraw = $this->withdrawRepository->findById($id);
+        $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
             'subject' => 'Lệnh rút #'.$withdraw->id.' đã được thanh toán',
@@ -154,7 +181,7 @@ class InvoiceController extends Controller
         $updatte = $this->withdrawRepository->update($id, [
             'status' => 'cancelled'
         ]);
-        $withdraw = $this->withdrawRepository->findById($id);
+        $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
             'subject' => 'Lệnh rút #'.$withdraw->id.' đã bị từ chối',
@@ -175,7 +202,7 @@ class InvoiceController extends Controller
         $updatte = $this->withdrawRepository->update($id, [
             'status' => 'hold'
         ]);
-        $withdraw = $this->withdrawRepository->findById($id);
+        $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
             'subject' => 'Lệnh rút #'.$withdraw->id.' gặp một số vấn đề',

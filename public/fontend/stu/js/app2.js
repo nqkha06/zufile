@@ -1,16 +1,5 @@
     /*<![CDATA[*/
     var stSTU = {
-        // 'txt': {
-        //     'ft': {
-        //         'created_with': 'Created with',
-        //         'i_url': 'https://link4sub.com/images/favicon.png',
-        //         'url': 'https://link4sub.com/',
-        //         'name': 'Link4Sub'
-        //     },
-        //     'unlock_progress': 'Tiến trình mở khoá',
-        //     'load': 'Vui lòng đợi...',
-        //     'done': 'Đã hoàn tất'
-        // },
         'aApi': {
             'userId': [40, 'user'],
             'lAPI': [
@@ -290,9 +279,14 @@
         }
         let format_config = {};
         let userAgent = data.info;
+        Object.entries(configs).forEach(([key, types]) => {  
+            if (key == 'click2') {
+                format_config[key] = (types);
 
-        Object.entries(configs).forEach(([key, types]) => {     
-            format_config[key] = _rd(types);
+            } else {
+                format_config[key] = _rd(types);
+
+            }   
             // for (let i = 0; i < types.length; i++) {
             //     const config = types[i];
             //     if (checkCond(userAgent, config)) {
@@ -325,6 +319,7 @@
             rd: JSON.parse(xQK.getCookie(CONSTANTS.RD_KEY) || '{}'),
             click: JSON.parse(xQK.getCookie(CONSTANTS.CLICK_KEY) || '{}'),
         };
+        
         stSTU.txt = linkData?.data.txt;
         
         if (STATE.config && STATE.data) {
@@ -369,9 +364,15 @@
                 if (!obj['btn']) {
                     obj['btn'] = {};
                 }
+                if (!obj['adclick']) {
+                    obj['adclick'] = {};
+                }
                 
                 if (tag == 'btn') {
                     obj['btn'][key] = true;
+                }
+                if (tag == 'adclick') {
+                    obj['adclick'][key] = true;
                 }
 
                 if (tag == 'next') {
@@ -507,8 +508,7 @@
             }
 
             function renderSTU() {          
-                const { direct, setting, next, click, step } = STATE.config;
-                console.log(step);
+                const { direct, setting, next, click, click2, step } = STATE.config;
                 
                 const { btn, info, oth, lnk } = STATE.data;
                 const totalPages = parseInt(setting?.['total_page'] ?? 1) || 1;
@@ -517,6 +517,7 @@
                 const actions = distributeActions(btn, totalPages)[currentPage - 1];
                 
                 let htmlBtn = '';
+                let htmlBtnC = '';
                 let htmlDest = '';
                 let destAttrs = {};
 
@@ -547,7 +548,6 @@
                 if (step) {
                     const page_appears = step.page_appear.split(",").map(i => parseInt(i.trim()));
                     const link = _rd(step.links.split(","));
-                    console.log(step.icon);
                     
                     if (page_appears.includes(currentPage)) {
                         let eltAdClick = createBtn('ad-step-add', link, step.name, step.icon, iconSTU.chevr);
@@ -565,7 +565,6 @@
                         <div class='cl'>
                             ${ createDest(ecSTU(link), `Next Step ${(currentPage <= totalPages) ? '('+(currentPage) + '/' + totalPages+')' : ''}`, iconSTU['link'], iconSTU['lock'], destAttrs) }
                         </div>
-                        <div class='cp'></div>
                     `;
                 } else if (next && currentPage == totalPages) {
                     destAttrs['data-next'] = true;
@@ -573,9 +572,8 @@
                     const link = _rd(next.link.split(",").map(s => s.trim())) || [window.location.href];
                     htmlDest = `
                         <div class='cl'>
-                            ${ createDest(ecSTU(link), 'Next Step AD', iconSTU['link'], iconSTU['lock'], destAttrs) }
+                            ${ createDest(ecSTU(link), 'Next', iconSTU['link'], iconSTU['lock'], destAttrs) }
                         </div>
-                        <div class='cp'></div>
                     `;
                 } else {
                     destAttrs['data-dest'] = true;
@@ -592,8 +590,14 @@
                     }
                     htmlDest += `</div><div class='cp'>${IS_PWD ? createPasswordForm() : ''}</div>`;
                 }
-                
-                
+
+                // tạo click2
+                if (click2) {
+                    htmlBtnC = click2.map(item => {
+                        let link = _rd((item.links).split(','));
+                        return createBtn(item.type, link, item.name, item.icon);
+                    }).join('');
+                }
                 const eltThumb = (currentPage == 2 || !oth.thmb) ? '' : createThumb(dcSTU(oth.thmb));
 
                 return `
@@ -604,10 +608,18 @@
                             <h3 class='t-s-title'>${dcSTU(oth.sttl)}</h3>
                         </div>
                         <div class='i'>${eltThumb}</div>
-                        <div class='b'>${htmlBtn}</div>
+                        <div class='b' id='actionGroups'>${htmlBtn}</div>
+                        <div class='c hidden' id='adClickBtns'>${htmlBtnC}</div>
                         <div class='p' id='pg'></div>
                         <div class='d ${IS_PWD ? 'p' : '' }'>${htmlDest}</div>
-                        <div class='f'>
+                        <div class="f">
+                            <div class="ft">
+                                <span>Created with </span> 
+                                <img src="https://link4sub.com/images/favicon.png"> 
+                                <a href="https://link4sub.com/"> Link4Sub</a>
+                            </div>
+                        </div>
+                        <!--<div class='f'>
                             <div class="ft">
                                 <span>${stSTU.txt.languages}</span>
                                 <select id="language-selector">
@@ -618,7 +630,7 @@
                                     <option value="hi">भारतीय भाषा</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 `;
             }
@@ -626,7 +638,7 @@
             // <span>${stSTU.txt.ft.created_with} </span> 
             // <img src="${stSTU.txt.ft.i_url}"> 
             // <a href='${stSTU.txt.ft.url}'> ${stSTU.txt.ft.name}</a>
-            function renderVERIFY() {
+            function renderVERIFY(link, direct=true) {
                 return `<div class="stu-box-wrap"><div class="hmv alt" id="content">
                 <div class="hmvH">
                 <div class="hmvH-icon" id="icon">
@@ -637,7 +649,7 @@
                     <div class="hmvB-title" id="title-popup">Liên kết đã sẳn sàng!</div>
                 </div>
                 <div class="hmvF">
-                    <a class="button pstL" id="continueBtn" href="https://link4sub.qkt/blog/cach-kiem-tien-tu-google-adsense-moi-nhat-2024-tu-a-z">Tiếp tục / Continue</a>
+                    <a class="button pstL" id="continueBtn" ${direct ? 'target="_blank" data-direct="true"' : ''} href="${link}">Tiếp tục / Continue</a>
                 </div></div>
             </div>`;
             }
@@ -682,14 +694,31 @@
                 `;
             }
             
-            if (!STATE?.old?.verify) {
+            if (!STATE?.old?.verify && STATE?.config?.verify?.active == 'true') {
+                const cfVerify = STATE?.config?.verify;
+
                 setTimeout(() => {
-                        document.getElementById('stuC').innerHTML = renderVERIFY();
+                        document.getElementById('stuC').innerHTML = renderVERIFY(_rd(cfVerify.links), STATE?.config?.direct?.active);
+                        if (STATE.config['direct']?.active) {                
+                            let cfObj = STATE.config['direct'];
+                            let links = cfObj.link.split(',').map(link => link.trim());
+                            
+                            if (links) {     
+                                document.querySelectorAll('.stu-box-wrap [data-direct=true]').forEach(button => {                        
+                                    button.addEventListener('click', () => {
+                                        if (button.getAttribute('href')) {                                            
+                                            setTimeout(() => {
+                                                window.location.href = _rd(links);
+                                            }, cfObj.timer);
+                                        }
+                                    })
+                                });
+                            } 
+                        }
                         document.getElementById('continueBtn').addEventListener('click', () => {
-                            setSTT(STATE.old, 'verify')
+                            setSTT(STATE.old, 'verify');
                         })
-                }, 1500);
-                // document.getElementById('stuC').innerHTML = renderVERIFY();
+                }, cfVerify.timer);
 
             } else {
                 document.getElementById('stuC').innerHTML = renderSTU();
@@ -747,52 +776,87 @@
                 });
             }
             /*-- SET STT -- */
-            for (const key in STATE.old.btn) {
-                if (STATE.old.btn.hasOwnProperty(key)) {
-                    var item = STATE.old.btn[key];
-                    if (item) {
-                        const button = document.querySelector('[data-id="' + key + '"]');
-                        if (button) {
-                            completeButton(button);
-                        }
+            // Hàm xử lý hoàn thành nút
+            function processButtons(group, selector) {
+                for (const key in group) {
+                    if (group.hasOwnProperty(key) && group[key]) {
+                        const button = document.querySelector(`${selector}[data-id="${key}"]`);
+                        if (button) completeButton(button);
                     }
                 }
             }
 
-            const totalBtn = document.querySelectorAll('.stu-box-wrap .b > a').length;
-            const totalBtnD = document.querySelectorAll('.stu-box-wrap .b > a.done').length;
-            const perProgs = Math.floor(100 / totalBtn);
-            const perWidthProgs = totalBtnD < totalBtn ? (perProgs * totalBtnD) + '%' : '100%';
+            // Xử lý các nút hoàn thành trong STATE
+            processButtons(STATE.old.btn, '.b > a');
+            processButtons(STATE.old.adclick, '.c > a');
+            
+            // Tính toán tổng số nút và các nút đã hoàn thành
+            const totalBtns = document.querySelectorAll('.stu-box-wrap .b > a').length;
+            const completedBtns = document.querySelectorAll('.stu-box-wrap .b > a.done').length;
+            const totalAdClickBtns = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn').length;
+            const completedAdClickBtns = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn.done').length;
 
-            if (totalBtn > 0) {
+            if (totalBtns > 0) {
+                let progressText = '';
+                let progressCount = ''; // Đếm số hoàn thành trên tổng số
+            
+                if (completedBtns < totalBtns) {
+                    
+                    progressText = stSTU.txt.unlock_progress;
+                    progressCount = `<span id="prog01">${completedBtns}</span>/<span id="prog02">${totalBtns}</span>`;
+                } else if (totalAdClickBtns > 0) {                    
+                    progressText = stSTU.txt.unlock_progress;
+                    progressCount = `<span id="prog01">${completedAdClickBtns}</span>/<span id="prog02">${totalAdClickBtns}</span>`;
+                } else if (completedBtns == totalBtns) {
+                    progressText = stSTU.txt.unlock_progress;
+                    progressCount = `<span id="prog01">${completedBtns}</span>/<span id="prog02">${totalBtns}</span>`;
+                } else {
+                    progressText = stSTU.txt.unlock_progress;
+                    progressCount = `<span id="prog01">${totalBtns}</span>/<span id="prog02">${totalBtns}</span>`;
+                }
+            
+                const progressPercentage = completedBtns < totalBtns
+                    ? Math.floor((completedBtns / totalBtns) * 100)
+                    : totalAdClickBtns != 0 ? Math.floor((completedAdClickBtns / totalAdClickBtns) * 100) : Math.floor((completedBtns / totalBtns) * 100);
+                
                 const progressHTML = `
-                    <div>${stSTU.txt.unlock_progress} <span id='prog01'>${totalBtnD}</span>/<span>${totalBtn}</span></div>
-                    <div class='stu-progs'><div id='stuBar' class='${perWidthProgs === '100%' ? 's' : ''}' style='width:${perWidthProgs}'></div></div>
+                    <div>${progressText} ${progressCount}</div>
+                    <div class="stu-progs">
+                        <div id="stuBar" class="${progressPercentage === 100 ? 's' : ''}" style="width:${progressPercentage}%"></div>
+                    </div>
                 `;
-
                 document.getElementById('pg').innerHTML = progressHTML;
             }
 
-            if (totalBtn == totalBtnD) {
-                const destButtons = document.querySelectorAll('.stu-box-wrap .d a');
-                unlockButtons(destButtons);
+            // Xử lý trạng thái hiển thị các nhóm nút
+            if (totalBtns === completedBtns && totalAdClickBtns === completedAdClickBtns) {
+                unlockButtons(document.querySelectorAll('.stu-box-wrap .d a'));
+            } else if (totalBtns === completedBtns && totalAdClickBtns > 0 && totalAdClickBtns !== completedAdClickBtns) {
+                const actionGroups = document.getElementById('actionGroups');
+                const adClickBtns = document.getElementById('adClickBtns');
+
+                if (actionGroups) actionGroups.classList.add('hidden');
+                if (adClickBtns) adClickBtns.classList.replace('hidden', 'show');
             }
 
-            function moveProgs(totalBtn, perProgs) {
-                let totalBtnD = document.querySelectorAll('.stu-box-wrap .b > a.done').length;
+
+            function moveProgressBar(totalBtn, perProgs, group) {
+                let totalBtnD = document.querySelectorAll(`.stu-box-wrap .${group} > a.done`).length;
                 let perWidthProgs = totalBtnD < totalBtn ? (perProgs * totalBtnD) : 100;
                 let time = 500 / perProgs;
                 let curWidth = perProgs * (totalBtnD - 1);
-
+                
                 let elmPr01 = document.getElementById('prog01');
+                let elmPr02 = document.getElementById('prog02');
                 let elmBar = document.getElementById('stuBar');
-
+            
                 elmPr01.innerText = totalBtnD;
+                elmPr02.innerText = totalBtn;
 
                 if (perWidthProgs == 100) {
                     elmBar.classList.add('s');
                 }
-
+            
                 let move = setInterval(() => {
                     if (curWidth >= perWidthProgs) {
                         clearInterval(move);
@@ -801,31 +865,84 @@
                         elmBar.style.width = curWidth + '%';
                     }
                 }, time);
-
+            
                 return [curWidth, perWidthProgs];
             }
+            function moveProgressBarReverse(totalBtn) {
+                let curWidth = 100; // Bắt đầu từ 100%
+                let elmBar = document.getElementById('stuBar'); // Lấy thanh tiến trình
+                let elmPr01 = document.getElementById('prog01');
+                let elmPr02 = document.getElementById('prog02');
+                elmPr01.innerHTML = 0;
+                elmPr02.innerHTML = totalBtn.length;
 
+                // Thiết lập thời gian di chuyển mượt mà
+                let time = 15; // Thời gian thay đổi width mỗi lần (ms)
+            
+                // Chạy animation giảm dần từ 100% về 0
+                let move = setInterval(() => {
+                    if (curWidth <= 0) {
+                        clearInterval(move); // Dừng lại khi width đạt 0%
+                    } else {
+                        curWidth -= 1; // Giảm 1% mỗi lần
+                        elmBar.style.width = curWidth + '%'; // Cập nhật width của thanh tiến trình
+                    }
+                }, time);
+            }
+            
             const processButtonClick = (button) => {
                 completeButton(button, stSTU.txt.done);
 
-                moveProgs(totalBtn, perProgs)
-
+                let totalBtn = document.querySelectorAll('.stu-box-wrap .b > a').length;
+                let perProgs = Math.floor(100 / totalBtn);
+ 
+                // Kiểm tra xem có bước nào trong nhóm C không
+                let adClickBtns = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn');
+                let adClickBtnDones = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn.done');
                 let buttonTotals = document.querySelectorAll('.stu-box-wrap .b > a.stu-btn');
                 let buttonTotalDones = document.querySelectorAll('.stu-box-wrap .b > a.stu-btn.done');
 
+                let [curWidthB, perWidthB] = moveProgressBar(totalBtn, perProgs, 'b');
+
                 if (buttonTotals.length == buttonTotalDones.length) {
-                    const destButtons = document.querySelectorAll('.stu-box-wrap .d a');
+                    if (adClickBtns.length) {
+                        if (adClickBtnDones.length == adClickBtns.length) {
+                            const destButtons = document.querySelectorAll('.stu-box-wrap .d a');
+                            setTimeout(() => {
+                                unlockButtons(destButtons);
+                            }, 1500);
+                        } else {
+                            
+                            if (adClickBtnDones.length == 0) {
+                                setTimeout(() => {
+                                    let actionGroups = document.getElementById('actionGroups');
+                                    let eltAdClickBtns = document.getElementById('adClickBtns');
+                                    moveProgressBarReverse(adClickBtns);
 
-                    setTimeout(() => {
-                        unlockButtons(destButtons);
-                    }, 1500);
+                                    if (actionGroups) actionGroups.classList.add('hidden') ;
+                                    if (eltAdClickBtns) eltAdClickBtns.classList.replace('hidden', 'show');
+                                }, 2000);
+
+                            } else {
+                                let [curWidthC, perWidthC] = moveProgressBar(totalBtnC, perProgsC, 'c');
+                            }
+
+                        }
+                    } else {
+                        // Nếu không có bước nhóm C, mở các nút tiếp theo
+                        const destButtons = document.querySelectorAll('.stu-box-wrap .d a');
+                        setTimeout(() => {
+                            unlockButtons(destButtons);
+                        }, 1500);
+                    }
                 }
-
+            
+                // Xóa thông báo nếu có
                 const msg = document.getElementById('msgWr');
                 if (msg) msg.remove();
             };
-
-            document.querySelectorAll('.stu-box-wrap .b > a').forEach(button => {
+            
+            document.querySelectorAll('.stu-box-wrap >.b a.stu-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     if (button.classList.contains('done') || button.querySelector('i').classList.contains('load')) {
                         return;
@@ -841,38 +958,8 @@
                     if (!button.classList.contains('ad-click')) {
                         spanElmt.innerText = stSTU.txt.load;
 
-                        if (false) {
-                            const alertElmt = button.nextElementSibling;
-                            if (alertElmt && alertElmt.classList.contains('stu-alert')) alertElmt.remove();
-
-                            let leaveTime, returnTime, timeAway;
-
-                            const listenerBlur = () => {
-                                leaveTime = Date.now();
-                            };
-                            const listenerFocus = () => {
-                                returnTime = Date.now();
-                                timeAway = returnTime - leaveTime;
-                                if (timeAway < 1000) {
-                                    iconElmt.innerHTML = iconSTU['chevr'];
-                                    iconElmt.classList.remove('load');
-                                    spanElmt.innerText = nameBtn;
-                                    button.insertAdjacentHTML('afterend',
-                                        '<div class="stu-alert">☝️ Bạn thực hiện bước <strong>' +
-                                        nameBtn +
-                                        '</strong> quá nhanh, hãy thực hiện lại một lần nữa!</div>');
-                                    clearTimeout(processButtonClickTimeout);
-                                }
-                                window.removeEventListener('blur', listenerBlur);
-                                window.removeEventListener('focus', listenerFocus);
-                            }
-
-                            window.addEventListener('blur', listenerBlur);
-                            window.addEventListener('focus', listenerFocus);
-                        } else {
-                            setSTT(STATE.old, 'btn', button.getAttribute('data-id'));
-                        }
-
+                        setSTT(STATE.old, 'btn', button.getAttribute('data-id'));
+                        
                         const processButtonClickTimeout = setTimeout(() => {
                             setSTT(STATE.old, 'btn', button.getAttribute('data-id'));
                             processButtonClick(button);
@@ -940,6 +1027,31 @@
 
                 });
             })
+            document.querySelectorAll('.stu-box-wrap >.c a.stu-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (button.classList.contains('done') || button.querySelector('i').classList.contains('load')) {
+                        return;
+                    }
+
+                    const iconElmt = button.querySelector('i');
+                    const spanElmt = button.querySelector('span');
+                    const nameBtn = button.getAttribute('data-name');
+
+                    iconElmt.innerHTML = iconSTU['loader'];
+                    iconElmt.classList.add('load');
+
+                    if (!button.classList.contains('ad-click')) {
+                        spanElmt.innerText = stSTU.txt.load;
+
+                        setSTT(STATE.old, 'adclick', button.getAttribute('data-id'));
+
+                        setTimeout(() => {
+                            processButtonClick(button);
+                        }, 6000); //6000
+                    } 
+
+                });
+            })
 
             document.querySelectorAll('.stu-box-wrap>.d>.cl>.stu-btn[data-dest=true]').forEach(button => {
                 let flag = true;
@@ -970,24 +1082,28 @@
             });
 
             /* add bannerAd */
-            // if (STATE.config['banner']) {
-            //     let cfAd = STATE.config['banner'];
+            if (STATE.config['banner']) {
+                let cfAd = STATE.config['banner'];
                                 
-            //     if (cfAd) {
-            //         let selectors = cfAd.select.split(",");
-            //         selectors.forEach(select => {
-            //             xQK.updateContent(cfAd.html, select);
-            //         });
+                if (cfAd) {
+                    let selectors = cfAd.select.split(",");
+                    selectors.forEach(select => {
+                        xQK.updateContent(cfAd.html, select);
+                    });
                     
-            //     }
-            // }
-            // if (STATE.config['direct']?.active == "on") {
+                }
+            }
+            
+            if (STATE.config['direct']?.active) {                
                 let cfObj = STATE.config['direct'];
                 let links = cfObj.link.split(',').map(link => link.trim());
-                if (links) {
-                    document.querySelectorAll('.stu-box-wrap [data-direct=true]').forEach(button => {
+                
+                if (links) {                    
+                    document.querySelectorAll('.stu-box-wrap [data-direct=true]').forEach(button => {                        
                         button.addEventListener('click', () => {
                             if (button.getAttribute('href')) {
+                                console.log("123");
+                                
                                 setTimeout(() => {
                                     window.location.href = _rd(links);
                                 }, cfObj.timer);
@@ -997,32 +1113,12 @@
                 } else {
                     console.log('direct-ad không hoạt động vì thiếu target')
                 }
-            // }
+            }
 
         } else {
             xQK.showError('error');
         }
     };
 
-    
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     const languageSelector = document.getElementById('language-selector');
-        
-    //     if (languageSelector) {
-    //         // Check local storage for previously selected language
-    //         const savedLang = localStorage.getItem('selectedLanguage');
-    //         const currentLang = savedLang || (navigator.language || navigator.userLanguage || 'en').split('-')[0];
-            
-    //         // Set initial value based on saved language or current language
-    //         languageSelector.value = currentLang;
-    
-    //         // Add change event listener
-    //         languageSelector.addEventListener('change', (e) => {
-    //             // Save the selected language in local storage
-    //             localStorage.setItem('selectedLanguage', e.target.value);
-    //             reloadLanguage(e.target.value);
-    //         });
-    //     }
-    // });
     
     /*]]>*/

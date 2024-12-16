@@ -7,6 +7,7 @@ use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class UserService
@@ -53,15 +54,25 @@ class UserService implements UserServiceInterface
         $keyword = addslashes($request->input('keyword'));
         $sortColumn = $request->input('sort_column') && $request->input('sort_column') != '-1' ? $request->input('sort_column') : 'balance';
         $sortDirection = $request->input('sort_direction') ? $request->input('sort_direction') : 'desc';
-
+    
+        // Cache key based on search criteria
+        $cacheKey = 'user_stats_' . md5($keyword . $sortColumn . $sortDirection . $request->get('page', 1));
+    
+        // Try to get the cached data
+        $cachedData = Cache::get($cacheKey);
+    
+        if ($cachedData) {
+            return $cachedData; // Return cached data if available
+        }
+    
         $condition = [
             'keyword' => $keyword,
             'orWhere' => [
-                ['email', 'LIKE', ('%'.$keyword.'%')],
-                ['users.id', 'LIKE', ('%'.$keyword.'%')]
+                ['email', 'LIKE', ('%' . $keyword . '%')],
+                ['users.id', 'LIKE', ('%' . $keyword . '%')]
             ],
         ];
-
+    
         $perPage = 10;
         $currentPage = request()->get('page', 1);
         
@@ -84,7 +95,7 @@ class UserService implements UserServiceInterface
                 ]
             ];
         })->sortByDesc('data_metric.balance');
-        
+        dd($new_data);
         $paginatedUsers = new LengthAwarePaginator(
             $new_data->forPage($currentPage, $perPage),
             $new_data->count(),
@@ -92,9 +103,13 @@ class UserService implements UserServiceInterface
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-
+    
+        // Cache the data for 60 minutes
+        Cache::put($cacheKey, $paginatedUsers, now()->addMinutes(60));
+    
         return $paginatedUsers;
     }
+    
     
     public function show($request, $id)
     {
@@ -161,8 +176,8 @@ class UserService implements UserServiceInterface
             'user_metric' => $metric,
             'STUstats' => $STUstats,
             'ctSTUstats' => $ctSTUstats,
-            'withdraw' => $withdraw,
-            'ctWithdraw' => $ctWithdraw,
+            // 'withdraw' => $withdraw,
+            // 'ctWithdraw' => $ctWithdraw,
             'STUlinks' => $STUlinks,
             'ctSTUlinks' => $ctSTUlinks->sortByDesc('created_at'),
             'ctStatsTable' => new LengthAwarePaginator($items, $total, $perPage, $currentPage, [

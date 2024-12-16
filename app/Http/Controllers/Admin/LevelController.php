@@ -57,7 +57,7 @@ class LevelController extends Controller
 
     public function edit(string $id)
     {
-        $level = $this->levelRepository->findById($id);
+        $level = $this->levelRepository->find($id);
 
         return view('backend.admin.level.edit', compact('level'));
     }

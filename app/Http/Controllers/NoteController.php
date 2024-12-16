@@ -198,13 +198,6 @@ class NoteController extends Controller
     }
     public function count(Request $request, $alias)
     {
-        // $st = Setting::where('key', 'rate')->first();
-        // if ($st->count() >= 1) {
-        //     $rate = json_decode($st->value, true);
-        // } else {
-        //     $rate = [[0.00, 1], [0.00, 1], [0.00, 1]];
-        // }
-
         $response = [];
         $referer = $request->headers->get('referer');
 

@@ -141,7 +141,13 @@
         </div>
     </noscript>
     @stack('scripts')
-
+    <script>
+    function darkMode() {
+        localStorage.setItem("mode", "darkmode" === localStorage.getItem("mode") ? "light" : "darkmode"), "darkmode" ===
+            localStorage.getItem("mode") ? document.querySelector("#mainCont").classList.add("drK") : document
+            .querySelector("#mainCont").classList.remove("drK")
+    };
+    </script>
 
 </body>
 <script src="{{ asset('/fontend/stu/js/app2.js?v=' . time()) }}"></script>

@@ -17,4 +17,5 @@ interface PostRepositoryInterface extends BaseRepositoryInterface
     public function getPostsInRange(string $start, string $end);
     public function getPostsCache(int $take = null, int $paginate = null);
     public function getPublishedPost($slug);
+    public function getAllPublished();
 }

@@ -82,7 +82,7 @@
 
     <!--[ Show only onep grid column in Mobile ]-->
     <script>const IS_STU = localStorage.getItem('_STU') !== null || location.search.match(/[\?&]a=([^&]+)/);
-        if (IS_STU) {
+        if (IS_STU && window.location.pathname.match(/^\/blog\/[a-zA-Z0-9-]+$/) !== null) {
             document.body.classList.add('onSTU');
         }
     </script>

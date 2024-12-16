@@ -120,11 +120,11 @@ return [
         'permission' => 'view_all_dashboard',
         'children' => [
             [
-                'title' => 'Stu ',
+                'title' => 'SubUnlock',
                 'url' => 'admin.levels.index'
             ],
             [
-                'title' => 'Note ',
+                'title' => 'Note',
                 'url' => 'admin.note_levels.index'
             ]
         ]

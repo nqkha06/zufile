@@ -87,24 +87,29 @@ class DashboardService implements DashboardServiceInterface
         }
         
         $report = $user->STUstats
-                       ->where('date', '>=', $startDate)
-                       ->where('date', '<=', $endDate)
-                       ->groupBy('date');
+        ->where('date', '>=', $startDate)
+        ->where('date', '<=', $endDate)
+        ->groupBy('date');
+    
+        $NOTE_report = $user->NOTEStats
+            ->where('date', '>=', $startDate)
+            ->where('date', '<=', $endDate)
+            ->groupBy('date');
+        
         $total_clicks = 0;
         $total_revenue = 0;
         $_report = [];
         
         foreach ($allDates as $date) {
-            if (isset($report[$date])) {
-                $clicks = $report[$date]->sum('clicks');
-                $revenue = $report[$date]->sum('revenue');
-                $cpm = $clicks > 0 ? ($revenue / $clicks) * 1000 : 0;
-            } else {
-                // Nếu không có dữ liệu cho ngày đó
-                $clicks = 0;
-                $revenue = 0;
-                $cpm = 0;
-            }
+            $stu_clicks = isset($report[$date]) ? $report[$date]->sum('clicks') : 0;
+            $stu_revenue = isset($report[$date]) ? $report[$date]->sum('revenue') : 0;
+        
+            $note_clicks = isset($NOTE_report[$date]) ? $NOTE_report[$date]->sum('clicks') : 0;
+            $note_revenue = isset($NOTE_report[$date]) ? $NOTE_report[$date]->sum('revenue') : 0;
+        
+            $clicks = $stu_clicks + $note_clicks;
+            $revenue = $stu_revenue + $note_revenue;
+            $cpm = $clicks > 0 ? ($revenue / $clicks) * 1000 : 0;
         
             $_report[$date] = [
                 'date' => $date,

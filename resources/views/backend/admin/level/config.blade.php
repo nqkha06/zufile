@@ -90,7 +90,7 @@
                         'required' => true
                     ],
                     ['label' => 'Tên', 'name' => '[confs][name]', 'type' => 'text', 'required' => true],
-                    ['label' => 'Phần tử', 'name' => '[confs][type]', 'type' => 'text', 'required' => true],
+                    ['label' => 'Phần tử', 'name' => '[confs][select]', 'type' => 'text', 'required' => true],
                     ['label' => 'Tỉ lệ xuất hiện', 'name' => '[confs][appr_rate]', 'type' => 'text', 'required' => true],
                     ['label' => 'Thời gian tồn tại', 'name' => '[confs][exist_time]', 'type' => 'text', 'required' => true],
                     ['label' => 'Lượt nhấp tối đa', 'name' => '[confs][click_limit]', 'type' => 'text', 'required' => true],
@@ -102,77 +102,226 @@
                     ],
                 ],
             ],
+            'click2' => [
+                'title' => 'AD Click 2',
+                'key_name' => 'click2',
+
+                'fields' => [
+                    [
+                        'label' => 'Vị trí',
+                        'name' => '[confs][position]',
+                        'type' => 'select',
+                        'required' => true,
+                        'options' => ['first' => 'Đầu', 'last' => 'Cuối'],
+                        'required' => true
+                    ],
+                    ['label' => 'Xuất hiện ở trang', 'name' => '[confs][page_appear]', 'type' => 'text', 'required' => true],
+                    [
+                        'label' => 'Biểu tượng',
+                        'name' => '[confs][icon]',
+                        'type' => 'select',
+                        'required' => true,
+                        'options' => ['ad' => 'Ad', 'ytb' => 'YouTube'],
+                        'required' => true
+                    ],
+                    ['label' => 'Tên', 'name' => '[confs][name]', 'type' => 'text', 'required' => true],
+                    ['label' => 'Phần tử', 'name' => '[confs][type]', 'type' => 'text', 'required' => true],
+                    ['label' => 'Tỉ lệ xuất hiện', 'name' => '[confs][appr_rate]', 'type' => 'text', 'required' => true],
+                    ['label' => 'Thời gian tồn tại', 'name' => '[confs][exist_time]', 'type' => 'text', 'required' => true],
+                    ['label' => 'Lượt nhấp tối đa', 'name' => '[confs][click_limit]', 'type' => 'text', 'required' => true],
+                    [
+                        'label' => 'Thời gian reset lượt nhấp',
+                        'name' => '[confs][reset_time]',
+                        'type' => 'text',
+                        'required' => true,
+                    ],
+                    [
+                        'label' => 'Liên kết',
+                        'name' => '[confs][links]',
+                        'type' => 'text',
+                        'required' => true,
+                    ],
+                ],
+            ],
             'next' => [
                 'title' => 'AD Bước Tiếp Theo',
                 'key_name' => 'next',
-                'fields' => [['label' => 'Liên kết', 'name' => 'link', 'type' => 'textarea']],
+                'fields' => [['label' => 'Liên kết', 'name' => '[confs][link]', 'type' => 'textarea']],
             ],
             'verify' => [
                 'title' => 'Verify',
                 'key_name' => 'verify',
-                'fields' => [],
+                'fields' => [
+                    [
+                        'label' => 'Đếm ngược',
+                        'name' => '[confs][timer]',
+                        'type' => 'text',
+                        'required' => true
+                    ],
+                    [
+                        'label' => 'Liên kết',
+                        'name' => '[confs][links]',
+                        'type' => 'text',
+                        'required' => true,
+                    ]
+               
+                ],
             ],
             'setting' => [
                 'title' => 'Cài Đặt Chung',
                 'key_name' => 'setting',
 
-                'fields' => [['label' => 'Tổng trang', 'name' => 'total_page', 'type' => 'text', 'required' => true]],
+                'fields' => [['label' => 'Tổng trang', 'name' => '[confs][total_page]', 'type' => 'text', 'required' => true]],
             ],
         ];
     @endphp
 
     <form action="{{ route('admin.levels.updateConfig', $level->id) }}" method="POST">
+        
         @csrf
         @method('PUT')
-        <div class="card mb-5">
-            <div class="card-body">
-                <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                    @foreach ($tabConfigs as $key => $config)
-                        <li class="nav-item">
-                            <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $key }}-tab"
-                                data-bs-toggle="pill" data-bs-target="#{{ $key }}"
-                                type="button">{{ $config['title'] }}</button>
-                        </li>
-                    @endforeach
-                </ul>
+
+        
+        <div class="row">
+
+        <div class="gap-3 col-md-9">
+            <div class="card mb-5">
+                <div class="card-body">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                        @foreach ($tabConfigs as $key => $config)
+                            <li class="nav-item">
+                                <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="{{ $key }}-tab"
+                                    data-bs-toggle="pill" data-bs-target="#{{ $key }}"
+                                    type="button">{{ $config['title'] }}</button>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+
+                {{-- <div class="card-body p-0"> --}}
+                    <div class="tab-content" id="pills-tabContent">
+                        @foreach ($tabConfigs as $key => $config)
+                            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ $key }}"
+                                aria-labelledby="{{ $key }}-tab">
+                                @php
+                                    $data_config = isset($level->config) ? json_decode($level->config) : [];
+                                @endphp
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="{{ $key }}-configs"></div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button count="0" id="add-{{ $key }}-config" class="btn" type="button">
+                                                            <svg class="icon icon-left svg-icon-ti-ti-plus" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                      <path d="M12 5l0 14"></path>
+                                      <path d="M5 12l14 0"></path>
+                                    </svg>            
+                                    Thêm cấu hình mới
+                                                
+                                            </button>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        @endforeach
+                    {{-- </div> --}}
+    
+                </div>
+    
+    
             </div>
         </div>
+        <div class="col-md-3 gap-3 d-flex flex-column-reverse flex-md-column mb-md-0 mb-5">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">
+                        Publish
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="btn-list">
+                        <button class="btn btn-primary" type="submit" value="apply" name="submitter">
+                            <svg class="icon icon-left svg-icon-ti-ti-device-floppy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"></path>
+                                <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                <path d="M14 4l0 4l-6 0l0 -4"></path>
+                            </svg>
+                            Save
 
-        <div class="card">
+                        </button>
 
-            {{-- <div class="card-body p-0"> --}}
-                <div class="tab-content" id="pills-tabContent">
-                    @foreach ($tabConfigs as $key => $config)
-                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="{{ $key }}"
-                            aria-labelledby="{{ $key }}-tab">
-                            @php
-                                $data_config = isset($level->config) ? json_decode($level->config) : [];
-                            @endphp
-                            <div id="{{ $key }}-configs"></div>
-                            <div class="text-end mb-3">
-                                <div count="0" id="add-{{ $key }}-config" class="btn btn-success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus"
-                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                                        stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M12 5l0 14"></path>
-                                        <path d="M5 12l14 0"></path>
-                                    </svg>
-                                    Thêm cấu hình mới
+                        <button class="btn" type="submit" name="submitter" value="save">
+                            <svg class="icon icon-left svg-icon-ti-ti-transfer-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M4 18v3h16v-14l-8 -4l-8 4v3"></path>
+                                <path d="M4 14h9"></path>
+                                <path d="M10 11l3 3l-3 3"></path>
+                            </svg>
+                            Save &amp; Exit
+
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div data-bb-waypoint="" data-bb-target="#form-actions"></div>
+
+            <header class="top-0 w-100 position-fixed end-0 z-1000" id="form-actions" style="display: none;">
+                <div class="navbar">
+                    <div class="container-xl">
+                        <div class="row g-2 align-items-center w-100">
+                            <div class="col">
+                                <div class="page-pretitle">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                        </ol>
+                                    </nav>
+
+                                </div>
+                            </div>
+                            <div class="col-auto ms-auto d-print-none">
+                                <div class="btn-list">
+                                    <button class="btn btn-primary" type="submit" value="apply" name="submitter">
+                                        <svg class="icon icon-left svg-icon-ti-ti-device-floppy" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2">
+                                            </path>
+                                            <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            <path d="M14 4l0 4l-6 0l0 -4"></path>
+                                        </svg>
+                                        Save
+
+                                    </button>
+
+                                    <button class="btn" type="submit" name="submitter" value="save">
+                                        <svg class="icon icon-left svg-icon-ti-ti-transfer-in" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M4 18v3h16v-14l-8 -4l-8 4v3"></path>
+                                            <path d="M4 14h9"></path>
+                                            <path d="M10 11l3 3l-3 3"></path>
+                                        </svg>
+                                        Save &amp; Exit
+
+                                    </button>
+
+
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                {{-- </div> --}}
-
-            </div>
-
-            <div class="card-footer">
-                <div class="mb-3 text-start">
-                    <button type="submit" class="btn btn-primary" id="submit-form">Lưu lại</button>
+                    </div>
                 </div>
-            </div>
+            </header>
+
         </div>
+
+        
+    </div>
     </form>
 
     <script>
@@ -180,7 +329,7 @@
         const tabConfigs = @json($tabConfigs);
 
         document.addEventListener('DOMContentLoaded', function() {
-            const configTypes = ['direct', 'banner', 'next', 'step', 'click', 'verify', 'setting'];
+            const configTypes = ['direct', 'banner', 'next', 'step', 'click', 'click2', 'verify', 'setting'];
 
             configTypes.forEach(type => {
                 const addButton = document.getElementById(`add-${type}-config`);

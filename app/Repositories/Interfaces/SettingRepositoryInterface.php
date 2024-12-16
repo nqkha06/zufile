@@ -8,5 +8,5 @@ namespace App\Repositories\Interfaces;
  */
 interface SettingRepositoryInterface extends BaseRepositoryInterface
 {
-    public function getAll();
+    
 }

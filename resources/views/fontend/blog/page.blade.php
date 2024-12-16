@@ -10,15 +10,9 @@
 @section('twitter_description', $page_data['summary'])
 @section('twitter_url', URL('/'))
 
-@push('styles')
-    <link href="{{ asset('/fontend/stu/css/app.css') }}" rel="stylesheet" />
-    <style>
-      aside {
-        display: none !important;
-      }
-    </style>
-@endpush
-
+@php
+    $hideSidebar = true
+@endphp
 @section('content')
     <!--[ Blog content ]-->
 

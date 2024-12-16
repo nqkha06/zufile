@@ -20,24 +20,8 @@ class UserService implements UserServiceInterface
     public function index($request)
     {
 
-        $keyword = addslashes($request->input('keyword'));
-        $created_at = addslashes($request->input('created_at'));
-        $role = addslashes($request->input('role'));
-
-        $condition = [
-            'keyword' => $keyword,
-            'orWhere' => [
-                ['email', 'LIKE', ('%'.$keyword.'%')],
-                ['id', 'LIKE', ('%'.$keyword.'%')]
-            ],
-        ];
-        if (!empty($created_at)) {
-            $condition['where'] = [['created_at', '=', $created_at]];
-        }
-
-        $invoices = $this->userRepository->pagination(['*'], $condition, 10);
-
-        return $invoices;
+    
+        return [];
     }
 
 }

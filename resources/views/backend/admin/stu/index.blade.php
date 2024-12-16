@@ -107,7 +107,7 @@
                                     <td>{{ $link->id }}</td>
                                     @if (isset($link->user))
                                         <td style="white-space: nowrap">
-                                            <a class="badge badge-outline text-blue" target="_blank"
+                                            <a class="badge badge-outline text-blue"
                                                 href="{{ route('admin.users.show', $link->user->id) }}">{{ $link->user->name }}</a>
                                         </td>
                                     @else
@@ -122,7 +122,9 @@
                                         {{ date('H:i, d/m/Y', strtotime($link->created_at)) }}</td>
                                     <td>{{ $link->stats->sum('clicks') }}</td>
                                     <td>${{ round($link->stats->sum('revenue'), 3) }}</td>
-                                    <td><span class="badge bg-azure-lt">{{ $link->level->name }}</span></td>
+                                    <td>
+                                        <a class="badge bg-azure-lt" href="{{ route('admin.levels.edit', $link->level) }}">{{ $link->level->name }}</a>
+                                    </td>
                                     <td>@if ($link->status == 'deleted')
                                         <span class="badge bg-danger-lt">{{ __('Đã xoá') }}</span>
                                         @else
@@ -134,7 +136,7 @@
                                             <button onclick="editSTU(this)" data-alias="{{ $link->alias }}"
                                                 data-param="{{ $link->data }}" class="btn"
                                                 data-bs-toggle="modal" data-bs-target="#modal-large">
-                                                Edit
+                                                Chỉnh sửa
                                             </button>
                                             <div class="dropdown">
                                                 <button class="btn dropdown-toggle align-text-top"
@@ -178,7 +180,7 @@
             </div>
 
             <div class="card-footer d-flex align-items-center">
-                {{ $links->withQueryString()->links('pagination.tabler') }}
+                {{ $links->links('pagination.tabler') }}
             </div>
         </div>
     </div>

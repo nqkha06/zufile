@@ -135,7 +135,7 @@
                                     <tr>
                                         <td style="white-space: nowrap">{{ $key }}</td>
                                         <td>{{ $val['clicks'] }}</td>
-                                        <td>{{ $val['revenue'] }}</td>
+                                        <td>${{ $val['revenue'] }}</td>
                                         <td>$0</td>
                                         <td>{{ $val['cpm'] }}</td>
                                     </tr>

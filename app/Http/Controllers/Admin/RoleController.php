@@ -25,7 +25,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = $this->roleRepository->pagination();
+        $roles = $this->roleRepository->getAllPaginated();
 
         return view('backend.admin.role.index', compact('roles'));
     }
@@ -56,7 +56,7 @@ class RoleController extends Controller
         $data['title'] = 'Chỉnh sửa role';
         $data['content'] = 'role.edit';
 
-        $data['role'] = $this->roleRepository->findById($id);
+        $data['role'] = $this->roleRepository->find($id);
 
         return view('backend.tabler.layout', compact('data'));
     }
@@ -87,7 +87,7 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        $role = $this->roleRepository->findById($id);
+        $role = $this->roleRepository->find($id);
 
         $this->roleRepository->delete($id);
 
@@ -98,12 +98,12 @@ class RoleController extends Controller
     {
 
         $permissions = $this->permissionRepository->getAll();
-        $role = $this->roleRepository->findById($id);
+        $role = $this->roleRepository->find($id);
         $rolePermissions = DB::table('role_has_permissions')
                                 ->where('role_has_permissions.role_id', $id)
                                 ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
                                 ->all();
-                                $permission_groups = PermissionGroup::with('permissions')->get();
+        $permission_groups = PermissionGroup::with('permissions')->get();
 
         return view('backend.admin.role.add', compact('permissions', 'role', 'rolePermissions', 'permission_groups'));
     }
@@ -114,7 +114,7 @@ class RoleController extends Controller
             'permission' => 'required'
         ]);
 
-        $role = $this->roleRepository->findById($id);
+        $role = $this->roleRepository->find($id);
 
         $role->syncPermissions($request->permission);
 

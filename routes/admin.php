@@ -45,6 +45,8 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
 
     Route::prefix('invoices')->group( function () {
         Route::get('/', [App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('admin.invoices.index');
+        Route::get('/create', [App\Http\Controllers\Admin\InvoiceController::class, 'create'])->name('admin.invoices.create');
+        Route::post('/', [App\Http\Controllers\Admin\InvoiceController::class, 'store'])->name('admin.invoices.store');
         Route::get('/{id}/edit', [App\Http\Controllers\Admin\InvoiceController::class, 'edit'])->name('admin.invoices.edit');
         Route::get('/{id}/pay', [App\Http\Controllers\Admin\InvoiceController::class, 'pay'])->name('admin.invoices.pay');
         Route::put('/{id}', [App\Http\Controllers\Admin\InvoiceController::class, 'update'])->name('admin.invoices.update');

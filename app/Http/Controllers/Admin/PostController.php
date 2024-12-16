@@ -99,7 +99,7 @@ class PostController extends Controller
      */
     public function edit(int $id)
     {
-        $post = $this->postRepository->findById($id, ['*'], ['category']);
+        $post = $this->postRepository->with(['category'])->find($id);
         $categories = $this->categoryRepository->all([]);
 
         return view('backend.admin.post.edit', compact('post', 'categories'));

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\Admin\Interfaces\UserServiceInterface as UserService;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use App\Repositories\Interfaces\AddressRepositoryInterface as AddressRepository;
+use App\Repositories\Interfaces\RoleRepositoryInterface as RoleRepository;
 
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -21,8 +22,9 @@ class UserController extends Controller
     protected $userRepository;
 
     protected $addressRepository;
+    protected $roleRepository;
 
-    public function __construct(UserService $userService, UserRepository $userRepository, AddressRepository $addressRepository)
+    public function __construct(UserService $userService, UserRepository $userRepository, AddressRepository $addressRepository, RoleRepository $roleRepository)
     {
         // $this->middleware('permission:view_all_users', ['only' => ['index']]);
         // $this->middleware('permission:create_users', ['only' => ['create', 'store']]);
@@ -32,6 +34,8 @@ class UserController extends Controller
         $this->userService = $userService;
         $this->userRepository = $userRepository;
         $this->addressRepository = $addressRepository;
+        $this->addressRepository = $addressRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -49,8 +53,10 @@ class UserController extends Controller
             'conditions' => $request->only('keyword', 'start_date', 'end_date'),
             'sort' => $request->only('sort_by', 'sort_direction')
         ];
+        $roles = $this->roleRepository->getAll();
+
         $users = $this->userService->listAllPaginated($filterParams);
-        return view('backend.admin.user.index', compact('users'));
+        return view('backend.admin.user.index', compact('users', 'roles'));
     }
 
     /**
@@ -125,7 +131,7 @@ class UserController extends Controller
      */
     public function edit(Request $request, string $id)
     {
-        $user = $this->userRepository->findById($id, ['*'], ['address']);
+        $user = $this->userRepository->with(['address'])->find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRoles = $user->roles->pluck('name', 'name')->all();
         $paymentMethods = PaymentMethod::all();
@@ -138,7 +144,7 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = $this->userRepository->findById($id);
+        $user = $this->userRepository->find($id);
 
         $rules = [
             'name' => 'required|string|max:250',
@@ -198,9 +204,9 @@ class UserController extends Controller
 
     public function checkFraud($id)
     {
-        $user = $this->userRepository->findById($id);
+        $user = $this->userRepository->find($id);
 
-        $ipList = DB::table('stu_link_accesses')->where('user_id', $id)->pluck('ip_address')->toArray();
+        $ipList = DB::table('stu_link_accesses')->pluck('ip_address')->toArray();
         if (empty($ipList)) {
             return response()->json(['message' => 'Không có dữ liệu IP'], 200);
         }
@@ -253,13 +259,6 @@ class UserController extends Controller
         );
 
         return view('backend.admin.user.check', compact('totalIps', 'paginatedData', 'user'));
-        // Trả về kết quả
-        return response()->json([
-            'total_ips' => $totalIps,
-            'current_page' => $page,
-            'per_page' => $perPage,
-            'paginated' => $paginatedData
-        ], 200);
         
     }
 }

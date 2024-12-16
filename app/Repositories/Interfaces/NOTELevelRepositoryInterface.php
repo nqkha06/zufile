@@ -8,6 +8,6 @@ use App\Repositories\Interfaces\BaseRepositoryInterface;
  */
 interface NOTELevelRepositoryInterface extends BaseRepositoryInterface
 {
-    public function getAll();
+
     public function pubLevel();
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Fontend\CategoryController;
 use App\Http\Controllers\Fontend\PostController;
 
 use App\Http\Controllers\Member\DashboardController;
@@ -45,7 +44,5 @@ require __DIR__.'/note.php';
 
 /* auth route */
 require __DIR__.'/auth.php';
-
-require __DIR__.'/tool.php';
 
 Route::post('ckeditor/upload', [DashboardController::class, 'upload'])->name('ckeditor.upload');

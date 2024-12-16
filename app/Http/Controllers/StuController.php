@@ -13,6 +13,8 @@ use App\Repositories\Interfaces\STURepositoryInterface as STURepository;
 use App\Repositories\Interfaces\STULogReferralRepositoryInterface as STULogReferralRepository;
 use App\Repositories\Interfaces\STUAccessRepositoryInterface as STUAccessRepository;
 use App\Repositories\Interfaces\STUStatisticRepositoryInterface as STUStatisticRepository;
+use App\Services\Interfaces\PostServiceInterface as PostService;
+
 use proxycheck\proxycheck;
 use Illuminate\Support\Facades\Log;
 use App\Services\GeoIPService;
@@ -27,6 +29,7 @@ class StuController extends Controller
     protected $STUAccessRepository;
     protected $STUStatisticRepository;
     protected $geoIPService;
+    protected $postService;
 
     public function __construct(
         STUService $STUService,
@@ -34,6 +37,7 @@ class StuController extends Controller
         STULogReferralRepository $STULogReferralRepository,
         STUAccessRepository $STUAccessRepository,
         STUStatisticRepository $STUStatisticRepository,
+        PostService $postService,
         GeoIPService $geoIPService
     ) {
         $this->STUService = $STUService;
@@ -41,6 +45,7 @@ class StuController extends Controller
         $this->STULogReferralRepository = $STULogReferralRepository;
         $this->STUAccessRepository = $STUAccessRepository;
         $this->STUStatisticRepository = $STUStatisticRepository;
+        $this->postService = $postService;
         $this->geoIPService = $geoIPService;
     }
 
@@ -166,12 +171,22 @@ class StuController extends Controller
         }
     
         $data_pageload_configs = json_decode($link_data->level->pageload_config) ?? [];
-    
-        $pages = $this->getMatchingPages($data_pageload_configs, $data_user_agent);
-    
+        $chose_config = $this->getConfig($data_pageload_configs, $data_user_agent);
+        if ($chose_config && $chose_config?->link == "[auto]") {
+            $data_post_links = $this->postService->getAllPostLinks();
+            $pages = $data_post_links;
+        } else {
+            $pages = $this->getMatchingPages($data_pageload_configs, $data_user_agent);
+        }
+
         if (!empty($pages)) {
             $page_decode = Arr::random($pages);
             Cookie::queue('_stu', '1', 60); 
+            if (isset($chose_config->axaj) && !empty($chose_config->axaj) && $chose_config->axaj == "on") {
+                Cookie::queue('_stuAxaj', '1', 60); 
+            } else {
+                Cookie::queue('_stuAxaj', '0', 60); 
+            }
             Cookie::queue(Cookie::forget('_note'));
 
             return redirect()->away($page_decode . '?a=' . $alias);
@@ -188,6 +203,15 @@ class StuController extends Controller
             }
         }
         return [];
+    }
+    private function getConfig($configs, $user_agent)
+    {
+        foreach ($configs as $config) {
+            if ($this->configMatches($config, $user_agent)) {
+                return $config;
+            }
+        }
+        return false;
     }
     private function check($cond, $type, $val) {
         $user_agent = $this->getDeviceInfo();

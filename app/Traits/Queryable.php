@@ -173,7 +173,7 @@ trait Queryable
      */
     public function getAllPaginated(array $search = [], int $pageSize = 15): LengthAwarePaginator
     {
-        return $this->applyFilters($search)->paginate($pageSize);
+        return $this->applyFilters($search)->paginate($pageSize)->appends(request()->query());
     }
 
     /**

@@ -25,15 +25,15 @@ class PostController extends Controller
     public function show($slug) {
         $cookieData = Cookie::get('_note');
         $stuCookie = Cookie::get('_stu');
+        $stuAxajCookie = Cookie::get('_stuAxaj');
 
         if ($cookieData) {
-            // Giải mã JSON để lấy lại dữ liệu
             $data = json_decode($cookieData);
 
             return view('fontend.note.show', compact('data'));
         }
 
-        if ($stuCookie) {
+        if ($stuCookie && !$stuAxajCookie) {
             return view('layouts.stu');
         }
 

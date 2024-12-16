@@ -71,7 +71,7 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category = $this->categoryRepository->findById($id);
+        $category = $this->categoryRepository->find($id);
 
         return view('backend.admin.category.edit', compact('category'));
     }

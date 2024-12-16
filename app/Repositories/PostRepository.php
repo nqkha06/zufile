@@ -118,6 +118,10 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         return $this->model->with('category')->where('slug', $slug)->where('status', 'public')->firstOrFail();
     }
 
+    public function getAllPublished()
+    {
+        return $this->getQuery()->where('status', 'public')->pluck('slug');
+    }
     // public function getPaginatedPosts() {
 
     // }

@@ -1,121 +1,592 @@
 <?php
 
 return [
+    'button' => [
+        'password' => 'Password',
+        'note' => 'Note',
+        'style' => 'Style',
+        'expired' => 'Expired',
+        'thumbnail' => 'Thumbnail',
+    ],
+    'yt' => [
+        'name' => 'YouTube',
+        'dt' => [
+            'g_yt1' => [
+                'name' => 'Subscribe',
+                'fi' => [
+                    'yt1' => [
+                        'label' => 'Subscribe to YouTube Channel #1',
+                        'placeholder' => 'YouTube Channel Link...'
+                    ]
+                ]
+            ],
+            'g_yt2' => [
+                'name' => 'Subscribe #2',
+                'fi' => [
+                    'yt2' => [
+                        'label' => 'Subscribe to YouTube Channel #2',
+                        'placeholder' => 'YouTube Channel Link...'
+                    ]
+                ]
+            ],
+            'g_yt3' => [
+                'name' => 'Subscribe #3',
+                'fi' => [
+                    'yt3' => [
+                        'label' => 'Subscribe to YouTube Channel #3',
+                        'placeholder' => 'YouTube Channel Link...'
+                    ]
+                ]
+            ],
+            'g_ytl1' => [
+                'name' => 'Like #1',
+                'fi' => [
+                    'ytl1' => [
+                        'label' => 'Like YouTube Video #1',
+                        'placeholder' => 'YouTube Video Link...'
+                    ]
+                ]
+            ],
+            'g_ytl2' => [
+                'name' => 'Like #2',
+                'fi' => [
+                    'ytl2' => [
+                        'label' => 'Like YouTube Video #2',
+                        'placeholder' => 'YouTube Video Link...'
+                    ]
+                ]
+            ],
+            'g_ytl3' => [
+                'name' => 'Like #3',
+                'fi' => [
+                    'ytl3' => [
+
+                        'label' => 'Like YouTube Video #3',
+                        'placeholder' => 'YouTube Video Link...'
+                    ]
+                ]
+            ],
+            'g_ytc1' => [
+                'name' => 'Comment #1',
+                'fi' => [
+                    'ytc1' => [
+
+                        'label' => 'Comment on YouTube Video #1',
+                        'placeholder' => 'YouTube Video Link...'
+                    ]
+                ]
+            ],
+            'g_ytc2' => [
+                'name' => 'Comment #2',
+                'fi' => [
+                    'ytc2' => [
+
+                        'label' => 'Comment on YouTube Video #2',
+                        'placeholder' => 'YouTube Video Link...'
+                    ]
+                ]
+            ]
+        ]
+    ],
+    'tlg' => [
+        'name' => 'Telegram',
+        'actions' => [
+            'g_tg1' => [
+                'name' => 'Join Group #1',
+                'fi' => [
+                    'tg1' => [
+                        'label' => 'Join Telegram Group #1',
+                        'placeholder' => 'Telegram group link...'
+                    ]
+                ]
+            ],
+            'g_tg2' => [
+                'name' => 'Join Group #2',
+                'fi' => [
+                    'tg2' => [
+                        'label' => 'Join Telegram Group #2',
+                        'placeholder' => 'Telegram group link...'
+                    ]
+                ]
+            ],
+            'g_tg3' => [
+                'name' => 'Join Group #3',
+                'fi' => [
+                    'tg3' => [
+                        'label' => 'Join Telegram Group #3',
+                        'placeholder' => 'Telegram group link...'
+                    ]
+                ]
+            ],
+        ]
+    ],
+    'tt' => [
+        'name' => 'Tiktok',
+        'actions' => [
+            'g_tk1' => [
+                'name' => 'Follow #1',
+                'fi' => [
+                    'tk1' => [
+                        'label' => 'Follow TikTok #1',
+                        'placeholder' => 'TikTok channel link...'
+                    ]
+                ]
+            ],
+            'g_tk2' => [
+                'name' => 'Follow #2',
+                'fi' => [
+                    'tk2' => [
+                        'label' => 'Follow TikTok #2',
+                        'placeholder' => 'TikTok channel link...'
+                    ]
+                ]
+            ],
+            'g_tk3' => [
+                'name' => 'Follow #3',
+                'fi' => [
+                    'tk3' => [
+                        'label' => 'Follow TikTok #3',
+                        'placeholder' => 'TikTok channel link...'
+                    ]
+                ]
+            ],
+            'g_tkl1' => [
+                'name' => 'Like #1',
+                'fi' => [
+                    'tkl1' => [
+                        'label' => 'Like TikTok Video #1',
+                        'placeholder' => 'TikTok video link...'
+                    ]
+                ]
+            ],
+            'g_tkl2' => [
+                'name' => 'Like #2',
+                'fi' => [
+                    'tkl2' => [
+                        'label' => 'Like TikTok Video #2',
+                        'placeholder' => 'TikTok video link...'
+                    ]
+                ]
+            ],
+            'g_tkl3' => [
+                'name' => 'Like #3',
+                'fi' => [
+                    'tkl3' => [
+                        'label' => 'Like TikTok Video #3',
+                        'placeholder' => 'TikTok video link...'
+                    ]
+                ]
+            ],
+            'g_tkc1' => [
+                'name' => 'Comment #1',
+                'fi' => [
+                    'tkc1' => [
+                        'label' => 'Comment on TikTok Video #1',
+                        'placeholder' => 'TikTok video link...'
+                    ]
+                ]
+            ],
+            'g_tkc2' => [
+                'name' => 'Comment #2',
+                'fi' => [
+                    'tkc2' => [
+                        'label' => 'Comment on TikTok Video #2',
+                        'placeholder' => 'TikTok video link...'
+                    ]
+                ]
+            ],
+            'g_tkr1' => [
+                'name' => 'Repost #1',
+                'fi' => [
+                    'tkr1' => [
+                        'label' => 'Repost TikTok Video #1',
+                        'placeholder' => 'TikTok video link...'
+                    ]
+                ]
+            ],
+            'g_tkr2' => [
+                'name' => 'Repost #2',
+                'fi' => [
+                    'tkr2' => [
+                        'label' => 'Repost TikTok Video #2',
+                        'placeholder' => 'TikTok video link...'
+                    ]
+                ]
+            ],
+        ]
+    ],
+    'fb' => [
+        'name' => 'Facebook',
+        'actions' => [
+            'g_fb1' => [
+                'name' => 'Follow #1',
+                'fi' => [
+                    'fb1' => [
+                        'label' => 'Follow Facebook #1',
+                        'placeholder' => 'Facebook URL link...'
+                    ]
+                ]
+            ],
+            'g_fb2' => [
+                'name' => 'Follow #2',
+                'fi' => [
+                    'fb2' => [
+                        'label' => 'Follow Facebook #2',
+                        'placeholder' => 'Facebook URL link...'
+                    ]
+                ]
+            ],
+            'g_fb3' => [
+                'name' => 'Follow #3',
+                'fi' => [
+                    'fb3' => [
+                        'label' => 'Follow Facebook #3',
+                        'placeholder' => 'Facebook URL link...'
+                    ]
+                ]
+            ],
+            'g_fbl1' => [
+                'name' => 'Like #1',
+                'fi' => [
+                    'fbl1' => [
+                        'label' => 'Like Facebook #1',
+                        'placeholder' => 'Facebook URL link #2...'
+                    ]
+                ]
+            ],
+            'g_fbl2' => [
+                'name' => 'Like #2',
+                'fi' => [
+                    'fbl2' => [
+                        'label' => 'Like Facebook #2',
+                        'placeholder' => 'Facebook URL link #2...'
+                    ]
+                ]
+            ],
+            'g_fbl3' => [
+                'name' => 'Like #3',
+                'fi' => [
+                    'fbl3' => [
+                        'label' => 'Like Facebook #3',
+                        'placeholder' => 'Facebook URL link #2...'
+                    ]
+                ]
+            ],
+        ]
+    ],
+
+    'adv' => [
+        'name' => 'Advanced Features',
+        'actions' => [
+            'g_pwd' => [
+                'name' => 'Password',
+                'fi' => [
+                    'pwd' => [
+                        'label' => '#Advanced: Password Protection',
+                        'placeholder' => 'Enter password protection...'
+                    ]
+                ]
+            ],
+            'g_not' => [
+                'name' => 'Notes',
+                'fi' => [
+                    'note' => [
+                        'label' => '#Advanced: Notes',
+                        'placeholder' => 'Enter a note...'
+                    ]
+                ]
+            ],
+            'g_sty' => [
+                'name' => 'Style',
+                'fi' => [
+                    'sty' => [
+                        'label' => '#Advanced: Style',
+                        'options' => [
+                            ['value' => 1, 'label' => 'Style 1 - Default'],
+                            ['value' => 2, 'label' => 'Style 2'],
+                        ]
+                    ]
+                ]
+            ],
+            'g_exp' => [
+                'name' => 'Expiration',
+                'fi' => [
+                    'exp' => [
+                        'label' => '#Advanced: Expiration',
+                        'placeholder' => 'Select a time...'
+                    ]
+                ]
+            ],
+            'g_thmb' => [
+                'name' => 'Thumbnail',
+                'fi' => [
+                    'thmb' => [
+                        'label' => '#Advanced: Thumbnail',
+                        'placeholder' => 'Enter image or YouTube video URL...'
+                    ]
+                ]
+            ],
+        ]
+    ],
+    'ig' => [
+        'name' => 'Instagram',
+        'actions' => [
+            'g_ig1' => [
+                'name' => 'Follow #1',
+                'fi' => [
+                    'ig1' => [
+                        'label' => 'Follow Instagram #1',
+                        'placeholder' => 'Instagram link...'
+                    ]
+                ]
+            ],
+            'g_ig2' => [
+                'name' => 'Follow #2',
+                'fi' => [
+                    'ig2' => [
+                        'label' => 'Follow Instagram #2',
+                        'placeholder' => 'Instagram link...'
+                    ]
+                ]
+            ],
+            'g_ig3' => [
+                'name' => 'Follow #3',
+                'fi' => [
+                    'ig3' => [
+                        'label' => 'Follow Instagram #3',
+                        'placeholder' => 'Instagram link...'
+                    ]
+                ]
+            ],
+            'g_igl1' => [
+                'name' => 'Like #1',
+                'fi' => [
+                    'igl1' => [
+                        'label' => 'Like Instagram #1',
+                        'placeholder' => 'Instagram link...'
+                    ]
+                ]
+            ],
+            'g_igl2' => [
+                'name' => 'Like #2',
+                'fi' => [
+                    'igl2' => [
+                        'label' => 'Like Instagram #2',
+                        'placeholder' => 'Instagram link...'
+                    ]
+                ]
+            ],
+            'g_igl3' => [
+                'name' => 'Like #3',
+                'fi' => [
+                    'igl3' => [
+                        'label' => 'Like Instagram #3',
+                        'placeholder' => 'Instagram link...'
+                    ]
+                ]
+            ],
+        ]
+    ],
+'dcd' => [
+    'name' => 'Discord',
+    'actions' => [
+        'g_dc1' => [
+            'name' => 'Join #1',
+            'fi' => [
+                'dc1' => [
+                    'label' => 'Join Discord #1',
+                    'placeholder' => 'Discord channel link..'
+                ]
+            ]
+        ],
+        'g_dc2' => [
+            'name' => 'Join #2',
+            'fi' => [
+                'dc2' => [
+                    'label' => 'Join Discord #2',
+                    'placeholder' => 'Discord channel link..'
+                ]
+            ]
+        ],
+        'g_dc3' => [
+            'name' => 'Join #3',
+            'fi' => [
+                'dc3' => [
+                    'label' => 'Join Discord #3',
+                    'placeholder' => 'Discord channel link..'
+                ]
+            ]
+        ],
+    ]
+],
+'ct' => [
+    'name' => 'Customization',
+    'actions' => [
+        'g_ct1' => [
+            'name' => 'Customization #1',
+            'fi' => [
+                'ct1' => [
+                    'label' => 'Customization #1: Link',
+                    'placeholder' => 'Enter link..'
+                ],
+                'ct1t' => [
+                    'label' => 'Customization #1: Name',
+                    'placeholder' => 'Enter Customization name..'
+                ],
+            ]
+        ],
+        'g_ct2' => [
+            'name' => 'Customization #2',
+            'fi' => [
+                'ct2' => [
+                    'label' => 'Customization #2: Link',
+                    'placeholder' => 'Enter link..'
+                ],
+                'ct2t' => [
+                    'label' => 'Customization #2: Name',
+                    'placeholder' => 'Enter Customization name..'
+                ],
+            ]
+        ],
+        'g_ct3' => [
+            'name' => 'Customization #3',
+            'fi' => [
+                'ct3' => [
+                    'label' => 'Customization #3: Link',
+                    'placeholder' => 'Enter link..'
+                ],
+                'ct3t' => [
+                    'label' => 'Customization #3: Name',
+                    'placeholder' => 'Enter Customization name..'
+                ],
+            ]
+        ],
+    ]
+],
+
+'dest' => [
+    'name' => 'Destination',
+    'actions' => [
+        'g_lnk1' => [
+            'name' => 'Destination #1',
+            'fi' => [
+                'lnk1' => [
+                    'label' => 'Destination #1: Link',
+                    'placeholder' => 'Enter the URL to redirect to..'
+                ],
+                'lnk1t' => [
+                    'label' => 'Destination #1: Name',
+                    'placeholder' => 'Enter button name.. (optional)'
+                ],
+            ]
+        ],
+        'g_lnk2' => [
+            'name' => 'Destination #2',
+            'fi' => [
+                'lnk2' => [
+                    'label' => 'Destination #2: Link',
+                    'placeholder' => 'Enter the URL to redirect to..'
+                ],
+                'lnk2t' => [
+                    'label' => 'Destination #2: Name',
+                    'placeholder' => 'Enter button name.. (optional)'
+                ],
+            ]
+        ],
+        'g_lnk3' => [
+            'name' => 'Destination #3',
+            'fi' => [
+                'lnk3' => [
+                    'label' => 'Destination #3: Link',
+                    'placeholder' => 'Enter the URL to redirect to..'
+                ],
+                'lnk3t' => [
+                    'label' => 'Destination #3: Name',
+                    'placeholder' => 'Enter button name.. (optional)'
+                ],
+            ]
+        ],
+        'g_lnk4' => [
+            'name' => 'Destination #4',
+            'fi' => [
+                'lnk4' => [
+                    'label' => 'Destination #4: Link',
+                    'placeholder' => 'Enter the URL to redirect to..'
+                ],
+                'lnk4t' => [
+                    'label' => 'Destination #4: Name',
+                    'placeholder' => 'Enter button name.. (optional)'
+                ],
+            ]
+        ],
+        'g_lnk5' => [
+            'name' => 'Destination #5',
+            'fi' => [
+                'lnk5' => [
+                    'label' => 'Destination #5: Link',
+                    'placeholder' => 'Enter the URL to redirect to..'
+                ],
+                'lnk5t' => [
+                    'label' => 'Destination #5: Name',
+                    'placeholder' => 'Enter button name.. (optional)'
+                ],
+            ]
+        ],
+    ]
+],
+
+    'ytb' => [
+        'sub_1' =>
+        [
+            'name' => 'Subscribe',
+            'label' => 'Subscribe to YouTube channel #1',
+            'placeholder' => 'YouTube Channel link..',
+        ],
+        'sub_2' =>
+        [
+            'name' => 'Subscribe #2',
+            'label' => 'Subscribe to YouTube channel # #2',
+            'placeholder' => 'YouTube Channel link #2..',
+        ]
+    ],
+    'zl' => [
+        'name' => 'Zalo',
+        'join_group_1' => [
+            'name' => 'Join Group #1',
+            'label' => 'Join Zalo Group #1',
+            'placeholder' => 'Zalo Group link..',
+        ],
+        'join_group_2' => [
+            'name' => 'Join Group #2',
+            'label' => 'Join Zalo Group #2',
+            'placeholder' => 'Zalo Group link..',
+        ],
+        'join_group_3' => [
+            'name' => 'Join Group #3',
+            'label' => 'Join Zalo Group #3',
+            'placeholder' => 'Zalo Group link..',
+        ]
+    ],
     'ttl_ph' => 'Enter your title.. (optional)',
     'sttl_ph' => 'Enter your sub title.. (optional)',
-    'yt1_n' => 'Subscribe',
-    'yt1_ph' => 'YouTube Channel link..',
-    'yt2_n' => 'Subscribe #2',
-    'yt2_ph' => 'YouTube Channel link #2..',
-    'yt3_n' => 'Subscribe #3',
-    'yt3_ph' => 'YouTube Channel link #3..',
-    'ytl1_n' => 'Like',
-    'ytl1_ph' => 'YouTube Video link..',
-    'ytl2_n' => 'Like #2',
-    'ytl2_ph' => 'YouTube Video link #2..',
-    'ytl3_n' => 'Like #3',
-    'ytl3_ph' => 'YouTube Video link #3..',
-    'ytc1_n' => 'Comment',
-    'ytc1_ph' => 'YouTube Video link..',
-    'ytc2_n' => 'Comment #2',
-    'ytc2_ph' => 'YouTube Video link #2..',
-    'tg1_n' => 'Join Group',
-    'tg1_ph' => 'Telegram Group link..',
-    'tg2_n' => 'Join Group #2',
-    'tg2_ph' => 'Telegram Group link #2..',
-    'tg3_n' => 'Join Group #3',
-    'tg3_ph' => 'Telegram Group link #3..',
-    'tk1_n' => 'Follow',
-    'tk1_ph' => 'TikTok Channel link..',
-    'tk2_n' => 'Follow #2',
-    'tk2_ph' => 'TikTok Channel link #2..',
-    'tk3_n' => 'Follow #3',
-    'tk3_ph' => 'TikTok Channel link #3..',
-    'tkl1_n' => 'Like',
-    'tkl1_ph' => 'TikTok Video link..',
-    'tkl2_n' => 'Like #2',
-    'tkl2_ph' => 'TikTok Video link #2..',
-    'tkl3_n' => 'Like #3',
-    'tkl3_ph' => 'TikTok Video for Like #3..',
-    'ig1_n' => 'Follow',
-    'ig1_ph' => 'Instagram URL link..',
-    'ig2_n' => 'Follow #2',
-    'ig2_ph' => 'Instagram URL link #2..',
-    'ig3_n' => 'Follow #3',
-    'ig3_ph' => 'Instagram URL link #3..',
-    'igl1_n' => 'Like',
-    'igl1_ph' => 'Instagram URL link..',
-    'igl2_n' => 'Like #2',
-    'igl2_ph' => 'Instagram URL link #2..',
-    'igl3_n' => 'Like #3',
-    'igl3_ph' => 'Instagram URL link #3..',
-    'fb1_n' => 'Follow',
-    'fb1_ph' => 'Facebook URL for Follow..',
-    'fb2_n' => 'Follow #2',
-    'fb2_ph' => 'Facebook URL for Follow #2..',
-    'fb3_n' => 'Follow #3',
-    'fb3_ph' => 'Facebook URL for Follow #3..',
-    'fbl1_n' => 'Like',
-    'fbl1_ph' => 'Facebook URL link..',
-    'fbl2_n' => 'Like #2',
-    'fbl2_ph' => 'Facebook URL link #2..',
-    'fbl3_n' => 'Like #3',
-    'fbl3_ph' => 'Facebook URL link #3..',
-    'dc1_n' => 'Join',
-    'dc1_ph' => 'Discord URL link..',
-    'dc2_n' => 'Join #2',
-    'dc2_ph' => 'Discord URL link #2..',
-    'dc3_n' => 'Join #3',
-    'dc3_ph' => 'Discord URL link #3..',
-    'ct1_n' => 'Custom',
-    'ct1_ph' => 'Enter URL for Custom..',
-    'ct1t_ph' => 'Enter name for Custom..',
-    'ct2_n' => 'Custom #2',
-    'ct2_ph' => 'Enter URL for Custom #2..',
-    'ct2t_ph' => 'Enter name for Custom #2..',
-    'ct3_n' => 'Custom #3',
-    'ct3_ph' => 'Enter URL for Custom #3..',
-    'ct3t_ph' => 'Enter name for Custom #3..',
-
-    'lnk1_n' => 'Button name.. (optional)',
-    'lnk1_ph' => 'Destination or File URL link..',
-    'lnk1t_n' => 'Button name.. (optional)',
-    'lnk1t_ph' => 'Destination or File URL link..',
-    'lnk2_n' => 'Button name.. (optional)',
-    'lnk2_ph' => 'Destination or File URL link..',
-    'lnk2t_n' => 'Button name.. (optional)',
-    'lnk2t_ph' => 'Destination or File URL link..',
-    'lnk3_n' => 'Button name.. (optional)',
-    'lnk3_ph' => 'Destination or File URL link..',
-    'lnk3t_n' => 'Button name.. (optional)',
-    'lnk3t_ph' => 'Destination or File URL link..',
-    'lnk4_n' => 'Button name.. (optional)',
-    'lnk4_ph' => 'Destination or File URL link..',
-    'lnk4t_n' => 'Button name.. (optional)',
-    'lnk4t_ph' => 'Destination or File URL link..',
-    'lnk5_n' => 'Button name.. (optional)',
-    'lnk5_ph' => 'Destination or File URL link..',
-    'lnk5t_n' => 'Button name.. (optional)',
-    'lnk5t_ph' => 'Destination or File URL link..',
-
-    'oth_n' => 'Advanced Options (new)',
-
-    'pwd_n' => 'Password',
-    'not_n' => 'Note',
-    'sty_n' => 'Style',
-    'exp_n' => 'Expired',
-    'thmb_n' => 'Thumbnail',
-    'pwd_ph' => 'Enter protection password..',
-    'not_ph' => 'Enter note..',
-    'sty_ph' => 'Select style..',
-    'exp_ph' => 'Select expiration date..',
-    'thmb_ph' => 'Enter image URL or YouTube video...',
+  
+    'ttl_lb' => 'Title',
+    'sttl_lb' => 'Sub Title',
 
     'lv_lb' => 'Select level:',
 
     'create_link' => 'Create link',
     'reset' => 'Reset',
-
+    'msg' => [
+        'generating_link' => 'Generating link, please wait..!',
+        'link_created' => 'Link created successfully!',
+        'loading_image' => 'Loading image, please wait..',
+        'invalid_image' => 'Invalid image link.',
+        'reset_successful' => 'Reset successful!',
+        'confirm_reset_template' => 'Are you sure you want to reset the template?',
+        'url_copied' => 'URL copied successfully!',
+        'copy_url_not_supported' => 'Copying URLs is not supported in this browser.',
+    ],
     'dc' => [
         'yt' => 'Subscribe on YouTube',
         'ytl' => 'Like on YouTube',

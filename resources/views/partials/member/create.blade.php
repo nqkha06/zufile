@@ -4,7 +4,7 @@
     <div class="popIn">
         <div class="popC">
             <div class="popH">
-                <div class="t">Tạo mới</div>
+                <div class="t">{{ __('header.create_new') }}</div>
                 <label class="c" for="forCreate"></label>
             </div>
             <div class="popB">
