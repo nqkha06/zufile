@@ -17,6 +17,7 @@
         "ramsey/uuid": "^4.7",
         "spatie/laravel-permission": "^6.4",
         "stevebauman/location": "^7.1",
+        "symfony/dom-crawler": "^7.2",
         "symfony/polyfill-mbstring": "^1.0",
         "torann/geoip": "^3.0"
     },

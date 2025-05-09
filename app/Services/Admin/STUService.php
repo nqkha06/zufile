@@ -100,7 +100,7 @@ class STUService implements STUServiceInterface
             $search[] = ['level_id', '=', $level];
         }
 
-        return $this->STURepository->with(['stats', 'level'])->getAllPaginated($search, $perPage);
+        return $this->STURepository->with(['level.translations', 'stats', 'level'])->getAllPaginated($search, $perPage);
     }
 
     public function getLink($alias) {

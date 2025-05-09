@@ -25,6 +25,7 @@ class RepositoryServiceProvider extends ServiceProvider
         'App\Repositories\Interfaces\NOTERepositoryInterface' => 'App\Repositories\NOTERepository',
 
         'App\Repositories\Interfaces\CategoryRepositoryInterface' => 'App\Repositories\CategoryRepository',
+        'App\Repositories\Interfaces\TagRepositoryInterface' => 'App\Repositories\TagRepository',
         'App\Repositories\Interfaces\PageRepositoryInterface' => 'App\Repositories\PageRepository',
         'App\Repositories\Interfaces\PostRepositoryInterface' => 'App\Repositories\PostRepository',
         'App\Repositories\Interfaces\PostViewRepositoryInterface' => 'App\Repositories\PostViewRepository',

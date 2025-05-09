@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\PaymentMethodServiceInterface as PaymentMethodService;
+use App\Services\PaymentMethodService;
+use App\Http\Requests\PaymentMethod\PaymentMethodFilterRequest;
+use App\Http\Requests\PaymentMethod\UpdatePaymentMethodRequest;
 
 class PaymentMethodController extends Controller
 {
@@ -15,9 +17,10 @@ class PaymentMethodController extends Controller
     }
     
 
-    public function index()
+    public function index(PaymentMethodFilterRequest $request)
     {
-        $methods = $this->paymentMethodService->listAllPaginated([]);
+        $filter = $request->validated();
+        $methods = $this->paymentMethodService->getAllPaginated($filter);
         
         return view('backend.admin.payment-method.index', compact('methods'));
     }
@@ -67,28 +70,59 @@ class PaymentMethodController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePaymentMethodRequest $request, string $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'fields.*.name' => 'required|string',
-            'fields.*.key' => 'required|string',
-            'withdraw_fee' => 'required|numeric|min:0',
-            'min_withdraw_amount' => 'required|numeric|min:0',
-            'status' => 'required',
-        ]);
-    
-        $updated = $this->paymentMethodService->update($id, [
-            'name' => $validated['name'],
-            'fields' => json_encode($validated['fields']),
-            'withdraw_fee' => $validated['withdraw_fee'],
-            'min_withdraw_amount' => $validated['min_withdraw_amount'],
-            'status' => $validated['status'],
+        $request->validated();
+        $method = $this->paymentMethodService->findOrFail($id);
+
+        $fields = [];
+        
+        foreach ($request->fields as $field) {
+            $fieldData = [
+                'label' => $field['label'],
+                'name' => $field['name'],
+                'type' => $field['type'],
+                'placeholder' => $field['placeholder'] ?? '',
+            ];
+
+            if ($field['type'] === 'select') {
+                $fieldData['options'] = [];
+                $lines = array_map('trim', explode("\n", $field['options']));
+
+                $options = array_map(function($line) {
+                    $parts = explode('|', $line, 2);
+
+                    if (count($parts) === 2) {
+                        return [
+                            'value' => trim($parts[0]),
+                            'label' => trim($parts[1]),
+                        ];
+                    }
+
+                    return null;
+                }, $lines);
+
+                // remove null values
+                $options = array_filter($options);
+                // reset index
+                $options = array_values($options);
+
+                $fieldData['options'] = $options;
+            }
+
+            $fields[] = $fieldData;
+        }
+
+        $method->update([
+            'name' => $request->name,
+            'withdraw_fee' => $request->withdraw_fee,
+            'min_withdraw_amount' => $request->min_withdraw_amount,
+            'fields' => $fields,
+            'status' => $request->status,
         ]);
 
-        if ($updated) return redirect(route('admin.payment-methods.index'))->with('success', 'Phương thức <b>'.$request->name.'</b> cập nhật thành công!');
+        return redirect(route('admin.payment-methods.index'))->with('success', 'Phương thức <b>'.$request->name.'</b> cập nhật thành công!');
         
-        return redirect(route('admin.payment-methods.index'))->with('error', 'Cập nhật thất bại, hãy thử lại sau!');
     }
 
     /**

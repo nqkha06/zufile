@@ -11,10 +11,8 @@
     </div>
     <div class="col-12 col-md-6 mb-3">
         <div class="form-label">Axaj</div>
-        <label class="form-check form-switch">
-            <input class="form-check-input" name="axaj[]" type="checkbox" {{ $config->axaj ?? false ? 'checked' : '' }}>
-            <span class="form-check-label">Bật/ tắt</span>
-        </label>
+       <input class="form-control" name="axaj[]" type="text" value="{{ isset($config->axaj) && $config->axaj == "on" ? 'on' : 'off' }}">
+
     </div>
     @php
         $fields = [

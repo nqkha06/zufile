@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\BaseStatusEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\CategoryServiceInterface as CategoryService;
@@ -25,7 +26,6 @@ class CategoryController extends Controller
      */
     public function index()
     {
-
         $categories = $this->categoryService->index();
 
         return view('backend.admin.category.index', compact('categories'));
@@ -43,19 +43,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'max:255', Rule::unique(Category::class)],
-            'description' => ['max:255', Rule::unique(Category::class)],
             'slug' => ['required', 'max:255', Rule::unique(Category::class)],
+            'description' => ['max:255'],
+            'status' => ['required', Rule::enum(BaseStatusEnum::class)]
         ]);
 
-        $this->categoryRepository->create([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'description' => $request->description,
-        ]);
+        $this->categoryRepository->create($validated);
 
-        return redirect()->route('admin.category.index')->with('success', 'Cập nhật/thêm vai trò thành công.');
+        if ($request->submitter == 'apply') {
+            return redirect()->back()->with('success', 'Tạo danh mục thành công!');
+        } else {
+            return redirect()->route('admin.categories.index')->with('success', 'Tạo danh mục thành công!');
+        }
     }
 
     /**
@@ -86,14 +87,20 @@ class CategoryController extends Controller
             'slug' => ['required', 'max:255', Rule::unique(Category::class)->ignore($id)],
             'description' => ['max:255'],
         ]);
-
-        $this->categoryRepository->update($id, [
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'description' => $request->description,
+        $validated = $request->validate([
+            'name' => ['required', 'max:255', Rule::unique(Category::class)->ignore($id)],
+            'slug' => ['required', 'max:255', Rule::unique(Category::class)->ignore($id)],
+            'description' => ['max:255'],
+            'status' => ['required', Rule::enum(BaseStatusEnum::class)]
         ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Cập nhật thành công');
+        $this->categoryRepository->update($id, $validated);
+
+        if ($request->submitter == 'apply') {
+            return redirect()->back()->with('success', 'Cập nhật danh mục thành công!');
+        } else {
+            return redirect()->route('admin.categories.index')->with('success', 'Cập nhật danh mục thành công!');
+        }
     }
 
     /**

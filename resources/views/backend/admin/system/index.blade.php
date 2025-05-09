@@ -76,6 +76,10 @@
               <label class="form-label">Chuyển đổi VNĐ</label>
               <input type="text" class="form-control" value="{{ old('usd_to_vnd', Setting::get('usd_to_vnd') ?? 0)  }}" name="usd_to_vnd">
             </div>
+            <div class="mb-4">
+              <label class="form-label">% Hoa hồng giới thiệu</label>
+              <input type="text" placeholder="Nhập phần trăm hoa hồng, ví dụ: 10" class="form-control" value="{{ old('ref_percent', Setting::get('ref_percent') ?? 0)  }}" name="ref_percent">
+            </div>
           </div>
           <div id="tab_stu" class="d-none">
             <div class="row">

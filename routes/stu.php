@@ -11,6 +11,9 @@ Route::get('/dc-1', function (){
 Route::get('/dc-2', function (){
     return view('fontend.stu.dc_2');
 })->name('stu.decode_2');
+Route::get('/redirect', function (){
+    return view('fontend.stu.redirect');
+})->name('stu.redirect');
 
 Route::prefix('stu')->group(function () {
     Route::post('/', [StuController::class, 'create']);

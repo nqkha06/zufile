@@ -37,9 +37,9 @@ class PostController extends Controller
             return view('layouts.stu');
         }
 
-        $article_data = $this->postRepository->getPublishedPost($slug);
+        $article_data = $this->postRepository->with(['categories'])->getPublishedPost($slug);
 
-        $related_articles = $this->postRepository->getByCondition([['category_id', '=', $article_data->category_id]]);
+        $related_articles = $this->postRepository->with(['categories'])->getAllPaginated();
 
         return view('fontend.blog.post', compact('article_data', 'related_articles'));
     }

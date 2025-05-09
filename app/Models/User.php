@@ -26,7 +26,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
+        'balance',
+        'referred_by'
     ];
     protected $hidden = [
         'password',
@@ -81,6 +83,13 @@ class User extends Authenticatable
             'link_id',
         );
     }
+    public function STUstatics()
+    {
+        return $this->hasMany(
+            StuAnalysis::class,
+    
+        );
+    }
     public function NOTEStats()
     {
         return $this->hasManyThrough(
@@ -89,5 +98,13 @@ class User extends Authenticatable
             'user_id',
             'link_id',
         );
+    }
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+    public function commissions()
+    {
+        return $this->hasMany(Commission::class);
     }
 }

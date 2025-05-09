@@ -53,6 +53,8 @@
                                                     $elt_lv = '<span class="level s3">'.$value->level->name.'</span>';
                                                 case 4:
                                                     $elt_lv = '<span class="level s4">'.$value->level->name.'</span>';
+                                                default:
+                                                    $elt_lv = '<span class="level s0">'.$value->level->name.'</span>';
                                                     break;
                                             }
                                         @endphp

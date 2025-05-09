@@ -52,7 +52,6 @@ class STU {
         }
 
         let renderInputs = (btnId, e) => {
-            
             let result = "";
             
             if (fbSTU[btnId].dt) {
@@ -98,6 +97,7 @@ class STU {
                                                 </div>
                                         </div>`;
                             } else {           
+                                
                                 elt += `<label class="grp__label" for="i_${field.i}">${field.label ? field.label : fbSTU[btnId].tx + ' ' + name}</label>
                                                     <div class="grp__input-wrapper">
                                                         <input ${attributes} class="grp__input stu_fi"
@@ -186,7 +186,7 @@ class STU {
                 <div class="stu_l_btn">${conStrs(u)}</div>
                 <div class="stu_ftr_cnt" id="stuFtr">${conStrs(p)}</div>
                 <div class="stu_ftr_inp" id="stuInp">${conStrs(f)}</div>
-                <div class="stu_lv a">
+                <div class="stu_lv grp a">
                     <label for="i_level">${STUtxt.lv_lb}</label>
                     <select id="i_level" class="stu_fi d ok" name="level" data-fill="true" data-in="oth">
                         ${options}
@@ -210,9 +210,7 @@ class STU {
     old() {
         const oldI = (this.type === 'edit') ? (this.inp || null) : (this.type === 'api') ? (JSON.parse(localStorage.getItem("input_STU_TK")) || null) : (JSON.parse(localStorage.getItem("input_STU")) || null);
         const oldB = (this.type === 'edit') ? (this.btn || null) : (this.type === 'api') ? (JSON.parse(localStorage.getItem("btn_STU_TK")) || null) : (JSON.parse(localStorage.getItem("btn_STU")) || null);
-        if (oldI) {
-            console.log(oldI);
-            
+        if (oldI) {            
             for (const key in oldI) {
                 
                 const s = this.selector.querySelector("[name=" + key + "]");
@@ -238,8 +236,10 @@ class STU {
                     }
 
                     if (s.dataset.img) {
-                        const n = s.parentNode.nextSibling;
-                        /*n.classList.add("a"), */ n.querySelector("img").src = oldI[key];
+                        const eltImgThumb = this.selector.querySelector(".stu-image img");
+                        if (eltImgThumb) eltImgThumb.src = oldI[key];
+                        
+                        /*n.classList.add("a"), */ 
                     }
                 }
             }
@@ -322,7 +322,7 @@ class STU {
         if (this.selector.querySelector(".stu_fi[data-img]")) {
             this.selector.querySelector(".stu_fi[data-img]").addEventListener("change", t => {
                 let e = t.target,
-                    s = e.parentNode.nextSibling.querySelector("img");
+                    s = this.selector.querySelector(".stu-image img");
                 if (!e.value) return e.classList.remove("ok"), e.classList.remove("er"), delete e.dataset.fill, s.parentNode.classList.remove("a"), void lsHandlerInp("r", e.name);
                 if (e.dataset.fill = !0, !e.value.includes("//")) return e.classList.add("er"), e.classList.remove("ok"), void s.parentNode.classList.remove("a");
 
@@ -408,6 +408,12 @@ class STU {
                             
                         });
                     })
+                    const gLv = this.selector.querySelector('[name="level"]');
+                    if (gLv) {
+                        objParams['oth'] = objParams['oth'] || {};
+                        objParams['oth']['level'] = ecSTU(gLv.value);
+                    }
+                    
                     if (Object.keys(objParams).length === 0) {
                         this.toastr.dismiss(notif);
                         this.toastr.error('Vui lòng điền đầy đủ thông tin trước khi tạo link');
@@ -523,6 +529,10 @@ class STU {
                     } else {
                         currentElement.classList.remove("er");
                         currentElement.classList.add("ok");
+                    }
+
+                    if (currentElement.value === "") {
+                        currentElement.classList.remove("er"), currentElement.classList.remove("ok")
                     }
                 }
                 
@@ -673,8 +683,9 @@ class NOTE {
         const selector = document.querySelector(this.select);
         let options = '';
         Object.keys(NOTELv).forEach(key => {
-            options += `<option value="${STULv[key].id}">- ${STULv[key].name}</option>`;
+            options += `<option value="${NOTELv[key].id}">- ${NOTELv[key].name}</option>`;
         });
+                
         selector.innerHTML = `
             <form class="fgNOTE" id="fgNOTE">
                 <div class="note_ftr_inp">
@@ -730,11 +741,11 @@ class NOTE {
                 let n = event.target.querySelector("[type=submit]");
                 if (!n.classList.contains("a")) {
                     n.classList.add("a");
-                    let ecSTU = t => btoa(encodeURIComponent(t)),
-                        notif = this.toastr.success({
+                    let ecSTU = t => btoa(encodeURIComponent(t))
+                    let notif = this.toastr.success({
                             message: 
                             `<div class="xldg">
-                                ${icSTU.gen}<span>Đang tạo liên kết, vui lòng đợi..!</span>
+                                ${icSTU.gen}<span>${ type == 'create' ? 'Đang tạo liên kết, vui lòng đợi..!' : 'Đang cập nhật liên kết, vui lòng đợi..!'}</span>
                             </div>`
                             , duration: 0
                             , dismissible: false
@@ -748,16 +759,22 @@ class NOTE {
                     objParams['password'] = selector.querySelector("[name='n_pasw']").value;
                     objParams['content'] = editor.getData();
                     objParams['level'] = selector.querySelector("[name='note_level']").value;
-
+                    console.log(this.alias);
+                    
                     const methodXhr = 'POST';
-                    const urlXhr = type == 'create' ? '/note' : '/note/'+this.alias+'/update';
+                    var urlXhr = '';
+                    if (type == 'create') {
+                        var urlXhr = '/member/notes';
+                    } else {
+                        var urlXhr = '/member/notes/'+this.alias+'/update';
+                    }
                     const CR_TOKEN = document.head.querySelector("[name~=csrf-token]").content;
 
                     this.request(methodXhr, urlXhr, CR_TOKEN, objParams)
                         .then((res) => {
                             // Handle success
                             if (res.status == 'success') {
-                                const shortUrl = NOTE_URL + '/' + res.alias;
+                                const shortUrl = res.url;
 
                                 setTimeout(() => {
                                     this.toastr.dismiss(notif);
@@ -765,7 +782,7 @@ class NOTE {
                                     if (type == 'edit') {
                                         this.toastr.success('Liên kết đã được cập nhật thành công!');
                                     } else if (type == 'create') {
-                                        this.toastr.success(STUtxt?.msg?.["link_created"]);
+                                        this.toastr.success(res.message);
                                         selector.querySelector("#i_n_rst").value = shortUrl;
                                         selector.querySelector(".note_rst").classList.add("a");
                                         selector.querySelector(".note_rst").scrollIntoView({
@@ -778,7 +795,7 @@ class NOTE {
                             } else {
                                 setTimeout(() => {
                                     this.toastr.dismiss(notif);
-                                    this.toastr.error('Error: '+ res.message)+'!';
+                                    this.toastr.error(res.message)+'!';
                                     n.classList.remove("a");
                                 }, 1e3)
                             }
@@ -905,7 +922,8 @@ class NOTE {
                         }) => {
                             t.focus(), this.toastr.dismiss(c)
                         })
-                    } else t.classList.remove("er"), t.classList.add("ok")
+                    } else t.classList.remove("er"), t.classList.add("ok");                    
+
                 }
                 if (t.value && !t.dataset.df && "datetime-local" == t.type) {
                     if (Date.parse(new Date(t.value)) < Date.parse(new Date().toISOString().slice(0, 16))) {

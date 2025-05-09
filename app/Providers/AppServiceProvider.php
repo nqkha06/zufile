@@ -18,7 +18,6 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\WithdrawServiceInterface' => 'App\Services\WithdrawService',
         'App\Services\Interfaces\StatisticsServiceInterface' => 'App\Services\StatisticsService',
         'App\Services\Interfaces\SettingServiceInterface' => 'App\Services\SettingService',
-        'App\Services\Interfaces\DashboardServiceInterface' => 'App\Services\DashboardService',
         'App\Services\Interfaces\PayoutRateServiceInterface' => 'App\Services\PayoutRateService',
         'App\Services\Interfaces\NOTEServiceInterface' => 'App\Services\NOTEService',
 
@@ -26,7 +25,6 @@ class AppServiceProvider extends ServiceProvider
 
         'App\Services\Interfaces\CategoryServiceInterface' => 'App\Services\CategoryService',
         'App\Services\Interfaces\PostServiceInterface' => 'App\Services\PostService',
-        'App\Services\Interfaces\PageServiceInterface' => 'App\Services\PageService',
 
         'App\Services\Interfaces\AccessServiceInterface' => 'App\Services\AccessService',
         'App\Services\Interfaces\InvoiceServiceInterface' => 'App\Services\InvoiceService',
@@ -38,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\PaymentMethodServiceInterface' => 'App\Services\PaymentMethodService',
 
         'setting' => 'App\Services\SettingService',
+        'language' => 'App\Services\LanguageService',
 
     ];
 

@@ -14,6 +14,9 @@ use Spatie\Permission\Models\Role;
 use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Enums\UserStatusEnum;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Requests\User\StoreUserRequest;
 
 class UserController extends Controller
 {
@@ -66,22 +69,17 @@ class UserController extends Controller
     {
         $roles = Role::pluck('name', 'name')->all();
         $paymentMethods = PaymentMethod::all();
+        $userStatusEnum = UserStatusEnum::cases();
 
-        return view('backend.admin.user.create', compact('roles', 'paymentMethods'));
+        return view('backend.admin.user.create', compact('roles', 'paymentMethods', 'userStatusEnum'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:6|max:32',
-            'payment_method' => 'string',
-            'fields.*' => 'string',
-        ]);
+        $request->validated();
 
         DB::beginTransaction();
 
@@ -102,13 +100,25 @@ class UserController extends Controller
                 'city' => $request->input('city'),
                 'zipcode' => $request->input('zipcode'),
             ]);
-            $user->syncRoles($request->role);
 
-            if ($request->has('payment_method') && !empty($request->payment_method)) {
-                $user->paymentMethod()->create(['payment_method_id' => $request->payment_method, 'details' => json_encode($request->fields)]);
+            if ($request->filled('roles')) {
+                $user->syncRoles($request->roles);
             }
+    
+            if (empty($user->paymentMethod)) {
+                $user->paymentMethod()->create(['payment_method_id' => $request->payment_method, 'details' => json_encode($request->fields)]);
+            } else {
+                $user->paymentMethod->payment_method_id = $request->payment_method;
+                $user->paymentMethod->details = json_encode($request->fields);
+                $user->paymentMethod->save();
+            }
+
             DB::commit();
-            return redirect()->route('admin.users.index')->with('success', 'Người dùng <b>' . $user->name . '</b> đã được tạo thành công..!');
+            if ($request->submitter === 'apply') {
+                return redirect()->back()->with('success', 'Người dùng <b>' . $user->name . '</b> đã cập nhật thành công..!');
+            } else {
+                return redirect()->route('admin.users.index')->with('success', 'Người dùng <b>' . $user->name . '</b> đã cập nhật thành công..!');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withErrors('Thêm người dùng không thành công, hãy thử lại...');
@@ -135,43 +145,32 @@ class UserController extends Controller
         $roles = Role::pluck('name', 'name')->all();
         $userRoles = $user->roles->pluck('name', 'name')->all();
         $paymentMethods = PaymentMethod::all();
+        $userStatusEnum = UserStatusEnum::cases();
 
-        return view('backend.admin.user.edit', compact('user', 'userRoles', 'roles', 'paymentMethods'));
+        return view('backend.admin.user.edit', compact('user', 'userRoles', 'roles', 'paymentMethods', 'userStatusEnum'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        $user = $this->userRepository->find($id);
+        $validated = $request->validated();
+        $user = $this->userRepository->findOrFail($id);
 
-        $rules = [
-            'name' => 'required|string|max:250',
-            'email' => 'required|string|email',
-        ];
-
-        if ($user->name != $request->name) {
-            $rules['name'] .= '|unique:users';
-        }
-        if ($user->email != $request->email) {
-            $rules['email'] .= '|unique:users';
-        }
-
-        $request->validate($rules);
-
+        
         $userData = [
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => strtolower($request->email),
         ];
 
-        if (!empty($request->password)) {
+        if ($request->input('is_change_password') === '1') {
             $userData['password'] = Hash::make($request->password);
         }
 
         $this->userRepository->update($id, $userData);
 
-        $this->addressRepository->updateOrInsert(['user_id' => $id], [
+        $this->addressRepository->getModel()->updateOrInsert(['user_id' => $id], [
             'fullname' => $request->input('fullname'),
             'number_phone' => $request->input('phone_number'),
             'address_1' => $request->input('address_1'),
@@ -181,7 +180,10 @@ class UserController extends Controller
             'zipcode' => $request->input('zipcode'),
         ]);
 
-        $user->syncRoles($request->role);
+        if ($request->filled('roles')) {
+            $user->syncRoles($request->roles);
+        }
+
         if (empty($user->paymentMethod)) {
             $user->paymentMethod()->create(['payment_method_id' => $request->payment_method, 'details' => json_encode($request->fields)]);
         } else {
@@ -189,8 +191,10 @@ class UserController extends Controller
             $user->paymentMethod->details = json_encode($request->fields);
             $user->paymentMethod->save();
         }
-
-        return redirect()->back()->with('success', 'Người dùng <b>' . $user->name . '</b> đã cập nhật thành công..!');
+        if ($request->submitter === 'apply') {
+            return redirect()->back()->with('success', 'Người dùng <b>' . $user->name . '</b> đã cập nhật thành công..!');
+        } 
+        return redirect()->route('admin.users.index')->with('success', 'Người dùng <b>' . $user->name . '</b> đã cập nhật thành công..!');
     }
 
 

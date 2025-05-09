@@ -1,17 +1,17 @@
 @extends('layouts.blog2')
 
-@section('title', $article_data['title'])
-@section('meta_description', $article_data['meta_description'] ?? $article_data['summary'])
+@section('title', $article_data['meta_title'] ?? $article_data['title'])
+@section('meta_description', $article_data['meta_description'] ?? $article_data['description'])
 @section('meta_keywords', $article_data['meta_keywords'])
 @section('meta_author', 'QK06')
 
 @section('og_title', $article_data['meta_title'] ?? $article_data['title'])
-@section('og_description', $article_data['meta_description'] ?? $article_data['summary'])
+@section('og_description', $article_data['meta_description'] ?? $article_data['description'])
 @section('og_image', URL('/') . $article_data['image'])
 @section('og_url', URL('/'))
 
 @section('twitter_title', $article_data['meta_title'] ?? $article_data['title'])
-@section('twitter_description', $article_data['meta_description'] ?? $article_data['summary'])
+@section('twitter_description', $article_data['meta_description'] ?? $article_data['description'])
 @section('twitter_image', URL('/') . $article_data['image'])
 @section('twitter_url', URL('/'))
 
@@ -21,7 +21,7 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('/fontend/stu/js/app.js?v=' . time()) }}"></script>
+    <script src="{{ asset('/fontend/stu/js/app2.js?v=' . time()) }}"></script>
 @endpush
 
 @section('content')
@@ -156,9 +156,13 @@
                         <div class="tagsCtn">
                             <input class="li hidden" id="forLabel" type="checkbox">
                             <div class="tagsHt">
-                                @foreach (array_map('trim', explode(',', $article_data['tags'])) as $tag)
-                                    <a>#{{ $tag }}</a>
-                                @endforeach
+                                @if ($article_data->tags->count())
+                                    @foreach ($article_data->tags as $tag)
+                                    <a>#{{ $tag->name }}</a>
+
+                                    @endforeach
+                                @endif
+                                
                                 <label aria-label="Show all labels" class="s" data-hide="Show less"
                                     data-show="+1 More…" for="forLabel" role="button">More…</label>
                             </div>

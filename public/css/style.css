@@ -185,8 +185,7 @@
           opacity: 1
       }
   }
-  
-  /* basic */
+ 
   /* Breadcrumb styling */
 .breadcrumb {
   margin: 25px auto;
@@ -270,57 +269,6 @@
   font-weight: bold;  
 }
 
-/* Column styles */
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-}
-
-.col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7 {
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-.col-sm-2 {
-  flex: 0 0 16.666667%;
-  max-width: 16.666667%;
-}
-
-.col-sm-3 {
-  flex: 0 0 25%;
-  max-width: 25%;
-}
-
-.col-sm-4 {
-  flex: 0 0 33.333333%;
-  max-width: 33.333333%;
-}
-
-.col-sm-5 {
-  flex: 0 0 41.666667%;
-  max-width: 41.666667%;
-}
-
-.col-sm-6 {
-  flex: 0 0 50%;
-  max-width: 50%;
-}
-
-.col-sm-7 {
-  flex: 0 0 58.333333%;
-  max-width: 58.333333%;
-}
-
-/* Responsive behavior */
-@media (max-width: 576px) {
-  .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7 {
-      flex: 0 0 100%;
-      max-width: 100%;
-  }
-}
     /*witch checkbox */
   input[type=checkbox][role=switch] {
     position: relative;

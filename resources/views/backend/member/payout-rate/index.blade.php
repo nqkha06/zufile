@@ -41,43 +41,88 @@
         }
     </style>
 
-    <div class="box">
-        <div class="box-top">
-            <div class="top-left">
-                <div class="icon"><i class="bi bi-flag"></i></div>
-                <div class="title">Tỷ lệ cấp độ</div>
+<div class="row">
+    <div class="col-12">
+        <div class="box">
+            <div class="box-top">
+                <div class="top-left">
+                    <div class="icon"><i class="bi bi-flag"></i></div>
+                    <div class="title">Tỷ lệ cấp độ</div>
+                </div>
+            </div>
+            <div class="box-container">
+                <div class="content" style="overflow: auto;">
+                    <table class="table table-mobile-md">
+                        <thead>
+                            <tr>
+                                <th style="word-break:break-all;min-width:120px">#Cấp độ</th>
+                                <th style="word-break:break-all;min-width:200px">#View/ip/24h</th>
+                                <th style="word-break:break-all;min-width:350px">#Mô tả</th>
+                                <th style="word-break:break-all;min-width:120px">#Tỷ lệ</th>
+                                <th style="word-break:break-all;min-width:150px">#Thử nghiệm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($level_paginted as $level)
+                                <tr>
+                                    <td data-label="#Cấp độ"><span class="level two">{{ $level?->translation()?->name }}</span></td>
+                                    <td data-label="#View/ip/24h">{{ $level['click_limit'] }} lượt xem</td>
+                                    <td data-label="#Mô tả">{{ $level?->translation()?->description }}</td>
+                                    <td data-label="#Tỷ lệ">${{ $level['click_value'] * 1000 }}/1000 lượt xem</td>
+                                    <td data-label="#Thử nghiệm"><a href="{{ $level['test_link'] }}"
+                                            target="_blank">{{  __("Test_link")}}</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                {{ $level_paginted->links('pagination.default') }}
             </div>
         </div>
-
-        <div class="box-container">
-            <div class="content" style="overflow: auto;">
-                <table class="table table-mobile-md">
-                    <thead>
-                        <tr>
-                            <th style="word-break:break-all;min-width:120px">#Cấp độ</th>
-                            <th style="word-break:break-all;min-width:200px">#View/ip/24h</th>
-                            <th style="word-break:break-all;min-width:350px">#Mô tả</th>
-                            <th style="word-break:break-all;min-width:120px">#Tỷ lệ</th>
-                            <th style="word-break:break-all;min-width:150px">#Thử nghiệm</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($level_paginted as $level)
-                            <tr>
-                                <td data-label="#Cấp độ"><span class="level two">{{ $level['name'] }}</span></td>
-                                <td data-label="#View/ip/24h">{{ $level['click_limit'] }} lượt xem</td>
-                                <td data-label="#Mô tả">{{ $level['description'] }}</td>
-                                <td data-label="#Tỷ lệ">${{ $level['click_value'] * 1000 }}/1000 lượt xem</td>
-                                <td data-label="#Thử nghiệm"><a href="{{ $level['test_link'] }}"
-                                        target="_blank">Test_link</a></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        
+    </div>
+    <div class="col-12">
+        <div class="box">
+            <div class="box-top">
+                <div class="top-left">
+                    <div class="icon"><i class="bi bi-flag"></i></div>
+                    <div class="title">Tỷ lệ cấp độ Note</div>
+                </div>
             </div>
-            {{ $level_paginted->links('pagination.default') }}
+        
+            <div class="box-container">
+                <div class="content" style="overflow: auto;">
+                    <table class="table table-mobile-md">
+                        <thead>
+                            <tr>
+                                <th style="word-break:break-all;min-width:120px">#Cấp độ</th>
+                                <th style="word-break:break-all;min-width:200px">#View/ip/24h</th>
+                                <th style="word-break:break-all;min-width:350px">#Mô tả</th>
+                                <th style="word-break:break-all;min-width:120px">#Tỷ lệ</th>
+                                <th style="word-break:break-all;min-width:150px">#Thử nghiệm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($note_level_paginted as $level)
+                                <tr>
+                                    <td data-label="#Cấp độ"><span class="level two">{{ $level['name'] }}</span></td>
+                                    <td data-label="#View/ip/24h">{{ $level['click_limit'] }} lượt xem</td>
+                                    <td data-label="#Mô tả">{{ $level['description'] }}</td>
+                                    <td data-label="#Tỷ lệ">${{ $level['click_value'] * 1000 }}/1000 lượt xem</td>
+                                    <td data-label="#Thử nghiệm"><a href="{{ $level['test_link'] }}"
+                                            target="_blank">Test_link</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                {{ $note_level_paginted->links('pagination.default') }}
+            </div>
         </div>
     </div>
+</div>
+
+
 
 
 @endsection

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\Interfaces;
-
+use Illuminate\Support\Collection;
 /**
  * Interface PageServiceInterface
  * @package App\Services\Interfaces
@@ -9,7 +9,8 @@ namespace App\Services\Interfaces;
 interface PageServiceInterface
 {
     public function listAllPagesPaginated();
-    public function editPage($id);
     public function updatePage($id, $req);
+    public function find(array $attributes): Collection;
+    public function findOrFail($key, string $column = null);
 
 }

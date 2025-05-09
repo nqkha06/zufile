@@ -38,8 +38,8 @@
                 <bdi class='nm' data-text='{{ config('profile.fullname') }}'
                     data-write='Oleh'></bdi>
                 <div class='pLbls' data-text='in'>
-                    <a aria-label='{{ $article->category->name }}' data-text='{{ $article->category->name }}'
-                        href='{{ route('blog.category', $article->category->name) }}'
+                    <a aria-label='{{ $article->categories()->first()?->name }}' data-text='{{ $article->categories()->first()?->name }}'
+                        href='{{ route('blog.category', $article->categories()->first()?->name ?? '') }}'
                         rel='tag'>
                     </a>
                     {{-- <a aria-label='Update' data-text='Update'

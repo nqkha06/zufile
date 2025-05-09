@@ -6,7 +6,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
+use App\Enums\BaseStatusEnum;
 
 /**
  * Class PostRepository.
@@ -25,7 +25,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         $cacheKey = "posts_{$take}_{$paginate}";
 
         return Cache::remember($cacheKey, 60, function () use ($take, $paginate) {
-            $query = $this->model->with('category', 'views')->where('status', 'public');
+            $query = $this->model->with('categories', 'views')->wherePublished();
 
             if ($take != null) {
                 $query = $query->latest()->take($take);
@@ -41,7 +41,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
 
     public function getPosts(int $take = null, int $paginate = null)
         {
-            $query = $this->model->with('category', 'views')->where('status', 'public');
+            $query = $this->model->with('categories', 'views')->wherePublished();
 
             if ($take != null) {
                 $query = $query->latest()->take($take);
@@ -58,7 +58,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         $cacheKey = "posts_paginate_{$paginate}";
 
         return Cache::remember($cacheKey, 60, function () use ($paginate) {
-            $query = $this->model->where('status', 'public');
+            $query = $this->model->wherePublished();
 
             if (isset($paginate) && !empty($paginate)) {
                 return $query->paginate($paginate);
@@ -73,7 +73,7 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         $cacheKey = "post_slug_{$slug}";
 
         return Cache::remember($cacheKey, 60, function () use ($slug) {
-            return $this->model->with('category')->where('slug', $slug)->firstOrFail();
+            return $this->model->with('categories')->where('slug', $slug)->firstOrFail();
         });
     }
 
@@ -91,16 +91,14 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         $cacheKey = "popular_posts_{$take}";
     
         return Cache::remember($cacheKey, 60, function () use ($take) {
-            $query = $this->model
-                ->select('posts.*')
-                ->with('category')
-                ->leftJoin('post_views', 'posts.id', '=', 'post_views.post_id')
-                ->selectRaw('COALESCE(SUM(post_views.views), 0) as views')
-                ->where('posts.status', 'public')
-                ->groupBy('posts.id')
-                ->orderBy('views', 'DESC')
-                ->take($take);
+            $query = $this->model->with(['categories', 'views' => function ($q) {
+                $q->orderBy('views', 'DESC');
+            }])
+            ->select('*')
+            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->take($take);
             return $query->get();
+
         });
     }
     
@@ -115,14 +113,11 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
 
     public function getPublishedPost($slug)
     {
-        return $this->model->with('category')->where('slug', $slug)->where('status', 'public')->firstOrFail();
+        return $this->model->with('categories')->where('slug', $slug)->wherePublished()->firstOrFail();
     }
 
     public function getAllPublished()
     {
-        return $this->getQuery()->where('status', 'public')->pluck('slug');
+        return $this->getQuery()->wherePublished()->pluck('slug');
     }
-    // public function getPaginatedPosts() {
-
-    // }
 }

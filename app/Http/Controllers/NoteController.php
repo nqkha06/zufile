@@ -25,7 +25,10 @@ class NoteController extends Controller
             $data = $request->all();
 
             if (empty($data['content']) || empty(($data['title']))) {
-                return response()->json(['status' => 'error', 'message' => 'Missing data field']);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => __('note_link.validate.missing_data_field')
+                ]);
             }
 
             $userId = $request->user() ? $request->user()->id : 0;
@@ -48,7 +51,12 @@ class NoteController extends Controller
             ]);
             
             DB::commit();
-            return response()->json(['status' => 'success', 'alias' => $alias]);
+            return response()->json([
+                'status' => 'success',
+                'alias' => $alias,
+                'url' => route("notes.show", $alias),
+                'message' => __("note_link.validate.link_created_successfully")
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['status' => 'error', 'message' => 'An error occurred while processing your request'], 500);
@@ -58,7 +66,7 @@ class NoteController extends Controller
     {   
         try {
             $data = $request->all();
-
+            
             if (empty($data['content']) || empty(($data['title']))) {
                 return response()->json(['status' => 'error', 'message' => 'Missing data field']);
             }
@@ -69,9 +77,9 @@ class NoteController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Invalid user']);
             }
             $dataUpd = [
-                'user_id' => $userId,
                 'title' => ($data['title']),
                 'content' => ($data['content']),
+                'level_id' => $data['level'] ? $data['level'] : 1
             ];
 
             if (!empty($data['password'])) {
@@ -80,9 +88,9 @@ class NoteController extends Controller
                 $dataUpd['password'] = null;
             }
 
-            $affectedRows = NOTELink::where('user_id', $userId)->where('alias', $alias)->update($dataUpd);
+            $affectedRows = NOTELink::where('user_id', $userId)->whereRaw('BINARY alias = ?', [$alias])->update($dataUpd);
 
-            if ($affectedRows > 0) {
+            if ($affectedRows) {
                 return response()->json(['status' => 'success', 'alias' => $alias]);
             }
             
@@ -119,7 +127,7 @@ class NoteController extends Controller
 
             return redirect()->away('https://link4sub.qkt/blog/xin-chao-cac-ban-day-la-bai-viet-cua-nguoi-dep-trai-nhat-the-gioi');
             
-            return view('fontend.note.show', compact('data'));
+            // return view('fontend.note.show', compact('data'));
         }
 
     }

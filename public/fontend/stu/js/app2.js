@@ -1,38 +1,5 @@
     /*<![CDATA[*/
-    var stSTU = {
-        'aApi': {
-            'userId': [40, 'user'],
-            'lAPI': [
-                'https://yeumoney.com/QL_api.php?token=5b539c82581a36409cab82695111565f5df92ee284414b49d4d22ff7990efefb&url='
-            ]
-        },
-    }
-    
-    async function reloadLanguage(lang) {
-        try {
-            // Get current STU data
-            let stuData = xQK.getLocalStorage('_STU');
-            if (!stuData) return false;
 
-            // Fetch new language data
-            const data = await xQK.fetchData(
-                'https://link4sub.qkt/stu/' + stuData.data.info.alias + '/fetch-data?lang=' + lang
-            );
-    
-            // Update storage with new language data
-            xQK.setLocalStorage('_STU', data.data);
-            
-            // Reload page to apply new language
-            main()
-            // window.location.reload();
-            
-            return true;
-        } catch (error) {
-            console.error('Error loading language:', error);
-            return false;
-        }
-    }
-    
     const iconSTU = {
         "bpm": "<svg fill=\"currentColor\" viewBox=\"0 0 448 512\"><path d=\"M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z\"/><path d=\"M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z\"/></svg>",
         "ttl": "<svg fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M5,4V7H10.5V19H13.5V7H19V4H5Z\"></path></svg>",
@@ -70,16 +37,58 @@
         "ct": '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <g> <path d="M399.034,265.919l-54.092,54.073h-28.602c2.373-6.678,3.666-13.859,3.666-21.333c0-35.249-28.751-64-64-64H152.798 L128,226.4V192c0-11.782-9.551-21.333-21.333-21.333H21.333C9.551,170.667,0,180.218,0,192v298.667 C0,502.449,9.551,512,21.333,512h85.333c11.782,0,21.333-9.551,21.333-21.333v-21.342h127.068 c60.397,0,119.538-17.22,170.512-49.648l3.637-2.917l60.331-60.352c24.927-24.895,24.927-65.568-0.003-90.498 C464.615,240.979,423.942,240.979,399.034,265.919z M85.333,469.333H42.667v-256h42.667V469.333z M459.384,326.23l-58.654,58.674 c-43.686,27.281-94.146,41.754-145.663,41.754H128.006V271.372l14.593,4.86c2.173,0.724,4.449,1.093,6.74,1.093h106.667 c11.685,0,21.333,9.649,21.333,21.333c0,11.685-9.649,21.333-21.333,21.333c-28.444,0-28.444,42.667,0,42.667h97.771 c5.657,0,11.082-2.247,15.082-6.246l60.352-60.331c8.257-8.267,21.899-8.267,30.163-0.003S467.639,317.986,459.384,326.23z"></path> <path d="M256,192c35.355,0,64-28.645,64-64s-28.645-64-64-64s-64,28.645-64,64S220.645,192,256,192z M256,106.667 c11.791,0,21.333,9.542,21.333,21.333s-9.542,21.333-21.333,21.333c-11.791,0-21.333-9.542-21.333-21.333 S244.209,106.667,256,106.667z"></path> <path d="M448,128c35.355,0,64-28.645,64-64S483.355,0,448,0s-64,28.645-64,64S412.645,128,448,128z M448,42.667 c11.791,0,21.333,9.542,21.333,21.333S459.791,85.333,448,85.333S426.667,75.791,426.667,64S436.209,42.667,448,42.667z"></path> </g> </g> </g> </g></svg>'
     };
 
-    function dcSTU(s) {
-            return decodeURIComponent(atob(s)) != null ? decodeURIComponent(atob(s)) : false
+    var stSTU = {
+        'aApi': {
+            'userId': [40, 'user'],
+            'lAPI': [
+                'https://yeumoney.com/QL_api.php?token=5b539c82581a36409cab82695111565f5df92ee284414b49d4d22ff7990efefb&url='
+            ]
+        },
+    }
+    async function reloadLanguage(lang) {
+        try {
+            // Get current STU data
+            let stuData = xQK.getLocalStorage('_STU');
+            if (!stuData) return false;
+
+            // Fetch new language data
+            const data = await xQK.fetchData(
+                'https://link4sub.qkt/stu/' + stuData.data.info.alias + '/fetch-data?lang=' + lang
+            );
+    
+            // Update storage with new language data
+            xQK.setLocalStorage('_STU', data.data);
+            
+            // Reload page to apply new language
+            main()
+            // window.location.reload();
+            
+            return true;
+        } catch (error) {
+            console.error('Error loading language:', error);
+            return false;
         }
+    }
+
+    function dcSTU(s) {
+        if (!s || typeof s !== 'string') {
+            return false;
+        }
+    
+        try {
+            const decoded = decodeURIComponent(atob(s));
+            return decoded !== null ? decoded : false;
+        } catch (e) {
+            return false;
+        }
+    }
 
     function ecSTU(s) {
         return btoa(encodeURIComponent(s)) ?? null;
     }
 
     function loadHeader() {
-        document.getElementById('Header1').innerHTML = `<div class="headInnr">
+        document.getElementById('Header1') ? document.getElementById('Header1').innerHTML = `<div class="headInnr">
             <h1 class="headH">
                 <bdi>
                     <span class="headLogo">
@@ -90,7 +99,7 @@
                     </span>
                 </bdi>
             </h1>
-        </div>`;
+        </div>` : false;
     }
     const xQK = {
         getCookie: (t) => {
@@ -200,16 +209,23 @@
 
     const checkSTU = async () => {
         let getStorageSTU = xQK.getLocalStorage('_STU');        
-        let getStorageALIAS = xQK.getParam('a');
+        let getStorageALIAS = xQK.getParam('a') || xQK.getLocalStorage('_ALIAS');
         window.history.replaceState({}, '', (url => (url.searchParams.delete('a'), url.toString()))(new URL(window.location.href)));
         if (getStorageALIAS) {
             try {
-                const savedLang = localStorage.getItem('selectedLanguage');
+                const savedLang = xQK.getLocalStorage('selectedLanguage');
                 const currentLang = savedLang || (navigator.language || navigator.userLanguage || 'en').split('-')[0];
+                const getSTT = JSON.parse(dcSTU(xQK.getParam('sttSTU')));
+                window.history.replaceState({}, '', (url => (url.searchParams.delete('sttSTU'), url.toString()))(new URL(window.location.href)));
+                console.log('https://link4sub.qkt/stu/' + getStorageALIAS + '/fetch-data?lang='+currentLang);
                 
                 const data = await xQK.fetchData('https://link4sub.qkt/stu/' + getStorageALIAS + '/fetch-data?lang='+currentLang);
                 xQK.deleteCookie('_OLD')
                 xQK.setLocalStorage('_STU', data.data);
+                xQK.setLocalStorage('_ALIAS',xQK.getParam('a'));
+                if (getSTT) {
+                    xQK.setCookie('_OLD', JSON.stringify(getSTT))
+                }
                 return true;
             } catch (error) {
                 xQK.showError(error);
@@ -217,7 +233,7 @@
             }
         }
         
-        if (getStorageSTU?.data?.info?.timestamp && (Date.now() - getStorageSTU.data.info.timestamp <= 1800*1000)) return true;
+        if (getStorageSTU?.data?.info?.timestamp && (Date.now() - getStorageSTU.data.info.timestamp <= 1800*1000*2)) return true;
         return false;
     }
 
@@ -228,9 +244,10 @@
         const linkData = isValid ? xQK.getLocalStorage('_STU') : '';
 
         if (linkData) {
-            // loadHeader();
+            loadHeader();
 
             renderSTU(linkData);
+            document.body.classList.add('onSTU');
         } else {
             xQK.deleteLocalStorage('_STU');
             // window.location.href = window.location.href;
@@ -239,61 +256,18 @@
     
     main();
 
-    function checkCond(info, config) {
-        if (config.active !== 'on') return false;
-    
-        const checkList = (list, value) => 
-            list === '[all]' || list.toLowerCase().split(',').map(item => item.trim()).includes(value.toLowerCase());
-        
-        const checkBlockList = (list, value) => 
-            list === '[no]' || !list.toLowerCase().split(',').map(item => item.trim()).includes(value.toLowerCase());
-
-        const checkWeb = (list) => 
-            list === undefined || list === '[all]' || list.toLowerCase().split(',').map(item => item.trim()).includes(window.location.host);
-        
-        const checkBlockWeb = (list) => 
-            list === undefined || list === '[no]' || !list.toLowerCase().split(',').map(item => item.trim()).includes(window.location.host);
-
-        const checkPage = (list, value) => 
-            list === '[all]' || list.toLowerCase().split(',').map(item => item.trim()).includes(value.toLowerCase());
-        
-        const checkBlockPage = (list, value) => 
-            list === '[no]' || !list.toLowerCase().split(',').map(item => item.trim()).includes(value.toLowerCase());
-        console.log(config);
-        
-        return (
-            checkList(config.country, info.country) &&
-            checkBlockList(config.block_country, info.country) &&
-            checkList(config.device, info.device) &&
-            checkBlockList(config.block_device, info.device) &&
-            checkList(config.os, info.os) &&
-            checkBlockList(config.block_os, info.os) &&
-            checkWeb(config.website) &&
-            checkBlockWeb(config.block_website)
-        );
-    }
-
     function handleConfig(configs, data) {
         function _rd(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
         }
         let format_config = {};
-        let userAgent = data.info;
-        Object.entries(configs).forEach(([key, types]) => {  
+        Object.entries(configs).forEach(([key, types]) => { 
+            
             if (key == 'click2') {
                 format_config[key] = (types);
-
             } else {
                 format_config[key] = _rd(types);
-
-            }   
-            // for (let i = 0; i < types.length; i++) {
-            //     const config = types[i];
-            //     if (checkCond(userAgent, config)) {
-            //         format_config[key] = config;
-            //         break;
-            //     }
-            // }            
+            }         
         });
         
         return format_config;
@@ -360,44 +334,26 @@
                 return showAd;
             }
 
-            function setSTT(obj, tag=null, key=null) {
-                if (!obj['btn']) {
-                    obj['btn'] = {};
+            function setSTT(state, tag=null, key=null) {
+                state.btn     ??= {};
+                state.adclick ??= {};
+            
+                switch (tag) {
+                  case 'btn':
+                  case 'adclick':
+                    state[tag][key] = true;
+                    break;
+                  case 'curr_page':
+                    state.btn.curr_page = (state.btn.curr_page ?? 1) + 1;
+                    break;
+                  default:
+                    state[tag] = true;
                 }
-                if (!obj['adclick']) {
-                    obj['adclick'] = {};
-                }
-                
-                if (tag == 'btn') {
-                    obj['btn'][key] = true;
-                }
-                if (tag == 'adclick') {
-                    obj['adclick'][key] = true;
-                }
-
-                if (tag == 'next') {
-                    obj['next'] = true;
-                }
-
-                if (tag == 'verify') {
-                    obj['verify'] = true;
-                }
-
-                if (tag == 'curr_page') {                    
-                    if (obj?.btn?.curr_page && obj.btn.curr_page >= 1) {
-                        obj['btn']['curr_page'] += 1;
-                    } else {
-                        obj['btn']['curr_page'] = 2;
-                    }
-                }
-
-                xQK.setCookie(CONSTANTS.OLD_KEY, JSON.stringify(obj), {
+                xQK.setCookie(CONSTANTS.OLD_KEY, JSON.stringify(state), {
                     secure: 1,
-                    'max-age': 1800*1000 // 30p
+                    'max-age': 1800*1000*2 // 60p
                 });
-
-                return true;
-            }
+            };
             const completeButton = (button, text = stSTU.txt.done, icon = ['', 'check']) => {
                 const [lftI, rgtI] = icon;
                 const iconElt = button.querySelector('i');
@@ -414,12 +370,33 @@
 
                 return true;
             };
-            const unlockButtons = (buttons, lftI = 'unlock', rgtI = '') => {
+            const unlockButtons = (buttons, lftI = 'unlock', rgtI = '') => {                
                 buttons.forEach(button => {
                     const destDtHref = button.getAttribute('data-href');
-
+                    if (dcSTU(destDtHref) && !button.getAttribute('data-dest')) {
+                        if (new URL(dcSTU(destDtHref)).hostname == location.hostname) {
+                            var urlDirect = dcSTU(destDtHref);
+                        } else {      
+                            let cloneStateOld = { ...JSON.parse(xQK.getCookie('_OLD') || '{}') };
+                            
+                            cloneStateOld.btn = cloneStateOld.btn || {};
+                            cloneStateOld.btn.curr_page = (cloneStateOld.btn.curr_page || 1) + 1;    
+                                              
+                            let params = {
+                                a: STATE?.data?.info?.alias,
+                                sttSTU: ecSTU(JSON.stringify(cloneStateOld || '{}'))
+                            };
+                            
+                            var urlDirect = new URL(dcSTU(destDtHref));
+                            for (let key in params) {                                
+                                urlDirect.searchParams.set(key, params[key]);
+                            }
+                        }
+                    } else {
+                        var urlDirect = dcSTU(destDtHref) 
+                    }
                     if (destDtHref) {
-                        button.setAttribute('href', dcSTU(destDtHref));
+                        button.setAttribute('href', urlDirect);
                     }
                     button.classList.remove('lock');
 
@@ -508,7 +485,7 @@
             }
 
             function renderSTU() {          
-                const { direct, setting, next, click, click2, step } = STATE.config;
+                const { direct, popunder, setting, next, click, click2, step } = STATE.config;
                 
                 const { btn, info, oth, lnk } = STATE.data;
                 const totalPages = parseInt(setting?.['total_page'] ?? 1) || 1;
@@ -524,6 +501,9 @@
                 if (direct) {
                     destAttrs['data-direct'] = true;
                     destAttrs['target'] = '_blank';
+                }
+                if (popunder) {
+                    destAttrs['data-pop'] = true;
                 }
                 //Tạo btn
                 if (actions && Object.keys(actions).length) {
@@ -560,19 +540,19 @@
                 if (currentPage < totalPages) {
                     destAttrs['data-btn'] = true;
 
-                    const link = _rd(next.link.split(",").map(s => s.trim())) || [window.location.href];
+                    const link = _rd(next.links.split(",").map(s => s.trim())) || [window.location.href];
                     htmlDest = `
                         <div class='cl'>
-                            ${ createDest(ecSTU(link), `Next Step ${(currentPage <= totalPages) ? '('+(currentPage) + '/' + totalPages+')' : ''}`, iconSTU['link'], iconSTU['lock'], destAttrs) }
+                            ${ createDest(ecSTU(link), `${stSTU?.txt?.next_step ?? ''} ${(currentPage <= totalPages) ? '('+(currentPage) + '/' + totalPages+')' : ''}`, iconSTU['link'], iconSTU['lock'], destAttrs) }
                         </div>
                     `;
                 } else if (next && currentPage == totalPages) {
                     destAttrs['data-next'] = true;
-
-                    const link = _rd(next.link.split(",").map(s => s.trim())) || [window.location.href];
+                    
+                    const link = _rd(next.links.split(",").map(s => s.trim())) || [window.location.href];
                     htmlDest = `
                         <div class='cl'>
-                            ${ createDest(ecSTU(link), 'Next', iconSTU['link'], iconSTU['lock'], destAttrs) }
+                            ${ createDest(ecSTU(link), stSTU?.txt?.next_step ?? '', iconSTU['link'], iconSTU['lock'], destAttrs) }
                         </div>
                     `;
                 } else {
@@ -586,17 +566,23 @@
                         const href = stSTU.aApi && stSTU.aApi.userId.includes(Number(info.userId))
                             ? ecSTU(`${_rd(stSTU.aApi.lAPI)}${dcSTU(value.url)}`)
                             : value.url;
-                        htmlDest += createDest(href, 'Continue', iconSTU['link'], iconSTU['lock'], destAttrs);
+                        htmlDest += createDest(href, stSTU.txt.continue, iconSTU['link'], iconSTU['lock'], destAttrs);
                     }
                     htmlDest += `</div><div class='cp'>${IS_PWD ? createPasswordForm() : ''}</div>`;
                 }
 
                 // tạo click2
                 if (click2) {
-                    htmlBtnC = click2.map(item => {
-                        let link = _rd((item.links).split(','));
-                        return createBtn(item.type, link, item.name, item.icon);
-                    }).join('');
+                htmlBtnC = click2.map(item => {
+                    const page_appears = item.page_appear.split(",").map(i => parseInt(i.trim()));
+                    if (page_appears.includes(currentPage)) {
+
+                    let link = _rd((item.links).split(','));
+                    return createBtn(item.type, link, item.name, item.icon); } else {
+                        return '';
+                    }
+                }).join('');
+                    
                 }
                 const eltThumb = (currentPage == 2 || !oth.thmb) ? '' : createThumb(dcSTU(oth.thmb));
 
@@ -609,35 +595,20 @@
                         </div>
                         <div class='i'>${eltThumb}</div>
                         <div class='b' id='actionGroups'>${htmlBtn}</div>
-                        <div class='c hidden' id='adClickBtns'>${htmlBtnC}</div>
+                        <div class='c' id='adClickBtns'>${htmlBtnC}</div>
                         <div class='p' id='pg'></div>
                         <div class='d ${IS_PWD ? 'p' : '' }'>${htmlDest}</div>
                         <div class="f">
                             <div class="ft">
-                                <span>Created with </span> 
-                                <img src="https://link4sub.com/images/favicon.png"> 
-                                <a href="https://link4sub.com/"> Link4Sub</a>
+                                <span>${stSTU.txt.ft.created_with} </span> 
+                                <img src="${stSTU.txt.ft.i_url}">  
+                                <a href='${stSTU.txt.ft.url}'> ${stSTU.txt.ft.name}</a>
                             </div>
                         </div>
-                        <!--<div class='f'>
-                            <div class="ft">
-                                <span>${stSTU.txt.languages}</span>
-                                <select id="language-selector">
-                                    <option value="vi">Tiếng Việt</option>
-                                    <option value="en">English</option>
-                                    <option value="id">Indonesia</option>
-                                    <option value="ja">日本語</option>
-                                    <option value="hi">भारतीय भाषा</option>
-                                </select>
-                            </div>
-                        </div>-->
                     </div>
                 `;
             }
 
-            // <span>${stSTU.txt.ft.created_with} </span> 
-            // <img src="${stSTU.txt.ft.i_url}"> 
-            // <a href='${stSTU.txt.ft.url}'> ${stSTU.txt.ft.name}</a>
             function renderVERIFY(link, direct=true) {
                 return `<div class="stu-box-wrap"><div class="hmv alt" id="content">
                 <div class="hmvH">
@@ -646,10 +617,10 @@
                     </div>
                 </div>
                 <div class="hmvB">
-                    <div class="hmvB-title" id="title-popup">Liên kết đã sẳn sàng!</div>
+                    <div class="hmvB-title" id="title-popup">${ stSTU.txt.verify.title }</div>
                 </div>
                 <div class="hmvF">
-                    <a class="button pstL" id="continueBtn" ${direct ? 'target="_blank" data-direct="true"' : ''} href="${link}">Tiếp tục / Continue</a>
+                    <a class="button pstL stu-btn" data-verify ${direct ? 'target="_blank" data-direct="true"' : ''} href="${link}">${ stSTU.txt.verify.btn }</a>
                 </div></div>
             </div>`;
             }
@@ -693,59 +664,26 @@
                     </form>
                 `;
             }
-            
-            if (!STATE?.old?.verify && STATE?.config?.verify?.active == 'true') {
+            if (!STATE?.old?.verify && STATE?.config?.verify) {
                 const cfVerify = STATE?.config?.verify;
+                document.getElementById('stuC').innerHTML = renderVERIFY(_rd(cfVerify.links.split(',').map(link => link.trim())), STATE?.config?.direct?.active);
 
-                setTimeout(() => {
-                        document.getElementById('stuC').innerHTML = renderVERIFY(_rd(cfVerify.links), STATE?.config?.direct?.active);
-                        if (STATE.config['direct']?.active) {                
-                            let cfObj = STATE.config['direct'];
-                            let links = cfObj.link.split(',').map(link => link.trim());
-                            
-                            if (links) {     
-                                document.querySelectorAll('.stu-box-wrap [data-direct=true]').forEach(button => {                        
-                                    button.addEventListener('click', () => {
-                                        if (button.getAttribute('href')) {                                            
-                                            setTimeout(() => {
-                                                window.location.href = _rd(links);
-                                            }, cfObj.timer);
-                                        }
-                                    })
-                                });
-                            } 
-                        }
-                        document.getElementById('continueBtn').addEventListener('click', () => {
-                            setSTT(STATE.old, 'verify');
-                        })
-                }, cfVerify.timer);
+                // setTimeout(() => {
+                //     document.getElementById('stuC').innerHTML = renderVERIFY(_rd(cfVerify.links.split(',').map(link => link.trim())), STATE?.config?.direct?.active);
+                // }, cfVerify.timer);
 
             } else {
-                document.getElementById('stuC').innerHTML = renderSTU();
+                if (document.getElementById('stuC')) {
+                    document.getElementById('stuC').innerHTML = renderSTU();
 
-                const languageSelector = document.getElementById('language-selector');
-                
-                if (languageSelector) {
-                    // Check local storage for previously selected language
-                    const savedLang = localStorage.getItem('selectedLanguage');
-                    const currentLang = savedLang || (navigator.language || navigator.userLanguage || 'en').split('-')[0];
-                    
-                    // Set initial value based on saved language or current language
-                    languageSelector.value = currentLang;
-            
-                    // Add change event listener
-                    languageSelector.addEventListener('change', (e) => {
-                        // Save the selected language in local storage
-                        localStorage.setItem('selectedLanguage', e.target.value);
-                        reloadLanguage(e.target.value);
-                    });
+                } else {
+                    document.body.innerHTML = renderSTU();
                 }
                 
             }
             // Render HTML
 
-            if (STATE.data.oth.exp && Date.parse(new Date(dcSTU(STATE.data.oth.exp))) > Date.parse(new Date().toISOString()
-                    .slice(0, 16))) {
+            if (STATE.data.oth.exp && Date.parse(new Date(dcSTU(STATE.data.oth.exp))) > Date.parse(new Date().toISOString().slice(0, 16))) {
                 alert('The link has expired..');
                 location.href = 'https://link4sub.com/';
             }
@@ -790,157 +728,109 @@
             processButtons(STATE.old.btn, '.b > a');
             processButtons(STATE.old.adclick, '.c > a');
             
-            // Tính toán tổng số nút và các nút đã hoàn thành
-            const totalBtns = document.querySelectorAll('.stu-box-wrap .b > a').length;
-            const completedBtns = document.querySelectorAll('.stu-box-wrap .b > a.done').length;
-            const totalAdClickBtns = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn').length;
-            const completedAdClickBtns = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn.done').length;
 
-            if (totalBtns > 0) {
-                let progressText = '';
-                let progressCount = ''; // Đếm số hoàn thành trên tổng số
-            
-                if (completedBtns < totalBtns) {
-                    
-                    progressText = stSTU.txt.unlock_progress;
-                    progressCount = `<span id="prog01">${completedBtns}</span>/<span id="prog02">${totalBtns}</span>`;
-                } else if (totalAdClickBtns > 0) {                    
-                    progressText = stSTU.txt.unlock_progress;
-                    progressCount = `<span id="prog01">${completedAdClickBtns}</span>/<span id="prog02">${totalAdClickBtns}</span>`;
-                } else if (completedBtns == totalBtns) {
-                    progressText = stSTU.txt.unlock_progress;
-                    progressCount = `<span id="prog01">${completedBtns}</span>/<span id="prog02">${totalBtns}</span>`;
-                } else {
-                    progressText = stSTU.txt.unlock_progress;
-                    progressCount = `<span id="prog01">${totalBtns}</span>/<span id="prog02">${totalBtns}</span>`;
-                }
-            
-                const progressPercentage = completedBtns < totalBtns
-                    ? Math.floor((completedBtns / totalBtns) * 100)
-                    : totalAdClickBtns != 0 ? Math.floor((completedAdClickBtns / totalAdClickBtns) * 100) : Math.floor((completedBtns / totalBtns) * 100);
+            function getBtnCounts() {
+                return {
+                totalB: document.querySelectorAll('.stu-box-wrap>.b a.stu-btn, .stu-box-wrap>.c a.stu-btn').length,
+                doneB:  document.querySelectorAll('.stu-box-wrap a.stu-btn.done').length,
+                };
+            }
+
+            function buildProgressHTML(percent, text, count) {
+                const sClass = (percent === 100) ? 's' : '';
                 
-                const progressHTML = `
-                    <div>${progressText} ${progressCount}</div>
-                    <div class="stu-progs">
-                        <div id="stuBar" class="${progressPercentage === 100 ? 's' : ''}" style="width:${progressPercentage}%"></div>
-                    </div>
+                return `
+                <div>${text} ${count}</div>
+                <div class="stu-progs">
+                    <div id="stuBar" class="${sClass}" style="width:${percent}%"></div>
+                </div>
                 `;
-                document.getElementById('pg').innerHTML = progressHTML;
-            }
-
-            // Xử lý trạng thái hiển thị các nhóm nút
-            if (totalBtns === completedBtns && totalAdClickBtns === completedAdClickBtns) {
-                unlockButtons(document.querySelectorAll('.stu-box-wrap .d a'));
-            } else if (totalBtns === completedBtns && totalAdClickBtns > 0 && totalAdClickBtns !== completedAdClickBtns) {
-                const actionGroups = document.getElementById('actionGroups');
-                const adClickBtns = document.getElementById('adClickBtns');
-
-                if (actionGroups) actionGroups.classList.add('hidden');
-                if (adClickBtns) adClickBtns.classList.replace('hidden', 'show');
-            }
-
-
-            function moveProgressBar(totalBtn, perProgs, group) {
-                let totalBtnD = document.querySelectorAll(`.stu-box-wrap .${group} > a.done`).length;
-                let perWidthProgs = totalBtnD < totalBtn ? (perProgs * totalBtnD) : 100;
-                let time = 500 / perProgs;
-                let curWidth = perProgs * (totalBtnD - 1);
-                
-                let elmPr01 = document.getElementById('prog01');
-                let elmPr02 = document.getElementById('prog02');
-                let elmBar = document.getElementById('stuBar');
-            
-                elmPr01.innerText = totalBtnD;
-                elmPr02.innerText = totalBtn;
-
-                if (perWidthProgs == 100) {
-                    elmBar.classList.add('s');
-                }
-            
-                let move = setInterval(() => {
-                    if (curWidth >= perWidthProgs) {
-                        clearInterval(move);
-                    } else {
-                        curWidth += 1;
-                        elmBar.style.width = curWidth + '%';
-                    }
-                }, time);
-            
-                return [curWidth, perWidthProgs];
-            }
-            function moveProgressBarReverse(totalBtn) {
-                let curWidth = 100; // Bắt đầu từ 100%
-                let elmBar = document.getElementById('stuBar'); // Lấy thanh tiến trình
-                let elmPr01 = document.getElementById('prog01');
-                let elmPr02 = document.getElementById('prog02');
-                elmPr01.innerHTML = 0;
-                elmPr02.innerHTML = totalBtn.length;
-
-                // Thiết lập thời gian di chuyển mượt mà
-                let time = 15; // Thời gian thay đổi width mỗi lần (ms)
-            
-                // Chạy animation giảm dần từ 100% về 0
-                let move = setInterval(() => {
-                    if (curWidth <= 0) {
-                        clearInterval(move); // Dừng lại khi width đạt 0%
-                    } else {
-                        curWidth -= 1; // Giảm 1% mỗi lần
-                        elmBar.style.width = curWidth + '%'; // Cập nhật width của thanh tiến trình
-                    }
-                }, time);
             }
             
-            const processButtonClick = (button) => {
-                completeButton(button, stSTU.txt.done);
 
-                let totalBtn = document.querySelectorAll('.stu-box-wrap .b > a').length;
-                let perProgs = Math.floor(100 / totalBtn);
+  function renderProgress() {
+    const { totalB, doneB} = getBtnCounts();    
+
+    let groupTotal  = totalB;
+    let groupDone   = doneB;
+    let dataType    = 'act'; // tuỳ ý bạn
  
-                // Kiểm tra xem có bước nào trong nhóm C không
-                let adClickBtns = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn');
-                let adClickBtnDones = document.querySelectorAll('.stu-box-wrap .c > a.stu-btn.done');
-                let buttonTotals = document.querySelectorAll('.stu-box-wrap .b > a.stu-btn');
-                let buttonTotalDones = document.querySelectorAll('.stu-box-wrap .b > a.stu-btn.done');
+  
+    // Nếu groupTotal = 0 => không cần vẽ progress
+    if (groupTotal > 0) {
+      const percent = Math.floor((groupDone / groupTotal) * 100);
+      const progressText = stSTU.txt.unlock_progress;
+      const progressCount = `<span id="prog01">${groupDone}</span>/<span id="prog02">${groupTotal}</span>`;
+  
+      document.getElementById('pg').innerHTML = buildProgressHTML(
+        percent, progressText, progressCount, dataType
+      );
+    }
+  
+    // Kiểm tra hiển thị nhóm D
+    if (totalB === doneB) {
+      unlockButtons(document.querySelectorAll('.stu-box-wrap .d a'));
+    }
 
-                let [curWidthB, perWidthB] = moveProgressBar(totalBtn, perProgs, 'b');
+   
+  }
+  
+  function moveProgressBar(total) {    
+    const totalDone   = document.querySelectorAll(`.stu-box-wrap >.b a.done, .stu-box-wrap >.c a.done`).length;
+    const perProgs    = Math.floor(100 / total);    
+    const perWidth    = (totalDone < total) ? (perProgs * totalDone) : 100;
+    const time        = 500 / perProgs;
+    let   curWidth    = perProgs * (totalDone - 1);
+  
+    const elmBar  = document.getElementById('stuBar');
+    const elmPr01 = document.getElementById('prog01');
+    const elmPr02 = document.getElementById('prog02');
+  
+    elmPr01.innerText = totalDone;
+    elmPr02.innerText = total;
+  
+    if (perWidth === 100) {
+      elmBar.classList.add('s');
+    }
+    const move = setInterval(() => {        
+      if (curWidth >= perWidth) {
+        clearInterval(move);
+      } else {
+        curWidth += 1;
+        elmBar.style.width = curWidth + '%';
+      }
+    }, time);
+  }
+  
 
-                if (buttonTotals.length == buttonTotalDones.length) {
-                    if (adClickBtns.length) {
-                        if (adClickBtnDones.length == adClickBtns.length) {
-                            const destButtons = document.querySelectorAll('.stu-box-wrap .d a');
-                            setTimeout(() => {
-                                unlockButtons(destButtons);
-                            }, 1500);
-                        } else {
-                            
-                            if (adClickBtnDones.length == 0) {
-                                setTimeout(() => {
-                                    let actionGroups = document.getElementById('actionGroups');
-                                    let eltAdClickBtns = document.getElementById('adClickBtns');
-                                    moveProgressBarReverse(adClickBtns);
+  function processButtonClick(button) {
+    completeButton(button, stSTU.txt.done);
+  
+    // Kiểm tra nhóm
 
-                                    if (actionGroups) actionGroups.classList.add('hidden') ;
-                                    if (eltAdClickBtns) eltAdClickBtns.classList.replace('hidden', 'show');
-                                }, 2000);
+    const bButtons    = document.querySelectorAll('.stu-box-wrap >.b a, .stu-box-wrap >.c a');
+    const bDone       = document.querySelectorAll('.stu-box-wrap >.b a.done, .stu-box-wrap >.c a.done');
+  
+    moveProgressBar(bButtons.length);
 
-                            } else {
-                                let [curWidthC, perWidthC] = moveProgressBar(totalBtnC, perProgsC, 'c');
-                            }
+    // Nếu B đã xong
+    if (bButtons.length === bDone.length) {
+        const destButtons = document.querySelectorAll('.stu-box-wrap .d a');
+        setTimeout(() => unlockButtons(destButtons), 1500);
+    
+    }
+  
+    // Xoá msg nếu có
+    const msg = document.getElementById('msgWr');
+    if (msg) msg.remove();
+  
+    // Cuối cùng, cập nhật lại giao diện tổng thể
+  }
+    
 
-                        }
-                    } else {
-                        // Nếu không có bước nhóm C, mở các nút tiếp theo
-                        const destButtons = document.querySelectorAll('.stu-box-wrap .d a');
-                        setTimeout(() => {
-                            unlockButtons(destButtons);
-                        }, 1500);
-                    }
-                }
-            
-                // Xóa thông báo nếu có
-                const msg = document.getElementById('msgWr');
-                if (msg) msg.remove();
-            };
+  
+  /** Lần đầu load: hiển thị progress */
+  renderProgress();
             
             document.querySelectorAll('.stu-box-wrap >.b a.stu-btn').forEach(button => {
                 button.addEventListener('click', () => {
@@ -985,12 +875,10 @@
                             const eltAd = document.querySelector(sAd);
                             const notificationText = `
                                 <p id="notif-ad" class="note">
-                                    <b>Bước 1:</b> Bấm vào quảng cáo được đánh dấu (sẽ tự động chuyển đến sau vài giây).<br>
-                                    <b>Bước 2:</b> Ở lại trang quảng cáo đó khoảng 5 giây.<br>
-                                    <b>Bước 3:</b> Quay lại và tiếp tục.
+                                    <span class="point-down">👇</span> Vui lòng nhấp vào quảng cáo bên dưới, chờ khoảng 10 giây trên trang đó rồi quay lại để tiếp tục.!
                                 </p>
                             `;
-                            button.insertAdjacentHTML('afterend', notificationText);
+                            eltAd.insertAdjacentHTML('beforebegin', notificationText);
                         
                             const scrollToElement = (element, delay = 0) => 
                                 new Promise(resolve => 
@@ -1006,12 +894,11 @@
                                 eltAd.removeAttribute('mark-ad');
                                 document.getElementById('notif-ad').remove();
                                 console.log('clicked..');
-                                scrollToElement(button, 5000)
-                                    .then(() => processButtonClick(button));
+                                scrollToElement(button, 500).then(() => processButtonClick(button));
                             };
                         
                             scrollToElement(document.getElementById('notif-ad'))
-                                .then(() => scrollToElement(eltAd, 5000))
+                                .then(() => scrollToElement(eltAd))
                                 .then(() => {
                                     eltAd.setAttribute('mark-ad', 'true');
                                     eltAd.addEventListener('click', rmAd, { once: true });
@@ -1053,65 +940,72 @@
                 });
             })
 
-            document.querySelectorAll('.stu-box-wrap>.d>.cl>.stu-btn[data-dest=true]').forEach(button => {
-                let flag = true;
-                button.addEventListener('click', () => {
-                    if (button.getAttribute('href') && flag) {
-                        flag = false;
-                        var xhr = new XMLHttpRequest();
-                        xhr.onreadystatechange = function() {
-                            if (this.readyState == 4 && this.status == 200) {
-                                var response = this.responseText;
-                                console.log(response)
-                            }
-                        };
-                        xhr.open('GET', STATE.data.info.url_count);
-                        xhr.send();
-                    }
-                })
-            });
+function getUnitDirect() {
+    let cfObj = STATE.config['direct'];
+    let links = cfObj.link.split(',').map(link => link.trim());
+    return {
+        'link': links[Math.floor(Math.random() * links.length)],
+        'timer': cfObj.timer ?? 1
+    };
+}
+function getUnitPopunder() {
+    let cfObj = STATE.config['popunder'];
+    let links = cfObj.link.split(',').map(link => link.trim());
+    return {
+        'link': links[Math.floor(Math.random() * links.length)]
+    };
+}
 
-            document.querySelectorAll('.stu-box-wrap>.d>.cl>.stu-btn[data-btn=true],.stu-box-wrap>.d>.cl>.stu-btn[data-next=true]').forEach(button => {
-                let flag = true;
-                button.addEventListener('click', () => {
-                    if (button.getAttribute('href') && flag) {
-                        flag = false;
-                        setSTT(STATE.old, 'curr_page');                        
-                    }
-                })
-            });
+document.querySelector('.stu-container').addEventListener('click', (e) => {
+    const btn = e.target.closest('.stu-btn');
+    if (!btn) return;                                     // bấm ngoài nút → next
+
+  
+    /* ---------- pop-under ---------- */
+    if (btn.dataset.pop !== undefined) {
+      e.preventDefault();
+      delete btn.dataset.pop;
+      let {link} = getUnitPopunder();   
+      window.open(link, '_blank');
+      return;
+    }
+  
+    /* ---------- direct redirect ---------- */
+    if (btn.href && btn.dataset.direct !== undefined) {
+      delete btn.dataset.direct;
+      let {link, timer} = getUnitDirect();
+
+      if (link && timer) setTimeout(() => (window.location.href = link), timer);
+    }
+  
+    /* ---------- count click ---------- */
+    if (btn.href && btn.dataset.dest !== undefined) {
+      fetch(STATE?.data?.info?.url_count).catch(console.error);
+    }
+
+    /* ---------- veryf ---------- */
+    if (btn.href && btn.dataset.verify !== undefined) {
+        delete btn.dataset.verify;
+        setSTT(STATE.old, 'verify');
+    }
+  
+    /* ---------- next page ---------- */
+    if (btn.href && (btn.dataset.next !== undefined || btn.dataset.btn !== undefined)) {
+      setSTT(STATE.old, 'curr_page');
+    }
+  });
 
             /* add bannerAd */
             if (STATE.config['banner']) {
                 let cfAd = STATE.config['banner'];
-                                
+                          
                 if (cfAd) {
+                    
                     let selectors = cfAd.select.split(",");
                     selectors.forEach(select => {
                         xQK.updateContent(cfAd.html, select);
                     });
                     
-                }
-            }
-            
-            if (STATE.config['direct']?.active) {                
-                let cfObj = STATE.config['direct'];
-                let links = cfObj.link.split(',').map(link => link.trim());
-                
-                if (links) {                    
-                    document.querySelectorAll('.stu-box-wrap [data-direct=true]').forEach(button => {                        
-                        button.addEventListener('click', () => {
-                            if (button.getAttribute('href')) {
-                                console.log("123");
-                                
-                                setTimeout(() => {
-                                    window.location.href = _rd(links);
-                                }, cfObj.timer);
-                            }
-                        })
-                    });
-                } else {
-                    console.log('direct-ad không hoạt động vì thiếu target')
                 }
             }
 
@@ -1120,5 +1014,22 @@
         }
     };
 
-    
+    const languageItems123 = document.querySelectorAll('.header__language-item');
+    languageItems123.forEach(item => {
+        item.addEventListener('click', () => {
+            const langCode = item.getAttribute('data-lang');
+          
+            reloadLanguage(langCode);
+        });
+    });
+
+    const closeVipAd = setInterval(() => {
+        let closeVipAdElt = document.querySelector('brde>brde:nth-child(2)');
+        if (closeVipAdElt) {
+            closeVipAdElt.click();
+            closeVipAdElt.querySelector('a').click();
+            closeVipAdElt.querySelector('img').click();
+            clearInterval(closeVipAd);
+        }
+    }, 1000)
     /*]]>*/

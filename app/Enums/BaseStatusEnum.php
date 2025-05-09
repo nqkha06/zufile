@@ -2,34 +2,29 @@
 
 namespace App\Enums;
 
-enum BaseStatusEnum
+enum BaseStatusEnum: string
 {
-    // Active = 1,
-    // Inactive = 0,
-    // Deleted = -1,
-    // Archived = -2,
-    // Pending = 0,
-    // Approved = 1,
-    // Rejected = -1,
-    // Draft = 0,
-    // Published = 1,
-    // Unpublished = 0,
-    // Suspended = -1,
-    // Unsuspended = 1,
-    // Locked = -1,
-    // Unlocked = 1,
-    // Frozen = -1,
-    // Unfrozen = 1,
-    // Expired = -1,
-    // NotExpired = 1,
-    // Banned = -1,
-    // Unbanned = 1,
-    // Hidden = -1,
-    // Visible = 1,
-    // HiddenByAdmin = -1,
-    // VisibleByAdmin = 1,
-    // PendingApproval = 0,
-    // ApprovedByAdmin = 1,
-    // RejectedByAdmin = -1,
-    // PendingPayment = 0,
+    case PUBLISHED = 'published';
+    case DRAFT = 'draft';
+    case PENDING = 'pending';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::PUBLISHED => __('Đã xuất bản'),
+            self::DRAFT => __('Bản nháp'),
+            self::PENDING => __('Chờ xử lý'),
+            default => __('Unknown'),
+        };
+    }
+
+    public function html(): string
+    {
+        return match ($this) {
+            self::PUBLISHED => '<span class="badge bg-green text-green-fg">'.__('Xuất bản').'</span>',
+            self::DRAFT => '<span class="badge bg-blue text-blue-fg">'.__('Bản nháp').'</span>',
+            self::PENDING => '<span class="badge bg-yellow text-yellow-fg">'.__('Chờ xử lý').'</span>',
+            default => '<span class="badge">'.__('Unknown').'</span>',
+        };
+    }
 }

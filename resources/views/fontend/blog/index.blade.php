@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 
-@include('components.blog.slider')
+{{-- @include('components.blog.slider') --}}
 <div class='section' id='top-widget'>
     <div class='widget HTML' data-version='2' id='HTML92'>
         <div class='widget-content'>

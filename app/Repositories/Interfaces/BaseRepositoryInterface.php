@@ -3,6 +3,7 @@
 namespace App\Repositories\Interfaces;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use App\Filters\BaseFilter;
 
 /**
  * Interface BaseServiceInterface
@@ -10,11 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 interface BaseRepositoryInterface
 {
-    public function all(array $relation);
     public function getAll(array $search = []): Collection;
     public function create(array $payload);
     public function update(int $id = 0, array $payload = []);
-    public function updateOrInsert(array $attributes, array $values);
     public function delete(int $id = 0);
     public function getAllPaginated(array $search = [], int $pageSize = 10);
     public function find($id);
@@ -24,5 +23,7 @@ interface BaseRepositoryInterface
     public function with(array $with);
     public function withCount(array $withCount);
     public function deleteAll(array $search = []): int;
+    public function wherePublished();
+    public function getModel();
 
 }

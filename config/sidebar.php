@@ -130,21 +130,27 @@ return [
         ]
     ],
     [
+        'title' => 'Trang',
+        'url' => 'admin.pages.index',
+        'icon' => '<svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"></path><path d="M13 8l2 0"></path><path d="M13 12l2 0"></path></svg>',
+        'permission' => 'view_all_dashboard',
+    ],
+    [
         'title' => 'Blog',
         'icon' => '<svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"stroke-width="2"stroke-linecap="round"stroke-linejoin="round"class="icon icon-tabler icons-tabler-outline icon-tabler-article"><path stroke="none"d="M0 0h24v24H0z"fill="none"></path><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path><path d="M7 8h10"></path><path d="M7 12h10"></path><path d="M7 16h10"></path></svg>',
         'permission' => 'view_all_dashboard',
         'children' => [
             [
-                'title' => 'Category',
-                'url' => 'admin.categories.index'
-            ],
-            [
-                'title' => 'Posts',
+                'title' => 'Bài viết',
                 'url' => 'admin.posts.index'
             ],
             [
-                'title' => 'Pages',
-                'url' => 'admin.pages.index'
+                'title' => 'Danh mục',
+                'url' => 'admin.categories.index'
+            ],
+            [
+                'title' => 'Thẻ',
+                'url' => 'admin.tags.index'
             ]
         ]
     ],

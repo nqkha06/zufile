@@ -11,7 +11,10 @@ use App\Http\Controllers\Admin\SendEmailController;
 use App\Http\Controllers\Admin\TopUserController;
 use App\Http\Controllers\Admin\PermissionGroupController;
 use App\Http\Controllers\Admin\STUController;
+use App\Http\Controllers\Admin\SystemController;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\WidgetController;
+use App\Http\Controllers\FileEditorController;
 
 Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function () {
 
@@ -96,9 +99,11 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
         Route::get('/create', [LevelController::class, 'create'])->name('admin.levels.create');
         Route::post('/store', [LevelController::class, 'store'])->name('admin.levels.store');
         Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('admin.levels.edit');
+        Route::get('/{id}/rate', [LevelController::class, 'rate'])->name('admin.levels.rate');
         Route::put('/{id}', [LevelController::class, 'update'])->name('admin.levels.update');
         Route::get('/{id}/config', [LevelController::class, 'editConfig'])->name('admin.levels.editConfig');
         Route::put('/{id}/config', [LevelController::class, 'updateConfig'])->name('admin.levels.updateConfig');
+        Route::put('/{id}/rate', [LevelController::class, 'postRate'])->name('admin.levels.postRate');
         Route::get('/{id}/pageload', [LevelController::class, 'editPageload'])->name('admin.levels.editPageload');
         Route::put('/{id}/pageload', [LevelController::class, 'updatePageload'])->name('admin.levels.updatePageload');
     });
@@ -130,6 +135,14 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
         Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
         Route::put('/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
         Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    });
+    Route::prefix('tags')->group( function () {
+        Route::get('/', [TagController::class, 'index'])->name('admin.tags.index');
+        Route::get('/create', [TagController::class, 'create'])->name('admin.tags.create');
+        Route::post('', [TagController::class, 'store'])->name('admin.tags.store');
+        Route::get('/{id}/edit', [TagController::class, 'edit'])->name('admin.tags.edit');
+        Route::put('/{id}', [TagController::class, 'update'])->name('admin.tags.update');
+        Route::delete('/{id}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
     });
 
     Route::prefix('posts')->group( function () {
@@ -180,4 +193,11 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
         Route::put('/{id}', [MenuController::class, 'update'])->name('admin.menus.update');
         Route::delete('/{id}/delete', [MenuController::class, 'destroy'])->name('admin.menus.destroy');
     });
+    Route::prefix('system')->group( function () {
+        Route::get('/', [SystemController::class, 'index'])->name('admin.system.index');
+    });
+
+    Route::get('/file-editor', [FileEditorController::class, 'index'])->name('file_editor.index');
+    Route::get('/file-editor/edit/{file}', [FileEditorController::class, 'edit'])->name('file_editor.edit');
+    Route::post('/file-editor/update', [FileEditorController::class, 'update'])->name('file_editor.update');
 });

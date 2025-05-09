@@ -3,7 +3,7 @@
 @section('title', __('withdraw.title'))
 
 @section('content')
-@php $user_metric = (request()->attributes->get('user_metric')) @endphp
+    @php $user_metric = (request()->attributes->get('user_metric')) @endphp
 
     <div class="container-wd">
         <div class="box-wd" style="background: #ff6363">
@@ -177,8 +177,8 @@
                     }
 
                     /* .form-selectgroup-label:hover {
-        color: #36c975
-    } */
+            color: #36c975
+        } */
 
                     .form-selectgroup-input:checked+.form-selectgroup-label {
                         z-index: 1;
@@ -250,31 +250,29 @@
                                         <td style="white-space: nowrap">{!! $value->type == 0
                                             ? '<span class="badge-s2 normal">thường</span>'
                                             : '<span class="badge-s2 fast">nhanh</span>' !!}</td>
-                        <td style="white-space: nowrap">
-                            @php
-                                $payment_details = json_decode($value->payment_details, true);
-                            @endphp
-                            @if ($payment_details)
-                                <button onclick="return alert('*Phương thức thanh toán: {{ $value->payment_method }}\n*Chi tiết: {{ implode(' - ', $payment_details) }}')">Xem Chi Tiết</button>
-                            @endif
-                        </td>
-                        
-                                        @php
-                                        if ($value->status == 'pending') {
-                                            $status = "<span class='status pending'>" . __('withdraw.pending') . '</span>';
-                                        } elseif ($value->status == 'approved') {
-                                            $status = "<span class='status watched'>" . __('withdraw.watched') . '</span>';
-                                        } elseif ($value->status == 'completed') {
-                                            $status = "<span class='status success'>" . __('withdraw.success') . '</span>';
-                                        } elseif ($value->status == 'failed') {
-                                            $status = "<span class='status refuse'>" . __('withdraw.refuse') . '</span>';
-                                        } elseif ($value->status == 'hold') {
-                                            $status = "<span class='status pending'>Liên hệ (bị giữ)</span>";
-                                        } else {
-                                            $status = "<span class='status pending'>Thông tin bank sai</span>";
-                                        }
-                                        @endphp
-                                        <td>{!! $status !!}</td>
+                                        <td style="white-space: nowrap">
+                                            @php
+                                                $payment_details = json_decode($value->payment_details, true);
+                                            @endphp
+                                            @if ($payment_details)
+                                                <button
+                                                    onclick="return alert('*Phương thức thanh toán: {{ $value->payment_method }}\n*Chi tiết: {{ implode(' - ', $payment_details) }}')">Xem
+                                                    Chi Tiết</button>
+                                            @endif
+                                        </td>
+
+
+                                        <td>
+                                            <span
+                                                @class([
+                                                    'status' => true,
+                                                    'pending' => $value->status->isPending() || $value->status->isRefunded() || $value->status->isOnHold(),
+                                                    'watched' => $value->status->isReviewed(),
+                                                    'success' => $value->status->isCompleted(),
+                                                    'refuse' => $value->status->isFailed() || $value->status->isCancelled(),
+                                                ])
+                                            >{{ $value->status->label() }}<span>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @else

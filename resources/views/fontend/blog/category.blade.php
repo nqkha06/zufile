@@ -1,6 +1,22 @@
 @extends('layouts.blog2')
 
-@section('title', 'Danh mục: '. $category->name)
+@section('title', $category->name)
+
+@section('title', $category['meta_title'] ?? $category['name'])
+@section('meta_description', $category['meta_description'] ?? $category['description'])
+@section('meta_keywords', $category['meta_keywords'])
+@section('meta_author', 'QK06')
+
+@section('og_title', $category['meta_title'] ?? $category['name'])
+@section('og_description', $category['meta_description'] ?? $category['description'])
+@section('og_image', URL('/') . $category['image'])
+@section('og_url', URL('/'))
+
+@section('twitter_title', $category['meta_title'] ?? $category['name'])
+@section('twitter_description', $category['meta_description'] ?? $category['description'])
+@section('twitter_image', URL('/') . $category['image'])
+@section('twitter_url', URL('/'))
+
 
 @section('content')
     <div class="section" id="main-widget">
@@ -43,7 +59,7 @@
 							<a data-text="{{ $post['title'] }}"
 								href="{{ route('blog.article', $post['slug']) }}" rel="bookmark"> {{ $post['title'] }} </a>
 						</h2>
-						<div class="pSnpt"> {{ $post['content'] }} </div>
+						<div class="pSnpt"> {{ $post['description'] ?? Str::words(strip_tags($post['content']), 255, '...')  }} </div>
 						<div class="pInf pSml">
 							<time class="aTtmp pTtmp pbl timeAgo" datetime="{{ $post['created_at'] }}"></time>
 							<a aria-label="Read more" class="pJmp" data-text="Keep reading"

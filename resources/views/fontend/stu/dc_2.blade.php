@@ -1,5 +1,6 @@
-<meta name="robots" content="noindex">
 @php
+    $SEO = Request::query('url');
+    dd($SEO);
     $post_links = ["https://link4sub.qkt/blog/kiem-tien-hieu-qua-voi-tiktok-affiliate-moi-nhat-2024-tu-a-z",
   "https://link4sub.qkt/blog/top-5-game-mobile-5v5-cuc-hay-ma-ban-nen-trai-nghiem",
   "https://link4sub.qkt/blog/cach-kiem-tien-tu-google-adsense-moi-nhat-2024-tu-a-z",
@@ -41,6 +42,23 @@
     }
 @endphp
 
-<script>
-    {!! $script !!}
-</script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="robots" content="noindex">
+    
+    <title>Loading...</title>
+</head>
+
+<body>
+    <script>
+        {!! $script !!}
+    </script>
+</body>
+
+</html>

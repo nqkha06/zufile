@@ -81,8 +81,8 @@
                                     datetime="{{ $val->created_at }}"
                                     title="Published: {{ date('F j, Y', strtotime($val->created_at)) }}"></time>
                                 <div class="pLbls" data-text="in">
-                                    <a aria-label="{{ $val->category->name }}"
-                                        data-text="{{ $val->category->name }}"
+                                    <a aria-label="{{ $val->categories->first()->name ?? ''}}"
+                                        data-text="{{ $val->categories->first()->name ?? ''}}"
                                         href="#" rel="tag">
                                     </a>
                                 </div>
@@ -114,7 +114,7 @@
                                 href='{{ route('blog.category', $category->slug) }}'>
                                 <span class='lbT'>{{ $category->name }}</span>
                                 <span class='lbR'>
-                                    <span class='lbC' data-text='{{ $category->publishedPosts->count() }}'></span>
+                                    <span class='lbC' data-text='{{ 10 }}'></span>
                                     <svg class='line' viewBox='0 0 24 24'>
                                         <g transform='translate(4.500000, 2.500000)'>
                                             <path

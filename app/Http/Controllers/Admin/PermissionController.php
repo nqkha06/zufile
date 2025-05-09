@@ -19,7 +19,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = $this->permissionRepository->pagination();
+        $permissions = $this->permissionRepository->getAllPaginated();
 
         return view('backend.admin.permission.index', compact('permissions'));
     }
@@ -47,7 +47,7 @@ class PermissionController extends Controller
      */
     public function edit(string $id)
     {
-        $permission = $this->permissionRepository->findById($id);
+        $permission = $this->permissionRepository->findOrFail($id);
         $permission_groups = PermissionGroup::with('permissions')->get();
 
         return view('backend.admin.permission.edit', compact('permission', 'permission_groups'));
@@ -79,7 +79,7 @@ class PermissionController extends Controller
      */
     public function destroy(string $id)
     {
-        $role = $this->permissionRepository->findById($id);
+        $role = $this->permissionRepository->findOrFail($id);
 
         $this->permissionRepository->delete($id);
 

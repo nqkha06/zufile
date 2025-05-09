@@ -14,6 +14,7 @@ use Illuminate\Support\LazyCollection;
 // use App\Models\BaseModel;
 use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\BaseRepositoryInterface;
+use App\Enums\BaseStatusEnum;
 
 /**
  * Trait Queryable
@@ -62,6 +63,8 @@ trait Queryable
      * @var array
      */
     protected $withoutGlobalScopes = [];
+
+    protected $conditions = [];
 
     /**
      * Soft query delete handle
@@ -189,6 +192,12 @@ trait Queryable
         return $this;
     }
 
+    public function wherePublished(): BaseRepositoryInterface
+    {
+        $this->conditions[] = ['status', '=', BaseStatusEnum::PUBLISHED];
+        return $this;
+    }
+
     /**
      * Set global scopes to include
      *
@@ -261,7 +270,7 @@ trait Queryable
     protected function applyFilters(array $searchParams = []): Builder
     {
         return $this
-            ->applyFilterConditions($searchParams)
+            ->applyFilterConditions(array_merge($searchParams, $this->conditions))
             ->when(
                 !is_array(($orderByField = $this->defaultOrderBy ?? $this->model->getKeyName())),
                 function (Builder $query) use ($orderByField) {
@@ -285,7 +294,7 @@ trait Queryable
         }
     
         $conditions = $this->parseConditions($conditions);
-    
+
         foreach ($conditions as $data) {
             list($field, $operator, $val) = $data;
     

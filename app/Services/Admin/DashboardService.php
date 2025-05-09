@@ -54,13 +54,13 @@ class DashboardService implements DashboardServiceInterface
             $endDate = Carbon::parse($request->query('endDate'))->endOfDay();
         }
 
-        $STULinks = $this->STURepository->getByCondition(
+        $STULinks = $this->STURepository->findMany(
             [['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
-        $NOTELinks = $this->NOTERepository->getByCondition(
+        $NOTELinks = $this->NOTERepository->findMany(
             [['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
 
-        $users = $this->userRepository->getByCondition([['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
-        $withdraws = $this->withdrawRepository->getByCondition([['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
+        $users = $this->userRepository->findMany([['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
+        $withdraws = $this->withdrawRepository->findMany([['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
 
         $STUStats = $this->STUStatisticRepository->getStatsBetweenDates($startDate, $endDate);
         $NOTEStats = $this->NOTEStatisticRepository->getStatsBetweenDates($startDate, $endDate);

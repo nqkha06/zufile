@@ -15,6 +15,17 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    public function handleReferral($refCode, Request $request)
+    {
+        $referrer = User::where('id', $refCode)->first();
+    
+        if ($referrer) {
+            $request->session()->put('referrer_id', $referrer->id);
+  
+        }
+        
+        return redirect()->route('auth.register');
+    }
     /**
      * Display the registration view.
      */
@@ -38,15 +49,20 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $referrer_id = $request->session()->get('referrer_id', null);
+
         $user = User::create([
             'name' => $request->name,
             'email' => strtolower($request->email),
             'password' => Hash::make($request->password),
+            'referred_by' => $referrer_id,
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
+
+        $request->session()->forget('referrer_id');
 
         return redirect(RouteServiceProvider::HOME);
     }

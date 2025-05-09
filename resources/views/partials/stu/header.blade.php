@@ -132,65 +132,7 @@
                             <div class='widget HTML' data-version='2' id='HTML000'>
                                 <ul class='mnMn' itemscope='itemscope'
                                     itemtype='https://schema.org/SiteNavigationElement'>
-                                    @php 
-                                    $header_menu = $menus->where('slug', 'blog-header-menu')->first()
-                                    @endphp
-                                    @if (!empty($header_menu))
-                                    @foreach ($header_menu->items as $item)
-                                    @if ($item->children->count())
-                                    <li class='drp'>
-                                        <input class='drpI hidden' id='drpDwn-{{ $item->id }}' name='drpDwn'
-                                            type='checkbox' />
-                                        <label class='a' for='drpDwn-{{ $item->id }}'>
-                                            <svg class='line' viewBox='0 0 24 24'>
-                                                <g transform='translate(2.500000, 2.500000)'>
-                                                    <line x1='6.6787' x2='12.4937' y1='12.0742685'
-                                                        y2='12.0742685'></line>
-                                                    <path
-                                                        d='M-1.13686838e-13,5.29836453 C-1.13686838e-13,2.85645977 1.25,0.75931691 3.622,0.272650243 C5.993,-0.214968804 7.795,-0.0463973758 9.292,0.761221672 C10.79,1.56884072 10.361,2.76122167 11.9,3.63645977 C13.44,4.51265024 15.917,3.19645977 17.535,4.94217405 C19.229,6.7697931 19.2200005,9.57550739 19.2200005,11.3640788 C19.2200005,18.1602693 15.413,18.6993169 9.61,18.6993169 C3.807,18.6993169 -1.13686838e-13,18.2288407 -1.13686838e-13,11.3640788 L-1.13686838e-13,5.29836453 Z'>
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                            <span class='n'>{{ $item->name }}</span>
-                                            <svg class='line d' viewBox='0 0 24 24'>
-                                                <g transform='translate(5.000000, 8.500000)'>
-                                                    <path d='M14,0 C14,0 9.856,7 7,7 C4.145,7 0,0 0,0'></path>
-                                                </g>
-                                            </svg>
-                                        </label>
-                                        <ul>
-                                            @foreach ($item->children as $child)
-                                            <li itemprop='name'><a href='{{ $child->url }}' itemprop='url'>{{ $child->name }}</a></li>
-                                            @endforeach
-                                        </ul>
-                                    </li>
-                                    @else
-                                    <li>
-                                        <a class='a' href='{{ $item->url }}' itemprop='url'>
-                                            <svg class='line' viewBox='0 0 24 24'>
-                                                <g transform='translate(2.749500, 2.549500)'>
-                                                    <path
-                                                        d='M6.809,18.9067 C3.137,18.9067 9.41469125e-14,18.3517 9.41469125e-14,16.1277 C9.41469125e-14,13.9037 3.117,11.8997 6.809,11.8997 C10.481,11.8997 13.617,13.8847 13.617,16.1077 C13.617,18.3307 10.501,18.9067 6.809,18.9067 Z'>
-                                                    </path>
-                                                    <path
-                                                        d='M6.809,8.728 C9.219,8.728 11.173,6.774 11.173,4.364 C11.173,1.954 9.219,-2.48689958e-14 6.809,-2.48689958e-14 C4.399,-2.48689958e-14 2.44496883,1.954 2.44496883,4.364 C2.436,6.766 4.377,8.72 6.778,8.728 L6.809,8.728 Z'>
-                                                    </path>
-                                                    <path
-                                                        d='M14.0517,7.5293 C15.4547,7.1543 16.4887007,5.8753 16.4887007,4.3533 C16.4897,2.7653 15.3627,1.4393 13.8647,1.1323'>
-                                                    </path>
-                                                    <path
-                                                        d='M14.7113,11.104 C16.6993,11.104 18.3973,12.452 18.3973,13.655 C18.3973,14.364 17.8123,15.092 16.9223,15.301'>
-                                                    </path>
-                                                </g>
-                                            </svg>
-                                            <span class='n' itemprop='name'>{{ $item->name }}</span>
-                                        </a>
-                                    </li>
-                                    @endif
-
-                                    @endforeach
-                                    @endif
-                               
+                                  
                     
                                 </ul>
                             </div>
@@ -202,7 +144,44 @@
             <div class='headD headR'>
                 <div class='headI'>
                     <div class='headP section' id='header-icon'>
-                        <div class='widget TextList' data-version='2' id='TextList000'>
+                        <style>
+                            #TextList000 {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                            .select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 150px;
+}
+
+.tIc_trans {
+  appearance: none; /* Xoá mũi tên mặc định */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 8px 12px 8px 36px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  width: 100%;
+  cursor: pointer;
+}
+
+.language-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 16px;
+  color: #666;
+}
+
+                        </style>
+                        <div class='widget TextList' data-version='2' id='TextList000' >
                             <ul class='headIc'>
                                 <li class='isDrk'>
                                     <span aria-label='Dark' class='tDark tIc tDL bIc' onclick='darkMode()'
@@ -224,19 +203,16 @@
                                         </svg>
                                     </span>
                                 </li>
-                                <li class='isSrh'>
-                                    <label aria-label='Search' class='tSrch tIc bIc' for='offSrh'>
-                                        <svg class='line' viewBox='0 0 24 24'>
-                                            <g transform='translate(2.000000, 2.000000)'>
-                                                <circle cx='9.76659044' cy='9.76659044' r='8.9885584'>
-                                                </circle>
-                                                <line x1='16.0183067' x2='19.5423342' y1='16.4851259'
-                                                    y2='20.0000001'></line>
-                                            </g>
-                                        </svg>
-                                    </label>
-                                </li>
+           
                             </ul>
+                            <div class="select-wrapper">
+                                <select class="tIc_trans" name="stu_trans" id="stu_trans">
+                                  <option value="vi">Việt Nam</option>
+                                  <option value="en">English</option>
+                                </select>
+                                <span class="language-icon">🌐</span> <!-- hoặc SVG nếu thích -->
+                              </div>
+                              
                         </div>
                     </div>
                 </div>

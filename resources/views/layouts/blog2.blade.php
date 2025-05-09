@@ -55,23 +55,23 @@
     <title>@yield('title', 'Blog')</title>
 
     <!--[ CSS stylesheet ]-->
-    <link rel="stylesheet" href="{{ URL('/') }}/fontend/blog2/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('fontend/blog2/css/app.css')}}" rel="stylesheet">
     @stack('styles')
 
-    {{-- <script type='application/ld+json'>
+    <script type='application/ld+json'>
         {
             "@context": "https://schema.org",
             "@type": "WebSite",
-            "url": "https://fletro.jagodesain.com/",
+            "url": "{{ URL('/') }}",
             "name": "{{ env('APP_NAME') }}",
             "alternateName": "{{ env('APP_NAME') }}",
             "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://fletro.jagodesain.com/search?q={search_term_string}",
+            "target": "{{ URL('/') }}/blog/search?q={search_term_string}",
             "query-input": "required name=search_term_string"
             }
         }
-    </script> --}}
+    </script>
 </head>
 <!--[ <body> open ]-->
     <body class="bD 
@@ -130,7 +130,6 @@
         <!--[ Footer section ]-->
         @include('partials.blog.footer')
 
-        <!--[ Delete 'or data:blog.isMobileRequest' if you want to show ad in both(desktop and mobile) ]-->
     </div>
     <!--[ Javascript disable condition ]-->
     <noscript>

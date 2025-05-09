@@ -6,43 +6,17 @@ use App\Services\Interfaces\NOTEServiceInterface;
 use App\Repositories\Interfaces\NOTERepositoryInterface as NOTERepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Abstracts\CrudServiceAbstract;
 
 /**
  * Class NOTEService
  * @package App\Services
  */
-class NOTEService implements NOTEServiceInterface
+class NOTEService extends CrudServiceAbstract implements NOTEServiceInterface
 {
-    protected $NOTERepository;
-
-    public function __construct(NOTERepository $NOTERepository)
-    {
-        $this->NOTERepository = $NOTERepository;
-    }
-    public function index($request)
-    {
-        $user = $request->user();
-
-        $keyword = addslashes($request->input('keyword'));
-        $created_at = addslashes($request->input('created_at'));
-        $level = addslashes($request->input('level'));
-
-        $condition['where'] = [['user_id', '=', $user->id], ['status', '=', 'active']];
-        if (!empty($created_at)) {
-            $condition['where'][] = [DB::raw('date(created_at)'), '=', $created_at];
-        }
-        if (!empty($keyword)) {
-            $condition['where'][] = ['alias', 'LIKE', ('%'.$keyword.'%')];
-            $condition['orWhere'][] = ['title', 'LIKE', ('%'.$keyword.'%')];
-            $condition['orWhere'][] = ['content', 'LIKE', ('%'.$keyword.'%')];
-        }
-        if (!empty($level) && $level != -1) {
-            $condition['where'][] = ['level_id', '=', $level];
-        }
-        
-        $links = $this->NOTERepository->pagination(['*'], $condition);
-
-        return $links;
+    
+    protected function getRepositoryClass(): string {
+        return NOTERepository::class;
     }
 
     public function listAllpaginated($searchParams = null, $sortBy = 'created_at', $sortOrder = 'desc', $perPage = 15)
@@ -90,7 +64,7 @@ class NOTEService implements NOTEServiceInterface
             }
         }
  
-        $links = $this->NOTERepository->with(['stats', 'user'])->getAllPaginated($search);
+        $links = $this->with(['stats', 'user'])->getAllPaginated($search);
 
         return $links;
     }
@@ -99,7 +73,7 @@ class NOTEService implements NOTEServiceInterface
     {
         DB::beginTransaction();
         try{
-            $this->NOTERepository->softDeleteOwn($alias, Auth::user()->id);
+            $this->softDeleteOwn($alias, Auth::user()->id);
 
             DB::commit();
             return true;
@@ -115,7 +89,7 @@ class NOTEService implements NOTEServiceInterface
     {
         DB::beginTransaction();
         try{
-            $this->NOTERepository->softDeleteAny($alias);
+            $this->softDeleteAny($alias);
 
             DB::commit();
             return true;
@@ -127,19 +101,19 @@ class NOTEService implements NOTEServiceInterface
         }
     }
 
-    public function restore(string $alias)
+    public function restore($alias): void 
     {
         DB::beginTransaction();
         try{
-            $this->NOTERepository->restore($alias);
+            $this->restore($alias);
 
             DB::commit();
-            return true;
+            // return true;
         }catch(\Exception $e ){
             DB::rollBack();
             // Log::error($e->getMessage());
             // echo $e->getMessage();die();
-            return false;
+            // return false;
         }
     }
 }

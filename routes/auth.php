@@ -58,6 +58,7 @@ use Illuminate\Support\Facades\Route;
 //         ->name('auth.logout');
 // });
 
+Route::get('/ref/{id}', [RegisteredUserController::class, 'handleReferral'])->name('ref');
 
 Route::prefix('auth')->group(function () {
     // Authentication Routes...

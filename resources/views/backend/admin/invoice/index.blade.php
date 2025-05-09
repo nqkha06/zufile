@@ -99,18 +99,9 @@
               @endif
           </td>
           <td data-label="Trạng thái">
-            @if ($invoice->status == 'approved')
-            <span class="badge bg-blue text-blue-fg">Đã xem xét</span>
-            @elseif ($invoice->status == 'completed')
-            <span class="badge bg-green text-green-fg">Thành công</span>
-            @elseif ($invoice->status == 'cancelled')
-            <span class="badge bg-red text-red-fg">Từ chối</span>
-            @elseif ($invoice->status == 'hold')
-            <span class="badge bg-dark text-dark-fg">Liên hệ</span>
-            @elseif ($invoice->status == 'pending')
-            <span class="badge bg-yellow text-yellow-fg">Đang xử lý</span>
-            @endif
+            {!! $invoice->status->toHtml() !!}
           </td>
+
           <td data-label="">
               <div class="btn-list flex-nowrap">
                   <a class="btn" href="{{ route('admin.invoices.edit', $invoice->id) }}">

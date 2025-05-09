@@ -17,7 +17,7 @@ class ChangePasswordController extends Controller
      */
     public function index()
     {
-        return view('backend.member.change.index');
+        return view('backend.member_2.profile.password');
     }
 
     /**

@@ -9,6 +9,8 @@ use App\Repositories\Interfaces\WithdrawRepositoryInterface as WithdrawRepositor
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\WithdrawNotification;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Models\Commission;
+use App\Models\User;
 
 class InvoiceController extends Controller
 {
@@ -16,10 +18,11 @@ class InvoiceController extends Controller
     protected $withdrawRepository;
     protected $userRepository;
 
-    public function __construct(InvoiceService $invoiceService, WithdrawRepository $withdrawRepository, UserRepository $userRepository) {
+    public function __construct(InvoiceService $invoiceService, WithdrawRepository $withdrawRepository, UserRepository $userRepository)
+    {
         $this->middleware('permission:view_all_invoices', ['only' => ['index']]);
         $this->middleware('permission:view_all_invoices', ['only' => ['create', 'store']]);
-        $this->middleware('permission:view_all_invoices', ['only' => ['update','edit']]);
+        $this->middleware('permission:view_all_invoices', ['only' => ['update', 'edit']]);
         $this->middleware('permission:view_all_invoices', ['only' => ['destroy']]);
         $this->middleware('permission:manage_invoice_status', ['only' => ['pending', 'watched', 'success', 'refuse', 'contact']]);
 
@@ -57,7 +60,9 @@ class InvoiceController extends Controller
             'email.exists' => 'Email người dùng này không tồn tại trong hệ thống.',
         ]);
         $user_data = $this->userRepository->findFirst([
-            'email', '=', $request->email
+            'email',
+            '=',
+            $request->email
         ]);
 
         $created = $this->withdrawRepository->create([
@@ -69,7 +74,6 @@ class InvoiceController extends Controller
             'payment_details' => $request->payment_details,
         ]);
         return redirect()->route('admin.invoices.index')->with('success', 'Tạo hoá đơn mới thành công!');
-
     }
 
     /**
@@ -107,12 +111,11 @@ class InvoiceController extends Controller
 
         $payload = $request->only('amount', 'costs', 'type', 'payment_method', 'status', 'payment_details');
         $this->withdrawRepository->update($id, $payload);
-        
-        if ($request->submitter == 'apply') {
-            return redirect()->back()->with('success', 'Hoá đơn #'. $id . ' đã được cập nhật thành công.');
 
+        if ($request->submitter == 'apply') {
+            return redirect()->back()->with('success', 'Hoá đơn #' . $id . ' đã được cập nhật thành công.');
         } else {
-            return redirect()->route('admin.invoices.index')->with('success', 'Hoá đơn #'. $id . ' đã được cập nhật thành công.');
+            return redirect()->route('admin.invoices.index')->with('success', 'Hoá đơn #' . $id . ' đã được cập nhật thành công.');
         }
     }
 
@@ -130,7 +133,7 @@ class InvoiceController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->back()->with('success', 'Đơn rút #'.$id.' đã chuyển thành trạng thái <b>pending</b>.');
+        return redirect()->back()->with('success', 'Đơn rút #' . $id . ' đã chuyển thành trạng thái <b>pending</b>.');
     }
     public function watched(string $id)
     {
@@ -140,10 +143,10 @@ class InvoiceController extends Controller
         $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
-            'subject' => 'Lệnh rút #'.$withdraw->id.' đã được xem xét',
-            'greeting' => 'Xin chào, ' .$withdraw->user->name. '!',
+            'subject' => 'Lệnh rút #' . $withdraw->id . ' đã được xem xét',
+            'greeting' => 'Xin chào, ' . $withdraw->user->name . '!',
             'body' => '
-                <p>Lệnh rút #'.$withdraw->id.' với số tiền $'.$withdraw->amount.' đã được xem xét. Hiện tại, bộ phận thanh toán của chúng tôi đang tiến hành thanh toán cho bạn.</p>
+                <p>Lệnh rút #' . $withdraw->id . ' với số tiền $' . $withdraw->amount . ' đã được xem xét. Hiện tại, bộ phận thanh toán của chúng tôi đang tiến hành thanh toán cho bạn.</p>
                 <p>Chúc bạn một ngày tốt lành!</p>
                 <p>Trân trọng,</p>
                 <p>Link4Sub</p>
@@ -152,7 +155,7 @@ class InvoiceController extends Controller
 
         Mail::to($withdraw->user->email)->queue(new WithdrawNotification($templateMail));
 
-        return redirect()->back()->with('success', 'Đơn rút #'.$id.' đã chuyển thành trạng thái <b>watched</b>.');
+        return redirect()->back()->with('success', 'Đơn rút #' . $id . ' đã chuyển thành trạng thái <b>watched</b>.');
     }
     public function success(string $id)
     {
@@ -163,18 +166,38 @@ class InvoiceController extends Controller
         $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
-            'subject' => 'Lệnh rút #'.$withdraw->id.' đã được thanh toán',
-            'greeting' => 'Xin chào, ' .$withdraw->user->name. '!',
+            'subject' => 'Lệnh rút #' . $withdraw->id . ' đã được thanh toán',
+            'greeting' => 'Xin chào, ' . $withdraw->user->name . '!',
             'body' => '
-                <p>Lệnh rút #'.$withdraw->id.' với số tiền $'.$withdraw->amount.' đã được thanh toán hoàn tất.</p>
+                <p>Lệnh rút #' . $withdraw->id . ' với số tiền $' . $withdraw->amount . ' đã được thanh toán hoàn tất.</p>
                 <p>Chúc bạn một ngày tốt lành!</p>
                 <p>Trân trọng,</p>
                 <p>Link4Sub</p>
             '
         ];
+        $userRequest = User::find($withdraw->user->id);
+        if ($userRequest) {
+            $userReferred_by = $userRequest->referred_by;
+            
+            if ($userReferred_by) {
+                $checkCommission = Commission::where('commissionable_type', 'App\Models\Withdraw')->where('commissionable_id', $withdraw->id)->exists();
+                if (!$checkCommission) {
+                    Commission::create([
+                        'user_id' => $withdraw->user->id,
+                        'from_user_id' => $withdraw->user->id,
+                        'amount' => $withdraw->amount*5/100,
+                        'rate' => 0,
+                        'commissionable_type' => 'App\Models\Withdraw',
+                        'commissionable_id' => $withdraw->id,
+                        'note' => '#' . $withdraw->id
+                    ]);
+                    User::where('id', $withdraw->user->id)->increment('balance', $withdraw->amount*5/100);
+                }
+            }
+        }
 
         Mail::to($withdraw->user->email)->queue(new WithdrawNotification($templateMail));
-        return redirect()->back()->with('success', 'Đơn rút #'.$id.' đã chuyển thành trạng thái <b>success</b>.');
+        return redirect()->back()->with('success', 'Đơn rút #' . $id . ' đã chuyển thành trạng thái <b>success</b>.');
     }
     public function refuse(string $id)
     {
@@ -184,10 +207,10 @@ class InvoiceController extends Controller
         $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
-            'subject' => 'Lệnh rút #'.$withdraw->id.' đã bị từ chối',
-            'greeting' => 'Xin chào, ' .$withdraw->user->name. '!',
+            'subject' => 'Lệnh rút #' . $withdraw->id . ' đã bị từ chối',
+            'greeting' => 'Xin chào, ' . $withdraw->user->name . '!',
             'body' => '
-                <p>Lệnh rút #'.$withdraw->id.' với số tiền $'.$withdraw->amount.' không được chấp thuận, vui lòng liên hệ <a href="https://t.me/qckha06" target="_blank">Admin</a> để biết thêm thông tin chi tiết.</p>
+                <p>Lệnh rút #' . $withdraw->id . ' với số tiền $' . $withdraw->amount . ' không được chấp thuận, vui lòng liên hệ <a href="https://t.me/qckha06" target="_blank">Admin</a> để biết thêm thông tin chi tiết.</p>
                 <p>Chúc bạn một ngày tốt lành!</p>
                 <p>Trân trọng,</p>
                 <p>Link4Sub</p>
@@ -195,7 +218,7 @@ class InvoiceController extends Controller
         ];
 
         Mail::to($withdraw->user->email)->queue(new WithdrawNotification($templateMail));
-        return redirect()->back()->with('success', 'Đơn rút #'.$id.' đã chuyển thành trạng thái <b>refuse</b>.');
+        return redirect()->back()->with('success', 'Đơn rút #' . $id . ' đã chuyển thành trạng thái <b>refuse</b>.');
     }
     public function contact(string $id)
     {
@@ -205,10 +228,10 @@ class InvoiceController extends Controller
         $withdraw = $this->withdrawRepository->find($id);
 
         $templateMail = [
-            'subject' => 'Lệnh rút #'.$withdraw->id.' gặp một số vấn đề',
-            'greeting' => 'Xin chào, ' .$withdraw->user->name. '!',
+            'subject' => 'Lệnh rút #' . $withdraw->id . ' gặp một số vấn đề',
+            'greeting' => 'Xin chào, ' . $withdraw->user->name . '!',
             'body' => '
-                <p>Lệnh rút #'.$withdraw->id.' với số tiền $'.$withdraw->amount.' gặp một số vấn đề, vui lòng liên hệ <a href="https://t.me/qckha06" target="_blank">Admin</a> để biết thêm thông tin chi tiết.</p>
+                <p>Lệnh rút #' . $withdraw->id . ' với số tiền $' . $withdraw->amount . ' gặp một số vấn đề, vui lòng liên hệ <a href="https://t.me/qckha06" target="_blank">Admin</a> để biết thêm thông tin chi tiết.</p>
                 <p>Chúc bạn một ngày tốt lành!</p>
                 <p>Trân trọng,</p>
                 <p>Link4Sub</p>
@@ -216,6 +239,6 @@ class InvoiceController extends Controller
         ];
 
         Mail::to($withdraw->user->email)->queue(new WithdrawNotification($templateMail));
-        return redirect()->back()->with('success', 'Đơn rút #'.$id.' đã chuyển thành trạng thái <b>contact</b>.');
+        return redirect()->back()->with('success', 'Đơn rút #' . $id . ' đã chuyển thành trạng thái <b>contact</b>.');
     }
 }

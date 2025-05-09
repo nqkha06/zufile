@@ -8,17 +8,33 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\UserPayment;
 use App\Models\PaymentMethod;
+use App\Services\PaymentMethodService;
+use App\Enums\BaseStatusEnum;
 
 class PaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $paymentMethodService;
+
+    public function __construct(PaymentMethodService $paymentMethodService) {
+        $this->paymentMethodService = $paymentMethodService;
+    }
     public function index()
     {
-        $paymentMethods = PaymentMethod::all();
+        $user = Auth::user();
+        // Phương thức hiện tại (có thể null)
+        $currentMethod  = $user->paymentMethods->first();
 
-        return view('backend.member.payment.index', compact('paymentMethods'));
+        // Giá trị đã lưu (mảng) + old input nếu validate fail
+        $savedValues    = $currentMethod?->pivot->details ?? [];
+        $fieldValues    = old('fields', $savedValues);
+
+        $paymentMethods = $this->paymentMethodService->getAll(['status', '=', BaseStatusEnum::PUBLISHED]);
+
+        return view('backend.member_2.profile.payment', compact(
+        'paymentMethods',      // Collection<PaymentMethod>
+        'currentMethod',       // PaymentMethod|null
+        'fieldValues'          // array
+    ));
     }
 
     /**
@@ -29,7 +45,7 @@ class PaymentController extends Controller
         $request->validate([
             'payment_method' => 'required',
             'fields.*' => 'required|string',
-        ], [
+        ],[
             'payment_method.required' => 'Trường "Phương thức thanh toán" là bắt buộc',
             'fields.*' => 'Vui lòng không để trống bắt cứ trường nào',
         ]);
@@ -45,7 +61,5 @@ class PaymentController extends Controller
         }
 
         return redirect()->back()->with('success', 'Cập nhật thanh toán thành công');
-
-        return redirect()->back()->with('success', 'Cập nhật thanh toán thất bại, thử lại sau!');
     }
 }

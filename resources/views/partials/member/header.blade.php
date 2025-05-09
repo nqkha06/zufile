@@ -122,17 +122,9 @@
         </div>
         <div class="Ilang iPu r">
             <div class="ipopUp-lang">
-                <?php
-                    $availableLanguages = array(
-                        'en' => 'English',
-                        'vi' => 'Việt Nam'
-                    );
-                    
-                    foreach ($availableLanguages as $code => $language) {
-                        $mark = (App::currentLocale() == $code) ? 'nLang a' : 'nLang';
-                        echo "<a class='$mark' href='".URL('/')."/lang/$code'>$language</a>";
-                    }
-                ?>
+               @foreach (Language::getSupportedLanguages() as $lang)
+              <a class='{{ (App::currentLocale() == $lang->code) ? 'nLang a' : 'nLang' }}' href='{{ URL('/') }}/lang/{{ $lang->code}}'>{{ $lang->name }}</a>
+               @endforeach
 
             </div>
         </div>

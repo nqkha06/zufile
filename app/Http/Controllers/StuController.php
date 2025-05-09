@@ -15,11 +15,13 @@ use App\Repositories\Interfaces\STUAccessRepositoryInterface as STUAccessReposit
 use App\Repositories\Interfaces\STUStatisticRepositoryInterface as STUStatisticRepository;
 use App\Services\Interfaces\PostServiceInterface as PostService;
 
-use proxycheck\proxycheck;
 use Illuminate\Support\Facades\Log;
 use App\Services\GeoIPService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use App\Facades\Setting;
+
+use App\Models\User;
 
 class StuController extends Controller
 {
@@ -52,8 +54,8 @@ class StuController extends Controller
     public function create(Request $request)
     {   
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $data = $request->all();
 
             if (empty($data['lnk'])) {
@@ -69,20 +71,23 @@ class StuController extends Controller
             } while (!$unique);
 
             $level = isset($data['oth']) && isset($data['oth']['level']) ? base64_decode($data['oth']['level']) : 1;
-        
+            $link_1 = urldecode(base64_decode($data['lnk']['lnk1']));
+            $get_meta = getMetaFromUrl($link_1);
+
             $this->STURepository->create([
                 'user_id' => $userId,
                 'alias' => $alias,
                 'data' => json_encode($data),
-                'status' => 1,
-                'level_id' => $level
+                'status' => 'active',
+                'level_id' => $level,
+                'seo_meta' => null
             ]);
             DB::commit();
             return response()->json(['status' => 'success', 'alias' => $alias]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['status' => 'error', 'message' => 'An error occurred while processing your request'], 500);
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return response()->json(['status' => 'error', 'message' => 'An error occurred while processing your request'], 500);
+        // }
     }
     public function update($alias, Request $request)
     {   
@@ -92,6 +97,8 @@ class StuController extends Controller
             if (empty($data['lnk'])) {
                 return response()->json(['status' => 'error', 'message' => 'Thiếu liên kết đích..']);
             }
+            $link_1 = urldecode(base64_decode($data['lnk']['lnk1']));
+            $get_meta = getMetaFromUrl($link_1);
 
             $level = isset($data['oth']) && isset($data['oth']['level']) ? base64_decode($data['oth']['level']) : 1;
 
@@ -99,7 +106,8 @@ class StuController extends Controller
                 'alias' => $alias,
                 'data' => json_encode($data),
                 'status' => 'active',
-                'level_id' => $level
+                'level_id' => $level,
+                'seo_meta' => !isset($get_meta['error']) ? $get_meta : []
             ];
 
             $data_stu = $this->STUService->getLink($alias);
@@ -123,11 +131,18 @@ class StuController extends Controller
 
     public function redirect(Request $request, $alias)
     {
-        $referrer = $request->headers->get('referer', 'direct');
         $ip_address = generate_random_ip("1.150.113.16");
-    
-        $link_data = $this->STURepository->with(['level'])->findLinkActive($alias);
+        
+        $cacheKey = "link_STU:{$alias}";
 
+        $link_data = Cache::remember($cacheKey, 60, function () use ($alias) {
+            return $this->STURepository
+                ->with(['level'])
+                ->findLinkActive($alias);
+        });
+
+        $SEO = null;
+        
         if (!$link_data) {
             return abort(404);
         }
@@ -159,16 +174,12 @@ class StuController extends Controller
             'device' => $get_data_device['device'] ?? 'unknown',
             'browser' => $get_data_device['browser'] ?? 'unknown',
             'country' => $data_ip['iso_code'] ?? 'unknown',
+            'referer' => $request->headers->get('referer', 'direct')
         ];
     
-        try {
-            $this->STULogReferralRepository->updateOrInsert([
-                'link_id' => $link_data->id,
-                'ip_address' => $ip_address,
-            ], array_merge($data_user_agent, ['referrer_url' => $referrer, 'visited_at' => now()]));
-        } catch (\Exception $e) {
-            Log::error('Error updating log referral: ' . $e->getMessage());
-        }
+        Cache::remember("user_agent:".$ip_address, 60*60, function () use ($data_user_agent) {
+            return $data_user_agent;
+        });
     
         $data_pageload_configs = json_decode($link_data->level->pageload_config) ?? [];
         $chose_config = $this->getConfig($data_pageload_configs, $data_user_agent);
@@ -189,7 +200,11 @@ class StuController extends Controller
             }
             Cookie::queue(Cookie::forget('_note'));
 
-            return redirect()->away($page_decode . '?a=' . $alias);
+            return response('', 302)
+            ->header('Location', route('stu.redirect').
+                    "?url=" . base64_encode(urlencode($page_decode . '?a=' . $alias)) .
+                    "&SEO=" . base64_encode(json_encode($SEO))
+                );
         }
     
         return redirect('/');
@@ -215,7 +230,55 @@ class StuController extends Controller
     }
     private function check($cond, $type, $val) {
         $user_agent = $this->getDeviceInfo();
+      
+        if ($type == "block") {
+            if ($cond == "device") {
+                $devices = explode(",", $val);
+                if (arrayContains($user_agent['device'], $devices, true)) {
+                    return false;
+                }
+            }
+            if ($cond == "operating_system") {
+                $operating_systems = explode(",", $val);
+                if (arrayContains($user_agent['operating_system'], $operating_systems, true)) {
+                    return false;
+                }
+            }
 
+            if ($cond == "website") {
+                $referer = $this->getRefererDomain();
+                $websites = explode(",", $val);
+                if (arrayContains($referer, $websites, true)) {
+                    return false;
+                }
+            }
+
+        }
+
+        if ($type == "only") {
+            if ($cond == "device") {
+                $devices = explode(",", $val);
+                if (!arrayContains($user_agent['device'], $devices, true)) {
+                    return false;
+                }
+            }
+            if ($cond == "operating_system") {
+                $operating_systems = explode(",", $val);
+                if (!arrayContains($user_agent['operating_system'], $operating_systems, true)) {
+                    return false;
+                }
+            }
+
+            if ($cond == "website") {
+                $referer = $this->getRefererDomain();
+                $websites = explode(",", $val);
+                if (!arrayContains($referer, $websites, true)) {
+                    return false;
+                }
+            }
+
+        }
+        
         return true;
     }
     private function configMatches($config, $user_agent)
@@ -248,45 +311,6 @@ class StuController extends Controller
                (!in_array(strtolower($value), $blockValues) || $config->$block == '[no]');
     }
     
-    public function checkProxyVpn($address_ip)
-    {
-        $proxycheck_options = [
-            'API_KEY' => env("PROXY_CHECK_API"),
-            'ASN_DATA' => 1,
-            'DAY_RESTRICTOR' => 7,
-            'VPN_DETECTION' => 1,
-            'RISK_DATA' => 1,
-            'INF_ENGINE' => 1,
-            'TLS_SECURITY' => 0,
-            'QUERY_TAGGING' => 1,
-            'MASK_ADDRESS' => 1,
-            'CUSTOM_TAG' => 'link4sub',
-        ];
-        
-        try {
-            $result_array = proxycheck::check($address_ip, $proxycheck_options);
-            
-            if ($result_array['status'] == 'ok' || $result_array['status'] == 'warning') {
-                return [
-                    'result' => $result_array[$address_ip]['proxy'] == "yes" ? $result_array[$address_ip]['type'] : 'no',
-                    'country' => $result_array[$address_ip]['isocode'] ?? 'unknown'
-                ];
-            }
-        } catch (\Exception $e) {
-            Log::error('Error in checkProxyVpn: ' . $e->getMessage());
-        }
-        
-        return [
-            'result' => 'unknown',
-            'country' => 'unknown'
-        ];
-    }
-    public function getProxyCheck($address_ip)
-    {
-
-        return false;
-
-    }
     public function getDeviceInfo()
     {
         $agent = new Agent();
@@ -320,24 +344,26 @@ class StuController extends Controller
 
             }
 
-            $link_data = $this->STURepository->with(['level'])->findLink($alias);
+            $cacheKey = "link_STU:{$alias}";
+    
+            $link_data = Cache::remember($cacheKey, 60, function () use ($alias) {
+                return $this->STURepository
+                    ->with(['level'])
+                    ->findLinkActive($alias);
+            });
+            
             if (!$link_data) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Invalid alias'
                 ]);
             }
+            $loged = Cache::get("user_agent:".$ip_address);
 
-            $loged = $this->STULogReferralRepository->findFirst([
-                ['link_id', '=', $link_data->id],
-                ['ip_address', '=', $ip_address],
-                ['visited_at', '>=', Carbon::now()->subMinutes(120)]
-            ]);
-            if (!$loged) {
+            if (empty($loged)) {
                 $loged = (object) [
                     'ip_address' => $ip_address,
                     'referrer_url' => 'danger',
-
                 ];
                 // return response()->json([
                 //     'status' => 'error',
@@ -351,37 +377,61 @@ class StuController extends Controller
                 $accessed = $this->STUAccessRepository->getAccessedByCondition([['ip_address', '=', $ip_address], ['user_id', '=', $link_data->user_id]], Carbon::today());
             }
 
-            if (count($accessed) >= $link_data->level->click_limit) {
+            //update stats
+            // $this->STUStatisticRepository->updateOrInsertStatsByAttr([
+            //     'link_id' => $link_data->id,
+            //     'date' => Carbon::today()->toDateString()
+            // ], $link_data->level->click_value);
+
+            $checkProxyVPN = checkProxyVPN($ip_address);
+
+            $loged = (array) $loged;
+
+            $rate = $link_data->level->rates()->where("country_code", "=", $loged['country'])->first();
+            if (!$rate) {
+                $rate = $link_data->level->rates()->where("country_code", "=", "ALL")->first();
+            }
+            if (isset($loged['device']) && $loged['device'] == "Desktop") {
+                $revenue = (float) $rate->rate[0] / 1000;
+                $limit = $rate?->daily_limit[0] ?? 1;
+
+            } else {
+                $revenue = (float) $rate->rate[1] / 1000;
+                $limit = $rate?->daily_limit[1] ?? 1;
+            }
+
+            
+            if (count($accessed) >= $limit) {
                 return response()->json([
                     'status' => 'error',
                     'message'=> 'limited click, '.'clicked today '.count($accessed)
                 ]);
             }
-
-            //update stats
-            $this->STUStatisticRepository->updateOrInsertStatsByAttr([
-                'link_id' => $link_data->id,
-                'date' => Carbon::today()->toDateString()
-            ], $link_data->level->click_value);
-
+            
             $create_data = [
                 'user_id' => $link_data->user_id,
                 'parent_id' => $link_data->id, //static_id
                 'link_id' => $link_data->id, //link_id
-                'revenue' => $link_data->level->click_value,
-                'created_at' => now(),
-                'ip_address' => $loged->ip_address,
-                'referral' => $loged->referrer_url,
-                'country' => $loged->country,
-                'browser' => $loged->browser,
-                'platform' => $loged->operating_system,
-                'device' => $loged->device,
-                'detection' => $loged->device,
+                'is_earn' => 1,
+                'revenue' => $revenue,
+                'reason' => 1,
+                'ip_address' => $ip_address,
+                'referral' => $loged['referer'],
+                'country' => $loged['country'],
+                'browser' => $loged['browser'],
+                'platform' => $loged['operating_system'],
+                'device' => $loged['device'],
+                'detection' => $checkProxyVPN['result'],
             ];
 
-            $this->STUAccessRepository->create(
+            $dataUp = $this->STUAccessRepository->create(
                 $create_data
             );
+
+            $user = User::find($link_data->user_id);
+            if ($user) {
+                $user->increment('balance', $revenue);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -390,13 +440,14 @@ class StuController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message'=> '505'
+                'message'=> $e->getMessage()    
             ]);
         }  
     }
     public function fetch(Request $request, $alias)
     {
-        try {
+
+        // try {
             $lang = $request->get('lang') ?? 'vi';
             // Hàm encodeURIComponent và decodeURIComponent
             function encodeURIComponent($str)
@@ -442,7 +493,6 @@ class StuController extends Controller
                 'lnk' => ecSTU(transLang('stu.dc.lnk', $lang))
             ];
             
-    
             $iconButon = [
                 'yt' => ecSTU('yt'),
                 'ytl' => ecSTU('ytl'),
@@ -459,12 +509,11 @@ class StuController extends Controller
                 'dc' => ecSTU('dc'),
                 'lnk' => ecSTU('lnk')
             ];
-    
-            $cacheKey = 'stu_link_active_' . $alias;
-            $cacheTime = 60; // thời gian cache, ví dụ 60 phút
-            
-            $result = Cache::remember($cacheKey, $cacheTime, function () use ($alias) {
-                return $this->STURepository->with(['level'])->findLinkActive($alias);
+        
+            $result = Cache::remember("link_STU:{$alias}", 60, function () use ($alias) {
+                return $this->STURepository
+                    ->with(['level'])
+                    ->findLinkActive($alias);
             });
             
             if (empty($result)) {
@@ -486,21 +535,37 @@ class StuController extends Controller
             $_config = [];
 
             foreach ($config as $typeName => $arr) {
+                $cnt = 0;
                 foreach ($arr as $key => $arr2) {
-                    if (isset($arr2->conds) && !empty($arr2->conds)) {
-                        $conds = $arr2->conds;
-                        for ($i = 0; $i < count($conds->cond); $i++) {
-                            $cond = $conds->cond[$i];
-                            $type = $conds->type[$i];
-                            $val = $conds->val[$i];
-                            $flag = $this->check($cond, $type, $val);
+                    if (isset($arr2->confs) && !empty($arr2->confs)) {
+                        $flag = true;
 
-                            if ($flag == false) break;
+                        if (isset($arr2->conds) && !empty($arr2->conds)) {
+                            $conds = $arr2->conds;
+
+                            for ($i = 0; $i < count($conds->cond); $i++) {
+                                $cond = $conds->cond[$i];
+                                $type = $conds->type[$i];
+                                $val = $conds->val[$i];
+                                $flag = $this->check($cond, $type, $val);
+
+                                if ($flag == false) break;
+                            }
+
                         }
-                    }
-                    if (isset($arr2->confs) && !empty($arr2->confs) && $arr2->confs->active == "true") {
-                        $confs = $arr2->confs;
-                        $_config[$typeName][$key] = $confs;
+
+                        if (isset($arr2->confs->links) && $arr2->confs->links == "[auto]") {
+                            $linksArray = $this->postService->getAllPostLinks();
+                            $joinedLinks = implode(',', $linksArray);
+                            $arr2->confs->links = $joinedLinks;
+                        }
+
+                        if ($flag) {
+                            $confs = $arr2->confs;
+                            $_config[$typeName][$cnt] = $confs;
+                            $cnt++;
+                        }
+                        
                     }
                 }
 
@@ -538,7 +603,13 @@ class StuController extends Controller
                         'enter_password' => transLang('stu.dc.enter_password', $lang),
                         'enter_password_war' => transLang('stu.dc.enter_password_war', $lang),
                         'confirm_password' => transLang('stu.dc.confirm_password', $lang),
-                    
+                        'continue' => transLang('stu.dc.continue', $lang),
+                        'next_step' => transLang('stu.dc.next_step', $lang),
+                        'verify' => [
+                            'title' => transLang('stu.dc.verify.title', $lang),
+                            'desc' => transLang('stu.dc.verify.desc', $lang),
+                            'btn' => transLang('stu.dc.verify.btn', $lang)
+                        ]
                     ],
                     'aApi' => [
                         'userId' => [40, 'user'],
@@ -589,24 +660,18 @@ class StuController extends Controller
             // Xử lý thông tin người dùng
             $ip_address = $request->ip();
             $ip_address = "1.150.113.16";
-            $loged = $this->STULogReferralRepository->firstByCondition([
-                ['link_id', '=', $result->id],
-                ['ip_address', '=', $ip_address],
-                ['visited_at', '>=', Carbon::now()->subMinutes(120)]
-            ]);
-    
-            if (empty($loged)) {
+            $loged = Cache::get("user_agent:". $ip_address);
+            if (!$loged) {
                 return response()->json([
-                    'code' => 403,
                     'status' => 'success',
                     'message' => 'Link Expired...'
                 ], 200);
             }
     
-            $res['data']['info']['country'] = $loged->country;
-            $res['data']['info']['device'] = $loged->device;
-            $res['data']['info']['os'] = $loged->operating_system;
-            $res['data']['info']['browser'] = $loged->browser;
+            $res['data']['info']['country'] = $loged['country'];
+            $res['data']['info']['device'] = $loged['device'];
+            $res['data']['info']['os'] = $loged['operating_system'];
+            $res['data']['info']['browser'] = $loged['browser'];
     
             return response()->json([
                 'status' => 'success',
@@ -614,13 +679,37 @@ class StuController extends Controller
                 'data' => $res
             ], 200);
     
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e,
-                'data' => null
-            ], 500);
-        }
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => $e,
+        //         'data' => null
+        //     ], 500);
+        // }
     }
-    
+    private function getRefererDomain(): string|null
+    {
+        $referer = request()->headers->get('referer');;
+   
+        $domain = $referer ? parse_url($referer, PHP_URL_HOST) : null;
+
+        return $domain;
+    }
+
+    private function reason(Request $request) {
+        $check = [];
+        /*check cookie*/
+        if (!$request->has('check_cookie')) {
+            Cookie::queue(Cookie::make('app_cookie_check', 'test', 1)); // Cookie hết hạn sau 1 phút
+        }
+
+        $isCookieDisabled = !$request->cookie('app_cookie_check');
+
+        if ($isCookieDisabled) {
+            $check[] = 2;
+        }
+
+
+        return $check;
+    }
 }

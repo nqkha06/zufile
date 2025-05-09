@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\UserWithdraw as Withdraw;
-use Illuminate\Support\Facades\DB;
 use App\Repositories\Interfaces\WithdrawRepositoryInterface;
 use App\Repositories\BaseRepository;
 /**

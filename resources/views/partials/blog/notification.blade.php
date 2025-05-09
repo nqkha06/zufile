@@ -1,4 +1,4 @@
-<div class='section' id='notif-widget'>
+{{-- <div class='section' id='notif-widget'>
     <div class='widget HTML' data-version='2' id='HTML0'>
         <input class='ntfI hidden' id='forNft' type='checkbox' />
         <div class='ntfC'>
@@ -19,4 +19,4 @@
             <label aria-label='Close Menu' class='c' for='forNft'></label>
         </div>
     </div>
-</div>
+</div> --}}

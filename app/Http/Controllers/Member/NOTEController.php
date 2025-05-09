@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\NOTEServiceInterface as NOTEService;
+use App\Services\NOTEService as NOTEService;
 
 class NOTEController extends Controller
 {
@@ -21,7 +21,7 @@ class NOTEController extends Controller
      */
     public function index(Request $request)
     {
-        $user_note_links = $this->NOTEService->index($request);
+        $user_note_links = $this->NOTEService->getAllPaginated();
 
         return view('backend.member.note-link.index', compact('user_note_links'));
     }

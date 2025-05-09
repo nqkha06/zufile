@@ -7,20 +7,26 @@ use Illuminate\Http\Request;
 use App\Services\Interfaces\PostServiceInterface as PostService;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 use App\Repositories\Interfaces\CategoryRepositoryInterface as CategoryRepository;
+use App\Repositories\Interfaces\TagRepositoryInterface as TagRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use App\Enums\BaseStatusEnum;
+use App\Models\Tag;
 
 class PostController extends Controller
 {   
     protected $postService;
     protected $postRepository;
     protected $categoryRepository;
+    protected $tagRepository;
 
-    public function __construct(PostService $postService, PostRepository $postRepository, CategoryRepository $categoryRepository)
+    public function __construct(PostService $postService, PostRepository $postRepository, CategoryRepository $categoryRepository, TagRepository $tagRepository)
     {
         $this->postService = $postService;
         $this->postRepository = $postRepository;
         $this->postRepository = $postRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
     }
     /**
      * Display a listing of the resource.
@@ -38,7 +44,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $categories = $this->categoryRepository->all([]);
+        $categories = $this->categoryRepository->all();
 
         return view('backend.admin.post.create', compact('categories'));
     }
@@ -53,6 +59,9 @@ class PostController extends Controller
             'slug'  => 'required',
             'content'  => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => ['required', Rule::enum(BaseStatusEnum::class)],
+            'categories' => ['required', 'array'],
+            'categories.*' => ['integer', 'exists:categories,id'], 
         ]);
         // Handle the file upload
         if ($request->hasFile('image')) {
@@ -70,9 +79,7 @@ class PostController extends Controller
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'meta_keywords' => $request->meta_keywords,
-            'category_id' => $request->category,
             'summary' => $request->description,
-            'tags' => $request->tags,
             'image' => $path ?? null,
             'status' => $request->status
         ];
@@ -87,22 +94,15 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(int $id)
     {
-        $post = $this->postRepository->with(['category'])->find($id);
-        $categories = $this->categoryRepository->all([]);
+        $post = $this->postRepository->with(['categories', 'tags'])->find($id);
+        $categories = $this->categoryRepository->findMany(['status' => BaseStatusEnum::PUBLISHED]);
+        $tags = $this->tagRepository->findMany(['status' => BaseStatusEnum::PUBLISHED]);
 
-        return view('backend.admin.post.edit', compact('post', 'categories'));
+        return view('backend.admin.post.edit', compact('post', 'categories', 'tags'));
     }
     
     /**
@@ -112,8 +112,12 @@ class PostController extends Controller
     {
         $request->validate([
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'status' => ['required', Rule::enum(BaseStatusEnum::class)],
+            'categories' => ['array'],
+            'categories.*' => ['integer', 'exists:categories,id'], 
+            'tags' => ['array'],
+            'tags.*' => ['integer', 'exists:tags,id'], 
         ]);
-
         // Handle the file upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -122,25 +126,33 @@ class PostController extends Controller
 
             $path = '/images/' . $imageName;
         }
+        $seo_meta = $request->seo_meta;
+
         $dataUpd = [
             'title' => $request->title,
             'slug' => $request->slug,
-            'summary' => $request->description,
+            'description' => $request->description,
             'content' => $request->content,
-            'meta_title' => $request->meta_title,
-            'meta_description' => $request->meta_description,
+            'meta_title' => $seo_meta['seo_title'] ?? '',
+            'meta_description' => $seo_meta['seo_description'] ?? '',
             'meta_keywords' => $request->meta_keywords,
-            'category_id' => $request->category,
-            'tags' => $request->tags,
             'status' => $request->status
         ];
         if (isset($path)) {
             $dataUpd['image'] = $path;
         }
 
+        $post = $this->postRepository->findFirst(['id' => $id]);
         $this->postRepository->update($id, $dataUpd);
-        
-        return redirect()->route('admin.posts.index')->with('success', 'Cập nhật thành công');
+        $post->categories()->sync($request->categories);
+        $post->tags()->sync($request->tags);
+
+        if ($request->submitter == 'apply') {
+            return redirect()->back()->with('success', 'Bài viết đã được cập nhật thành công.');
+
+        } else {
+            return redirect()->route('admin.posts.index')->with('success', 'Bài viết đã được cập nhật thành công.');
+        }
     }
 
     /**

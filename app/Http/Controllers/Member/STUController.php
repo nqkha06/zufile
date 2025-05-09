@@ -22,7 +22,7 @@ class STUController extends Controller
 
         $links = $this->STUService->listOwnSTUPaginated($searchParams);
         
-        return view('backend.member.stu-link.index', compact('links'));
+        return view('backend.member_2.stu', compact('links'));
     }
 
     public function destroy(string $alias)

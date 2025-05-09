@@ -586,6 +586,12 @@ return [
         'confirm_reset_template' => 'Are you sure you want to reset the template?',
         'url_copied' => 'URL copied successfully!',
         'copy_url_not_supported' => 'Copying URLs is not supported in this browser.',
+
+        'url_required' => 'Please enter a valid link.',
+        'url_disallowed' => 'Do not enter a link here.',
+        'url_allowed_domains' => 'Enter a URL containing: <b>:domains</b>',
+        'datetime_invalid' => 'Invalid expiration date.',
+
     ],
     'dc' => [
         'yt' => 'Subscribe on YouTube',
@@ -615,7 +621,14 @@ return [
         'password' => 'Password: ',
         'enter_password' => 'Enter a Password..',
         'enter_password_war' => 'Please enter your password to unlock this link!',
-        'confirm_password' => 'Confirm'
+        'confirm_password' => 'Confirm',
+        'continue' => 'Continue',
+        'next_step' => 'Next Step',
+        'verify' => [
+            'title' => 'Verify that you are human',
+            'desc' => 'Please complete the verification to unlock the link.',
+            'btn' => 'Continue...!',
+        ],
 
     ]
 

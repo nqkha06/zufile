@@ -34,13 +34,17 @@ $breadcrumbs = [
     'admin.levels.index' => __('Levels'),
     'admin.note_levels.index' => __('Quản lý cấp độ Note'),
     'admin.payment-methods.index' => __('Payment Methods'),
-    'admin.categories.index' => __('Blog - Categories'),
+    'admin.categories.index' => __('Blog - Danh mục'),
+    'admin.tags.index' => __('Thẻ'),
     'admin.posts.index' => __('Blog - Posts'),
     'admin.pages.index' => __('Blog - Pages'),
     'admin.widgets.index' => __('Widgets'),
     'admin.menus.index' => __('Menus'),
     'admin.send-emails.index' => __('Send Mails'),
     'admin.popular.stu' => __('STU Phổ biến'),
+
+    'admin.system.index' => __('System'),
+    'file_editor.index' => __('Quản lý mã nguồn')
 
 ];
 
@@ -157,6 +161,11 @@ Breadcrumbs::for('admin.categories.edit', function (BreadcrumbTrail $trail, $cat
     $trail->push('Edit category: '.$category->name, route('admin.categories.edit', $category->id));
 });
 
+// Admin > Tags > create
+Breadcrumbs::for('admin.tags.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.tags.index');
+    $trail->push(__('Create tag'), route('admin.tags.create'));
+});
 
 // Admin > Invoices > [user] > edit
 Breadcrumbs::for('admin.invoices.edit', function (BreadcrumbTrail $trail, $invoice) {

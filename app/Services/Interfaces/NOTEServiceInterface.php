@@ -8,7 +8,6 @@ namespace App\Services\Interfaces;
  */
 interface NOTEServiceInterface
 {
-    public function index($request);
     public function listAllpaginated($searchParams = null, $sortBy = 'created_at', $sortOrder = 'desc', $perPage = 15);
     public function softDeleteOwn($alias);
     public function softDeleteAny($alias);

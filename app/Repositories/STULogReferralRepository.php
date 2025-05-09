@@ -3,17 +3,17 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\STULogReferralRepositoryInterface;
-use App\Repositories\BaseRepository;
+use App\Repositories\Abstracts\BaseRepositoryAbstract;
 use App\Models\StuLogReferral;
 
 /**
  * Class STULogReferralRepository.
  */
-class STULogReferralRepository extends BaseRepository implements STULogReferralRepositoryInterface
+class STULogReferralRepository extends BaseRepositoryAbstract implements STULogReferralRepositoryInterface
 {
     protected $model;
 
     public function __construct(StuLogReferral $model) {
-        $this->model = $model;
+        parent::__construct($model);
     }
 }

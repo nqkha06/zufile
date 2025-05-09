@@ -20,7 +20,7 @@ class NOTELevelComposer
     public function compose(View $view)
     {
         $levels = Cache::remember('note_active_levels', 60 * 60, function() {
-            return $this->levelRepository->getByCondition([['status', '=', 1]]);
+            return $this->levelRepository->findMany([['status', '=', 1]]);
         });
         
         $view->with('note_levels', $levels);

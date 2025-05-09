@@ -1,6 +1,10 @@
 <?php
 use Illuminate\Support\Carbon;
 use App\Services\SettingService;
+use GuzzleHttp\Client;
+use proxycheck\proxycheck;
+use Illuminate\Support\Facades\Log;
+use App\Models\Language;
 
 if (!function_exists('round_views')) {
     function round_views($views)
@@ -360,4 +364,223 @@ if (!function_exists('renderStatusInvoice')) {
     }
 }
 
+if (!function_exists('arrayContains')) {
+    function arrayContains($item, $array, $caseInsensitive = false)
+    {
+        if ($caseInsensitive) {
+            return in_array(strtolower($item), array_map('strtolower', $array));
+        }
+        return in_array($item, $array);
+    }
+}
+
+if (!function_exists('blogFormatDateTime')) {
+    function blogFormatDateTime($datetime)
+    {
+        return Carbon::parse($datetime)->format('M d, Y');
+
+    }
+}
+
+if (!function_exists('getMetaFromUrl')) {
+    function getMetaFromUrl($long_url)
+{
+    $linkMeta = [
+        'title' => '',
+        'description' => '',
+        'image' => '',
+    ];
+
+    // Kiểm tra URL hợp lệ
+    if (filter_var($long_url, FILTER_VALIDATE_URL) === false) {
+        return $linkMeta;
+    }
+
+    // Kiểm tra nếu URL là dạng magnet (không cần xử lý)
+    if (parse_url($long_url, PHP_URL_SCHEME) == 'magnet') {
+        return $linkMeta;
+    }
+
+    // Gửi yêu cầu CURL
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $long_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+    ]);
+    curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate');
+
+    $content = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        // Log lỗi Curl
+        error_log('Curl error: ' . curl_error($ch));
+        curl_close($ch);
+        return $linkMeta;
+    }
+
+    curl_close($ch);
+
+    // Nếu không có nội dung trả về
+    if (empty($content)) {
+        return $linkMeta;
+    }
+
+    // Phân tích nội dung HTML
+    try {
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+
+        // Lấy title
+        try {
+            $linkMeta['title'] = trim(strip_tags(
+                $crawler->filterXpath('//title')->eq(0)->text()
+            ));
+        } catch (\Exception $e) {
+        }
+
+        // Lấy description
+        try {
+            $linkMeta['description'] = trim(strip_tags(
+                $crawler->filterXpath("//meta[@name='description']")->eq(0)->attr('content')
+            ));
+        } catch (\Exception $e) {
+        }
+
+        // Lấy image
+        try {
+            $linkMeta['image'] = $crawler->filterXpath("//meta[@property='og:image']")->eq(0)->attr('content');
+        } catch (\Exception $e) {
+        }
+    } catch (\Exception $e) {
+        // Log lỗi hoặc xử lý tùy ý
+    }
+
+    return $linkMeta;
+}
+
+    // function getMetaFromUrl($url, $timeout = 5)
+    // {
+    //     try {
+    //         // Tạo một client HTTP
+    //         $client = new Client();
+
+    //         // Gửi yêu cầu GET tới URL với timeout
+    //         $response = $client->get($url, [
+    //             'timeout' => $timeout, // Giới hạn thời gian request
+    //         ]);
+
+    //         // Lấy nội dung HTML của trang
+    //         $html = $response->getBody()->getContents();
+
+    //         // Sử dụng DOMDocument để phân tích HTML
+    //         $dom = new \DOMDocument();
+    //         @$dom->loadHTML($html);
+
+    //         $metaData = [
+    //             'title' => null,
+    //             'description' => null,
+    //         ];
+
+    //         // Lấy thẻ <title>
+    //         $titles = $dom->getElementsByTagName('title');
+    //         if ($titles->length > 0) {
+    //             $metaData['title'] = $titles->item(0)->nodeValue;
+    //         }
+
+    //         // Lấy meta description
+    //         $metaTags = $dom->getElementsByTagName('meta');
+    //         foreach ($metaTags as $meta) {
+    //             if ($meta->getAttribute('name') === 'description') {
+    //                 $metaData['description'] = $meta->getAttribute('content');
+    //                 break;
+    //             }
+    //         }
+
+    //         return $metaData;
+    //     } catch (\GuzzleHttp\Exception\RequestException $e) {
+    //         // Xử lý lỗi do timeout hoặc các lỗi liên quan đến HTTP
+    //         return [
+    //             'error' => 'Request failed: ' . $e->getMessage(),
+    //         ];
+    //     } catch (\Exception $e) {
+    //         // Xử lý các lỗi khác
+    //         return [
+    //             'error' => 'An error occurred: ' . $e->getMessage(),
+    //         ];
+    //     }
+    // }
+}
+
+if (!function_exists('checkProxyVPN')) {
+    function checkProxyVPN($address_ip)
+    {
+        $proxycheck_options = [
+            'API_KEY' => env("PROXY_CHECK_API", ""),
+            'ASN_DATA' => 1,
+            'DAY_RESTRICTOR' => 7,
+            'VPN_DETECTION' => 1,
+            'RISK_DATA' => 1,
+            'INF_ENGINE' => 1,
+            'TLS_SECURITY' => 0,
+            'QUERY_TAGGING' => 1,
+            'MASK_ADDRESS' => 1,
+            'CUSTOM_TAG' => 'link4sub_dev',
+        ];
+        
+        try {
+            $result_array = proxycheck::check($address_ip, $proxycheck_options);
+            
+            if ($result_array['status'] == 'ok' || $result_array['status'] == 'warning') {
+                return [
+                    'status' => "success",
+                    'result' => $result_array[$address_ip]['proxy'] == "yes" ? $result_array[$address_ip]['type'] : 'no',
+                    'country' => $result_array[$address_ip]['isocode'] ?? 'unknown',
+                    "data" => $result_array[$address_ip]
+                ];
+            }
+        } catch (\Exception $e) {
+            Log::error('Error in checkProxyVpn: ' . $e->getMessage());
+        }
+        
+        return [
+            'status' => "error",
+            'result' => 'unknown',
+            'country' => 'unknown'
+        ];
+    }
+}
+
+if (!function_exists('getAllLanguages')) {
+    function getAllLanguages() {
+        return Language::all();
+    }
+}
+if (!function_exists('currencyFormat')) {
+    function currencyFormat($amount) {
+        $format = round($amount, 3);
+
+        return "$".$format;
+    }
+}
+if (!function_exists('formatCurrency')) {
+    function formatCurrency($amount) {
+        $format = round($amount, 3);
+
+        return "$".$format;
+    }
+}
+if (!function_exists('formatTime')) {
+    function formatTime($time) {
+        $format = date('H:i, d/m/Y', strtotime($time));
+        return $format;
+    }
+}
 ?>

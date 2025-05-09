@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        return view('backend.member.profile.index');
+        return view('backend.member_2.profile.info');
     }
 
     public function update(Request $request)

@@ -612,7 +612,14 @@ return [
         'password' => 'Mật khẩu: ',
         'enter_password' => 'Nhập mật khẩu..',
         'enter_password_war' => 'Vui lòng nhập mật khẩu để mở khoá liên kết này!',
-        'confirm_password' => 'Xác nhận'
+        'confirm_password' => 'Xác nhận',
+        'continue' => 'Tiếp tục',
+        'next_step' => 'Bước tiếp theo',
+        'verify' => [
+            'title' => 'Liên kết của bạn đã sẳn sàng!',
+            'desc' => 'Please complete the verification to unlock the link.',
+            'btn' => 'Tiếp tục...',
+        ],
     ],
     /* notifcation */
 ];

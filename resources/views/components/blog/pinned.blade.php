@@ -44,8 +44,8 @@
                         <bdi class='nm' data-text='Link4Sub'
                             data-write='Oleh'></bdi>
                         <div class='pLbls' data-text='in'>
-                            <a aria-label='{{ $article->category->name }}' data-text='{{ $article->category->name }}'
-                                href='https://fletro.jagodesain.com/search/label/{{ $article->category->name }}'
+                            <a aria-label='{{ $article->categories()->first()->name }}' data-text='{{ $article->categories()->first()->name }}'
+                                href='https://fletro.jagodesain.com/search/label/{{ $article->categories()->first()->name }}'
                                 rel='tag'>
                             </a>
                             {{-- <a aria-label='Fullpage' data-text='Fullpage'
@@ -57,7 +57,7 @@
                 </div>
                 <h3 class='pTtl aTtl'><a
                         href='{{ route('blog.article', $article->slug)}}'>{{ $article->title }}</a></h3>
-                <div class='pSnpt'>{{ $article->summary }}</div>
+                <div class='pSnpt'>{{ $article->description }}</div>
                 <div class='pInf pSml'>
                     <time class='aTtmp pTtmp pbl' data-text='Dec 5, 2019'
                         datetime='{{ $article->created_at }}'

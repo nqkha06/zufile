@@ -10,7 +10,6 @@ class NOTELink extends Model
 {
     use HasFactory, QueryScopes;
     protected $table = 'note_links';
-    const UPDATED_AT = null;
 
     protected $fillable = [
         'user_id',

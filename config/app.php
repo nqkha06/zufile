@@ -190,7 +190,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
         'Setting' => App\Facades\Setting::class,
-
+        'Language' => App\Facades\Language::class,
 
     ])->toArray(),
     
@@ -445,5 +445,6 @@ return [
         'YU' => 'Yugoslavia',
         'ZM' => 'Zambia',
         'ZW' => 'Zimbabwe'
-    )
+    ),
+    'DEFAULT_LANG_ADMIN' => env("DEFAULT_LANG_ADMIN")
 ];

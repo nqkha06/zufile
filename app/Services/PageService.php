@@ -2,40 +2,22 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\PageServiceInterface;
 use App\Repositories\Interfaces\PageRepositoryInterface as PageRepository;
+use App\Services\Abstracts\CrudServiceAbstract;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class PageService
  * @package App\Services
  */
-class PageService implements PageServiceInterface
+class PageService extends CrudServiceAbstract
 {
-    protected $pageRepository;
-
-    public function __construct(PageRepository $pageRepository)
-    {
-        $this->pageRepository = $pageRepository;
+    
+    protected function getRepositoryClass(): string {
+        return PageRepository::class;
     }
     
-    public function listAllPagesPaginated()
-    {
-        $search = [
-            ['title', 'like', '%'.request()->keyword.'%']
-        ];
-        if (request()->created_at) {
-            $search[] = ['created_at', 'date', request()->created_at];
-        }
-
-        return $this->pageRepository->getAllPaginated($search);
-    }
-    
-    public function editPage($id)
-    {
-        return $this->pageRepository->find($id);
-    }
-
-    public function updatePage($id, $req)
+    public function update($id, $req): ?Model
     {
         // Handle the file upload
         if ($req->hasFile('image')) {
@@ -55,6 +37,6 @@ class PageService implements PageServiceInterface
         if (isset($path)) {
             $dataUpd['image'] = $path;
         }
-        return $this->pageRepository->update($id, $dataUpd);
+        return parent::update($id, $dataUpd);
     }
 }

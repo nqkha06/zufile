@@ -8,15 +8,14 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Fontend\BlogController;
 use App\Http\Controllers\Frontend\PageController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Response;
 
 Route::get('lang/{language}', function ($locale) {
-    if (!in_array($locale, ['en', 'vi'])) {
+    if (!in_array($locale, getAllLanguages()->pluck('code')->toArray() ?? [])) {
         abort(404);
     }
     session()->put('locale', $locale);
     return redirect()->back();
-});
+})->name('lang.switcher');
 
 /* API ROUTE */
 require __DIR__.'/apii.php';
@@ -36,11 +35,11 @@ require __DIR__.'/admin.php';
 /* MEMBER ROUTE */
 require __DIR__.'/member.php';
 
-/* stu route */
-require __DIR__.'/stu.php';
-
 /* note route */
 require __DIR__.'/note.php';
+
+/* stu route */
+require __DIR__.'/stu.php';
 
 /* auth route */
 require __DIR__.'/auth.php';

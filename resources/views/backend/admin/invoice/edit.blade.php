@@ -46,7 +46,7 @@
 
 
 
-                <div class="col-lg-6">
+                {{-- <div class="col-lg-6">
                     <div class="mb-3 position-relative" data-bb-collapse="false"
                         data-bb-trigger="[name=is_change_password]" data-bb-value="1" style="display: none;">
 
@@ -76,7 +76,7 @@
 
                     </div>
 
-                </div>
+                </div> --}}
 
 
             </div>
@@ -233,7 +233,6 @@
                     </div>
                 </header>
 
-
                 <div class="card meta-boxes">
                     <div class="card-header">
                         <h4 class="card-title">
@@ -241,18 +240,17 @@
                         </h4>
                     </div>
 
-
-                    <div class=" card-body">
-                        <select class="form-select" name="status" value="{{ old('status', $invoice->status) }}"
-                            id="status" placeholder="" required>
+                    <div class="card-body">
+                        <select class="form-select" name="status" id="status" required="">
                             <option value="">[--Trạng thái--]</option>
-                            <option value="pending" @selected($invoice->status == 'pending')>Đang xử lý</option>
-                            <option value="approved" @selected($invoice->status == 'approved')>Đã xem xét</option>
-                            <option value="completed" @selected($invoice->status == 'completed')>Thành công</option>
-                            <option value="cancelled" @selected($invoice->status == 'cancelled')>Đã từ chối</option>
-                            <option value="hold" @selected($invoice->status == 'hold')>Tạm giữ</option>
+                            @foreach (\App\Enums\InvoiceStatusEnum::cases() as $status)
+                                <option value="{{ $status->value }}" {{ old('status', $invoice->status) == $status ? 'selected' : '' }}>
+                                    {{ $status->label() }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
+                    
                 </div>
 
             </div>

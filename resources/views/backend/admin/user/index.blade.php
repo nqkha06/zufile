@@ -82,6 +82,7 @@
                         <th>Id.</th>
                         <th>Tên đăng nhập</th>
                         <th>Tham gia</th>
+                        <th>Số dư</th>
                         <th>Vai trò</th>
                         <th class="w-1"></th>
                     </tr>
@@ -102,6 +103,7 @@
                                 </div>
                             </td>
                             <td data-label="Tham gia">{{ date('H:i, d/m/Y', strtotime($user->created_at)) }}</td>
+                            <td data-label="Số dư">{{ formatCurrency($user->balance) }}</td>
                             <td class="text-secondary" data-label="Vai trò">
                                 @if (count($user->roles))
                                     @foreach ($user->roles as $role)
@@ -195,6 +197,6 @@
       }));
     });
     // @formatter:on
-  </script>
+</script>
   
 @endpush

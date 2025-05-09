@@ -170,16 +170,16 @@
                                                 {{ date('H:i, d/m/Y', strtotime($value->created_at)) }}</td>
                                             <td style="white-space: nowrap">
                                                 <div class="btnDt" style="cursor:pointer">
-                                                    <label class="btnDtt d" data-alias="note/{{ $value->alias }}"
+                                                    <label class="btnDtt d" data-alias="{{ $value->alias }}"
                                                         data-param='{{ json_encode(['title' => $value->title, 'content' => $value->content, 'password' => $value->password]) }}'
                                                         onclick="editNOTE(this)" for="forEdit"><i
                                                             class="bi bi-pencil-square"></i></label>
                                                     <form action="{{ route('member.note.destroy', $value->alias) }}" method="POST" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btnDtt c" onclick="return confirm('Bạn có chắc chắn muốn xoá liên kết  \'note/{{ $value->alias }}\' chứ? Nó không thể khôi phục nếu bạn xoá nó!')"><i class="bi bi-trash"></i></button>
+                                                        <button type="submit" class="btnDtt c" onclick="return confirm('Bạn có chắc chắn muốn xoá liên kết  \'{{ $value->alias }}\' chứ? Nó không thể khôi phục nếu bạn xoá nó!')"><i class="bi bi-trash"></i></button>
                                                     </form>
-                                                    <span class="btnDtt l" data-alias="note/{{ $value->alias }}" onclick="cpLink(this)"><i class="bi bi-clipboard"></i></span>
+                                                    <span class="btnDtt l" data-alias="{{ $value->alias }}" onclick="cpLink(this)"><i class="bi bi-clipboard"></i></span>
                                                 </div>
                     
                                             </td>

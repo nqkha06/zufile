@@ -19,7 +19,7 @@ class PageController extends Controller
      */
     public function show(string $slug)
     {
-        $page_data = $this->pageRepository->firstByCondition([['slug', '=', $slug]]);
+        $page_data = $this->pageRepository->findFirst([['slug', '=', $slug]]);
 
         if ($page_data) {
             return view('fontend.blog.page', compact('page_data'));

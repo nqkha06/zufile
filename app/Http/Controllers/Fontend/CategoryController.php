@@ -44,7 +44,7 @@ class CategoryController extends Controller
      */
     public function show(string $category)
     {
-        $category = $this->categoryRepository->firstByCondition([['slug', '=', $category]]);
+        $category = $this->categoryRepository->findFirst([['slug', '=', $category]]);
         $posts = $category->posts;
 
         // $data = [

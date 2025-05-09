@@ -42,6 +42,7 @@
                   <th>Slug</th>
                   <th>Mô tả</th>
                   <th>Count</th>
+                  <th>Trạng thái</th>
                   <th class="w-1"></th>
                 </tr>
               </thead>
@@ -53,14 +54,20 @@
                             <td>{{ $value->slug }}</td>
                             <td>{{ $value->description }}</td>
                             <td>{{ $value->posts->count() }}</td>
+                            <td>{!! isset($value->status) ? $value->status->html() : '' !!}</td>
                             <td style="white-space: nowrap">
                                 <div class="btn-list flex-nowrap">
                                     <a class="btn btn-primary" href="{{ route('admin.categories.edit', $value->id) }}" >
                                       Edit
                                     </a>
-                                    <a class="btn btn-red" href="{{ route('admin.categories.edit', $value->id) }}" >
-                                      Delete
-                                    </a>
+                                    <form action="{{ route('admin.categories.destroy', $value->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-red" type="button" onclick="confirm('{{ __('Bạn chắc chắn sẽ xoá nó chứ?') }}') ? this.closest('form').submit() : ''">
+                                            Delete
+                                        </button>
+                                    </form>
+                                  
                                 </div>
                             </td>
                         </tr>

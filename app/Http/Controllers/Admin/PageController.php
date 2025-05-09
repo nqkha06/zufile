@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\PageServiceInterface as PageService;
+use App\Services\PageService as PageService;
 use App\Repositories\Interfaces\PageRepositoryInterface as PageRepository;
 use App\Repositories\Interfaces\CategoryRepositoryInterface as CategoryRepository;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Page\PageFilterRequest;
 
 class PageController extends Controller
 {   
@@ -24,10 +25,10 @@ class PageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PageFilterRequest $request)
     {
-
-        $pages = $this->pageService->listAllPagesPaginated();
+        $filters = $request->validated();
+        $pages = $this->pageService->getAllPaginated($filters);
 
         return view('backend.admin.page.index', compact('pages'));
     }
@@ -96,8 +97,7 @@ class PageController extends Controller
      */
     public function edit(int $id)
     {
-        $page = $this->pageRepository->find(['id' => $id]);
-
+        $page = $this->pageService->findOrFail($id);
         return view('backend.admin.page.edit', compact('page'));
     }
     

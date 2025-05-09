@@ -1,3 +1,7 @@
+@php
+        $meta_title = request()->get('X-SEO-Title');
+        dd($meta_title);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 

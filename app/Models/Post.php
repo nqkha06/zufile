@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\BaseStatusEnum;
+use App\Builders\BaseQueryBuilder;
 
 class Post extends Model
 {
@@ -16,24 +18,36 @@ class Post extends Model
         'meta_title',
         'meta_description',
         'meta_keywords',
-        'summary',
+        'description',
         'image',
         'slug',
-        'category_id',
-        'tags',
         'status'
     ];
 
     protected $attributes = [
-        'status' => 'public',
+        'status' => BaseStatusEnum::DRAFT,
     ];
-    public function category()
+
+    protected $casts = [
+        'status' => BaseStatusEnum::class
+    ];
+
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'post_categories', 'post_id', 'category_id');
+    }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tag_id');
     }
     
     public function views()
     {
         return $this->hasMany(PostView::class, 'post_id');
+    }
+
+    public function newEloquentBuilder($query): BaseQueryBuilder
+    {
+        return new BaseQueryBuilder($query);
     }
 }

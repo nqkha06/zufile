@@ -6,7 +6,7 @@
     <div class="auth-inner">
       <div class="form signup">
         <div class="form-header">
-          <div class="form-header__title">Đăng ký tài khoản</div>
+          <div class="form-header__title">Đăng ký</div>
         </div>
         <div class="form-body">
           @if ($errors->any())
