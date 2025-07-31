@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\DashboardServiceInterface as DashboardService;
+use App\Services\DashboardService as DashboardService;
 use App\Repositories\Interfaces\StatisticsRepositoryInterface as StatisticsRepository;
-use App\Services\Interfaces\AccessServiceInterface as AccessService;
+use App\Services\AccessService as AccessService;
 
 class AccessController extends Controller
 {

@@ -1,25 +1,35 @@
 <?php
 
 return [
-    'title' => 'Bảng giá kiếm tiền',
-
-    'earnings_table' => [
-        'title' => 'Bảng giá kiếm tiền',
-        'package_country' => 'Mô tả gói / Quốc gia',
-        'earnings_per_1000' => 'Thu nhập trên 1000 lượt xem',
-        'desktop' => 'Máy tính bàn',
-        'mobile_tablet' => 'Điện thoại / Máy tính bảng',
-        'all_countries' => 'Tất cả các quốc gia',
-    ],
+    'title' => 'Tỷ lệ thanh toán',
+    'auto_settings' => 'Cài đặt tự động',
+    'note_individual_level' => 'Khi bạn chọn một cấp độ mặc định, bạn vẫn có thể thay đổi cấp độ riêng cho từng liên kết nếu muốn.',
+    'note_change_affects_all' => 'Khi bạn thay đổi cấp độ mặc định, tất cả các liên kết của bạn — bao gồm cả liên kết cũ và mới — sẽ tự động áp dụng cấp độ mới này.',
+    'default_level' => 'Cấp độ mặc định',
+    'default_level_description' => 'Sử dụng nếu không chọn cấp độ riêng cho từng liên kết',
+    'save_settings' => 'Lưu cài đặt',
 
     'levels_table' => [
-        'title' => 'Cấp độ kiếm tiền',
-        'level' => '#Cấp độ',
-        'view_per_ip' => '#Lượt xem / IP / 24h',
-        'description' => '#Mô tả',
-        'test_link' => '#Thử nghiệm',
-        'test' => 'Liên kết thử nghiệm',
+        'title' => 'Danh sách cấp độ',
+        'name' => 'Tên',
+        'views_per_ip' => 'Lượt xem/ip/24h',
+        'steps' => 'Số bước',
+        'time' => 'Thời gian',
+        'demo' => 'Demo',
+        'description' => 'Mô tả',
     ],
 
-    'test_link' => 'Liên kết thử nghiệm',
+    'earnings_table' => [
+        'title' => 'Bảng thu nhập',
+        'package_country' => 'Quốc gia',
+        'earning_per_1000' => 'Thu nhập trên 1000 lượt xem',
+        'desktop' => 'Máy tính',
+        'mobile_tablet' => 'Điện thoại / Máy tính bảng',
+        'all_countries' => 'Các quốc gia còn lại',
+    ],
+
+    'no_rates' => 'Chưa có dữ liệu',
+    'no_rates_description' => 'Không có tỷ lệ nào được thiết lập cho cấp độ này.',
+    'demo' => 'Demo',
+    'na' => 'Không có',
 ];

@@ -4,7 +4,7 @@
 :root {
     --tblr-font-sans-serif: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
     --tblr-font-monospace: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-    
+
     --main-bg: #fff;
     --main-color: #000;
     --box-shadow-clr: rgba(0,0,0,.05);
@@ -12,13 +12,13 @@
     --header-bg: #fff;
     --sidebar-bg: #fff;
     --sidebar-color: #000;
-  
+
     --border-color: #dbe0eb;
 
     --box-bg: #fff;
     --box-color: #000;
     --text-color: #000;
-  
+
     --tableHover-bg: #f5f5f5;
 
     --link-color: #0e4bf1;
@@ -30,7 +30,7 @@
     --tran-05: 0.5s ease;
     --tran-03: 0.3s ease;
     --tran-02: 0.2s ease;
-    
+
     --colorF-STU: #fffdfc;
     --colorMain-S: #ed143d;
     --headerC-S: #fffdfc;
@@ -55,8 +55,12 @@
     --stu-inp-clr-label: #fffdfc;
     --stu-inp-clr-border: #e6e6e6;
 
+    --stu-ftr-bg: #f9fafb;
+    --stu-ftr-clr: #000000;
+    --stu-ftr-bdclr: #e7eaf0;
+
   }
-  
+
   [data-bs-theme="dark"] {
     --border-color: #43474e;
     --main-bg: #22262d;
@@ -66,12 +70,12 @@
     --header-bg: #22262d;
     --sidebar-bg: #22262d;
     --sidebar-color: #fff;
-  
+
     --box-bg: #2d3138;
     --box-color: #d9e2f0;
-  
+
     --text-color: #fff;
-  
+
     --tableHover-bg: rgb(53 57 64 / 80%);
 
     --link-color: #41b375;
@@ -79,7 +83,7 @@
 
     --panel-color: #fff;
     --toggle-color: #ddd;
-  
+
     --colorF-STU: #fffdfc;
     --colorMain-S: #ed143d;
     --headerC-S: #fffdfc;
@@ -100,8 +104,16 @@
 
     --stu-inp-clr-label: #2f3541;
     --stu-inp-clr-border: #393535;
+
+    --stu-inp-clr-label: #fffdfc;
+    --stu-inp-clr-border: #e6e6e6;
+
+    --stu-ftr-bg: #f9fafb;
+    --stu-ftr-clr: #000000;
+    --stu-ftr-bdclr: #e7eaf0;
+
   }
-  
+
 .fgNOTE .note_ftr_inp {
   display: flex;
   flex-wrap: wrap;

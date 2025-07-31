@@ -39,10 +39,10 @@ class STURepository extends BaseRepository implements STURepositoryInterface
             $orderByField = $this->defaultOrderBy ?? $this->model->getKeyName();
             $query->orderBy($orderByField, 'desc');
         }
-            
+
         return $query;
     }
-    
+
     public function getLinks(
           $user_id=0
         , array $condition = []
@@ -114,7 +114,7 @@ class STURepository extends BaseRepository implements STURepositoryInterface
         });
         $query->groupBy('stu_links.id')
         ->orderBy($orderBy[0], $orderBy[1]);
-        
+
         return $query->paginate($perPage)->withQueryString()->withPath(url()->current());
     }
     public function getPopularBetween(
@@ -130,7 +130,7 @@ class STURepository extends BaseRepository implements STURepositoryInterface
         ->whereBetween('stu_link_clicks.date', [$startDate, $endDate])
         ->groupBy('stu_links.id')
         ->orderBy($orderBy[0], $orderBy[1]);
-        
+
         return $query->paginate(10)->withQueryString()->withPath($path);
     }
 
@@ -140,7 +140,7 @@ class STURepository extends BaseRepository implements STURepositoryInterface
 
     public function findLinkActive(string $alias) {
         $query = $this->getQuery();
-        return $query->whereRaw('BINARY alias = ?', [$alias])->where('status', 'active')->first();
+        return $query->whereRaw('BINARY alias = ?', [$alias])->first();
     }
 
     public function deleteAny(string $alias) {

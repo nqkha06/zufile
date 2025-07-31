@@ -8,7 +8,7 @@ use App\Repositories\Interfaces\SettingRepositoryInterface as SettingRepository;
 
 use Illuminate\Support\Facades\Cache;
 
-class SettingService implements SettingServiceInterface
+class SettingService
 {
     protected $settingRepository;
 
@@ -41,7 +41,7 @@ class SettingService implements SettingServiceInterface
     }
 
     public function all()
-    {   
+    {
         return Cache::remember('settings.all', 60 * 60, function() {
             $data = $this->settingRepository->getAll();
             $settings = [];

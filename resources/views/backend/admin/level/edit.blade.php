@@ -62,7 +62,7 @@
                                     style="min-height: 300px">{{ $level?->translation($lang?->code)?->description }}</textarea>
                             </div>
                         </div>
-                   
+
                     </div>
 
                 </div>
@@ -126,17 +126,17 @@
                             href="{{ route("admin.levels.edit", [$level->id, "ref_lang" => $lang->code])}}" target="_blank">
                             <img src="{{ asset("core/img/flags/".$lang->flag.".svg")}}" title="{{ $lang->name }}"
                                 class="flag" style="height: 16px" loading="lazy" alt="{{ $lang->name }} flag">
-                            <span>{{ $lang->name }} <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"></path>
-                                    <path d="M11 13l9 -9"></path>
-                                    <path d="M15 4h5v5"></path>
-                                </svg></span>
-                        </a>
+                                <span>{{ $lang->name }} <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"></path>
+                                        <path d="M11 13l9 -9"></path>
+                                        <path d="M15 4h5v5"></path>
+                                    </svg></span>
+                            </a>
                             @endforeach
-                            
+
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Interfaces\LevelRepositoryInterface as LevelRepository;
 use App\Enums\BaseStatusEnum;
 use App\Repositories\Interfaces\NOTELevelRepositoryInterface as NoteLevelRepository;
-
+use App\Facades\UserSetting;
 
 class PayoutRateController extends Controller
 {
@@ -24,10 +24,18 @@ class PayoutRateController extends Controller
      */
     public function index(Request $request)
     {
-        $note_level_paginted = $this->noteLevelRepository->wherePublished()->getAllPaginated();
+        $autoLevel = UserSetting::get('auto_level', 0);
+
         $dataLevels = $this->levelRepository->wherePublished()->with(['translations'])->getAll();
 
-        return view('backend.member_2.payout_rate', compact( 'note_level_paginted', 'dataLevels'));
+        return view('backend.member_2.payout_rate', compact('dataLevels', 'autoLevel'));
+    }
 
+    public function saveAutoLevel(Request $request)
+    {
+        $autoLevel = $request->input('auto_level', 0);
+        UserSetting::set('auto_level', $autoLevel);
+
+        return redirect()->back()->with('success', __('Auto level setting updated successfully.'));
     }
 }

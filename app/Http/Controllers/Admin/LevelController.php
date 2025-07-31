@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Level;
 use App\Repositories\Interfaces\LevelRepositoryInterface as LevelRepository;
-use App\Services\Interfaces\STULevelServiceInterface as STULevelService;
+use App\Services\STULevelService as STULevelService;
 use App\Models\Language;
 use App\Models\Country;
 use App\Models\LevelTranslation;
@@ -26,7 +26,7 @@ class LevelController extends Controller
         $this->levelRepository = $levelRepository;
         $this->STULevelService = $STULevelService;
     }
-    
+
     public function index()
     {
         $levelss = $this->STULevelService->getPaginatedWidgets();
@@ -111,10 +111,10 @@ class LevelController extends Controller
                     ])
                 ];
             }
-           
+
         }
         STULevelRate::insert($arr);
-        
+
         if ($request->submitter == 'apply') {
             return redirect()->back()->with('success', 'Rate cấp độ <b>'.$level->name.'</b> cập nhật thành công!');
         } else {
@@ -145,7 +145,7 @@ class LevelController extends Controller
                 'description' => $request->description // Dữ liệu cập nhật hoặc thêm mới
             ]
         );
-                
+
         if ($request->submitter == 'apply') {
             return redirect()->back()->with('success', 'Cấp độ <b>'.$request->name.'</b> cập nhật thành công!');
         } else {
@@ -170,7 +170,7 @@ class LevelController extends Controller
         $data = array_filter($request->all(), function ($key) {
             return !in_array($key, ['_method', '_token', 'submitter']);
         }, ARRAY_FILTER_USE_KEY);
-        
+
         $updated = Level::where('id', $id)->update([
             'config' => json_encode($data)
         ]);
@@ -187,11 +187,11 @@ class LevelController extends Controller
     }
     public function updatePageload(Request $request, string $id)
     {
-        $configs = [];        
+        $configs = [];
         $data = array_filter($request->all(), function ($key) {
             return !in_array($key, ['_method', '_token']);
         }, ARRAY_FILTER_USE_KEY);
-    
+
         $numberOfConfigs = count($data[array_key_first($data)]);
 
         // Tạo cấu hình cho từng phần tử
@@ -203,7 +203,7 @@ class LevelController extends Controller
             $configs[] = $arr;
 
         }
-        
+
         $updated = Level::where('id', $id)->update([
             'pageload_config' => json_encode($configs)
         ]);

@@ -1,5 +1,7 @@
 <?php
 return [
+    'title' => 'Giới thiệu',
+
     'desc_referral' => 'Kiếm :percent doanh thu từ các lần rút tiền thành công của người bạn giới thiệu.',
 
     'step1_title'      => 'Chia sẻ liên kết giới thiệu',
@@ -15,7 +17,7 @@ return [
     'share_link_paragraph'   => 'Chương trình giới thiệu của :name là cách tuyệt vời để bạn quảng bá dịch vụ và kiếm thêm thu nhập! Giới thiệu bạn bè và nhận :percent doanh thu từ các lần rút tiền thành công của họ vĩnh viễn.',
 
     'copy_link_button'       => 'Sao chép',
-    
+
     'account' => 'Tài khoản',
     'joined'  => 'Tham gia lúc',
 ];

@@ -14,20 +14,12 @@ return [
         'permission' => 'view_all_dashboard',
     ],
     [
-        'title' => 'Thống kê',
+        'title' => 'Thống kê truy cập',
         'url' => 'admin.access.index',
         'icon' => '<svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"stroke-width="2"stroke-linecap="round"stroke-linejoin="round"class="icon icon-tabler icons-tabler-outline icon-tabler-chart-bar"><path stroke="none"d="M0 0h24v24H0z"fill="none"></path><path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path><path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path><path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"></path><path d="M4 20h14"></path></svg>',
         'permission' => 'view_admin_access',
-        'children' => [
-            [
-                'title' => 'Truy cập',
-                'url' => 'admin.access.index',
-            ],
-            [
-                'title' => 'Cấp độ',
-                'url' => 'admin.stats.level',
-            ]
-        ]
+        'url' => 'admin.access.index',
+
     ],
     [
         'title' => 'Top BXH',
@@ -113,6 +105,13 @@ return [
                 'url' => 'admin.payment-methods.index'
             ]
         ]
+    ],
+     [
+        'title' => 'System Settings',
+        'icon' => '<svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"stroke-width="2"stroke-linecap="round"stroke-linejoin="round"class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2"><path stroke="none"d="M0 0h24v24H0z"fill="none"></path><path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z"></path><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path></svg>',
+        'permission' => 'view_all_dashboard',
+        'url' => 'admin.system.index'
+
     ],
     [
         'title' => 'Quản lý cấp độ',

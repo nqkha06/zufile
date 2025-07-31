@@ -12,39 +12,30 @@ use Illuminate\Support\Facades\Hash;
 
 class ChangePasswordController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('backend.member_2.profile.password');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request)
     {
         # Validation
         $request->validate([
-            'old_password' => 'required|regex:/^[a-zA-Z0-9]+$/',
-            'new_password' => 'required|confirmed',
+            'current_password' => 'required|max:255',
+            'password' => 'required|max:255|regex:/^[\x20-\x7E]*$/',
         ], [
-            'old_password.regex' => 'Mật khẩu không được có dấu, khoảng trắng hoặc kí tự đặc biệt'
+            'password.regex' => 'Mật khẩu không được có dấu, khoảng trắng.',
+            'current_password.required' => 'Mật khẩu hiện tại là bắt buộc.',
+            'password.required' => 'Mật khẩu mới là bắt buộc.',
+            'password.max' => 'Mật khẩu mới không được vượt quá 255 ký tự.',
         ]);
 
 
         #Match The Old Password
-        if(!Hash::check($request->old_password, Auth::user()->password)){
-            return back()->withErrors('Mật khẩu cũ không khớp!');
+        if(!Hash::check($request->current_password, Auth::user()->password)){
+            return response()->json(['message' => 'Mật khẩu hiện tại không đúng.'], 422);
         }
-
 
         #Update the new Password
         User::whereId(Auth::user()->id)->update([
-            'password' => Hash::make($request->new_password)
+            'password' => Hash::make($request->password)
         ]);
 
-        return back()->with('success', 'Đã thay đổi mật khẩu thành công!');
+        return response()->json(['message' => 'Mật khẩu đã được cập nhật thành công.']);
     }
 }

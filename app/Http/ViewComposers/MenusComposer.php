@@ -20,11 +20,16 @@ class MenusComposer
     // }
     public function __construct()
     {
-        $this->menus = Cache::remember('menus', 60*60, function() {
-            return MenuGroup::with(['items' => function($query) {
+        // $this->menus = Cache::remember('menus', 1, function() {
+        //     return MenuGroup::with(['items' => function($query) {
+        //         $query->whereNull('parent_id')->orderBy('order');
+        //     }, 'items.children'])->get();
+        // });
+
+        $this->menus = MenuGroup::with(['items' => function($query) {
                 $query->whereNull('parent_id')->orderBy('order');
             }, 'items.children'])->get();
-        });
+
     }
     public function compose(View $view)
     {

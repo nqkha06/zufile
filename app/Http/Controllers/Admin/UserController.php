@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Admin\Interfaces\UserServiceInterface as UserService;
+use App\Services\Admin\UserService as UserService;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use App\Repositories\Interfaces\AddressRepositoryInterface as AddressRepository;
 use App\Repositories\Interfaces\RoleRepositoryInterface as RoleRepository;
@@ -104,7 +104,7 @@ class UserController extends Controller
             if ($request->filled('roles')) {
                 $user->syncRoles($request->roles);
             }
-    
+
             if (empty($user->paymentMethod)) {
                 $user->paymentMethod()->create(['payment_method_id' => $request->payment_method, 'details' => json_encode($request->fields)]);
             } else {
@@ -158,7 +158,7 @@ class UserController extends Controller
         $validated = $request->validated();
         $user = $this->userRepository->findOrFail($id);
 
-        
+
         $userData = [
             'name' => $request->name,
             'email' => strtolower($request->email),
@@ -193,7 +193,7 @@ class UserController extends Controller
         }
         if ($request->submitter === 'apply') {
             return redirect()->back()->with('success', 'Người dùng <b>' . $user->name . '</b> đã cập nhật thành công..!');
-        } 
+        }
         return redirect()->route('admin.users.index')->with('success', 'Người dùng <b>' . $user->name . '</b> đã cập nhật thành công..!');
     }
 
@@ -214,13 +214,13 @@ class UserController extends Controller
         if (empty($ipList)) {
             return response()->json(['message' => 'Không có dữ liệu IP'], 200);
         }
-        
+
         // Hàm lấy dải mạng (network prefix) từ địa chỉ IP
         $getNetworkPrefix = function ($ip, $prefixLength = 3) {
             $segments = explode('.', $ip);
             return implode('.', array_slice($segments, 0, $prefixLength)); // Lấy 3 phần đầu của IP
         };
-        
+
         // Tạo mảng lưu các dải mạng và các IP tương ứng
         $networkGroups = [];
         foreach ($ipList as $ip) {
@@ -232,11 +232,11 @@ class UserController extends Controller
             }
             $networkGroups[$networkPrefix]['count']++; // Tăng số lượng IP
         }
-        
+
         // Tính tỷ lệ trùng lặp
         $totalIps = count($ipList);
         $networkGroupsWithPercentage = [];
-        
+
         foreach ($networkGroups as $networkPrefix => $group) {
             $count = $group['count'];
             $percentage = ($count / $totalIps) * 100; // Tính tỷ lệ phần trăm
@@ -245,24 +245,24 @@ class UserController extends Controller
                 'percentage' => round($percentage, 2), // Làm tròn đến 2 chữ số thập phân
             ];
         }
-        
+
         uasort($networkGroupsWithPercentage, function ($a, $b) {
             return $b['count'] <=> $a['count'];
         });
-        
+
         $page = request()->get('page', 1);
-        $perPage = 10; 
-        
+        $perPage = 10;
+
         $currentPageItems = array_slice($networkGroupsWithPercentage, ($page - 1) * $perPage, $perPage);
         $paginatedData = new LengthAwarePaginator(
-            $currentPageItems, 
-            count($networkGroupsWithPercentage), 
-            $perPage, 
-            $page, 
+            $currentPageItems,
+            count($networkGroupsWithPercentage),
+            $perPage,
+            $page,
             ['path' => request()->url(), 'query' => request()->query()]
         );
 
         return view('backend.admin.user.check', compact('totalIps', 'paginatedData', 'user'));
-        
+
     }
 }

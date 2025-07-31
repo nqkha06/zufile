@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\v1\BlogController;
-
+use App\Http\Controllers\UploadCtl;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,4 +14,8 @@ use App\Http\Controllers\Api\v1\BlogController;
 |
 */
 
-// Route::get('/api/blog/fetch', [BlogController::class, 'loadAjax'])->name('api.blog.fetch');
+Route::middleware(['web', 'auth'])->prefix('upload')->group(function () {
+    Route::post ('init',     [UploadCtl::class,'init']);
+    Route::post ('complete', [UploadCtl::class,'complete']);
+    Route::post ('cancel',   [UploadCtl::class,'cancel']);
+});

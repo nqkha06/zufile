@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\WithdrawRepositoryInterface as WithdrawRepository;
-use App\Notifications\WithdrawNotification;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Withdraw\StoreWithdrawRequest;
 use App\Enums\InvoiceStatusEnum;
+use App\Enums\BaseStatusEnum;
+use App\Models\PaymentMethod;
 
 class WithdrawController extends Controller
 {
@@ -27,18 +28,34 @@ class WithdrawController extends Controller
      */
     public function index()
     {
-        $optionWithdrawAmounts = [
-            3, 5, 10, 20,30,50,80,100,500,800,1000,2000,5000,8000
-        ];
-        // $invoices = $this->withdrawRepository->getAllPaginated(['user_id' => Auth::user()->id]);
-        $invoices = $this->withdrawRepository->getAll(['user_id' => Auth::user()->id]);
+        $user = Auth::user();
+        // Phương thức hiện tại (có thể null)
+        $currentMethod  = $user->paymentMethods->first();
+
+        // Giá trị đã lưu (mảng) + old input nếu validate fail
+        $savedValues    = $currentMethod?->pivot->details ?? [];
+        $fieldValues    = old('fields', $savedValues);
+
+        $paymentMethods = PaymentMethod::query()
+            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->get();
+
+        $invoices = $this->withdrawRepository->getAllPaginated(['user_id' => $user->id]);
 
         $totalPending = $invoices->where('status', InvoiceStatusEnum::PENDING)->sum('amount');
         $totalReviewed = $invoices->where('status', InvoiceStatusEnum::REVIEWED)->sum('amount');
         $totalCompleted = $invoices->where('status', InvoiceStatusEnum::COMPLETED)->sum('amount');
 
-        return view('backend.member_2.withdraw', compact('invoices', 'optionWithdrawAmounts',
-     'totalPending', 'totalReviewed', 'totalCompleted'));
+        $invoices = $this->withdrawRepository->getAllPaginated(['user_id' => $user->id]);
+
+        return view('backend.member_2.withdraw', compact('invoices',
+     'totalPending', 'totalReviewed', 'totalCompleted',
+
+
+    'paymentMethods',      // Collection<PaymentMethod>
+        'currentMethod',       // PaymentMethod|null
+        'fieldValues'
+    ));
     }
 
     /**
@@ -46,7 +63,7 @@ class WithdrawController extends Controller
      */
     public function store(StoreWithdrawRequest $request)
     {
-        $validated = $request->validated();
+        $request->validated();
         // $type = $validated['type'] === 'fast' ? 1 : 0;
         $type = 0;
         $costs = $type === 1 ? 10 : 0;
@@ -54,12 +71,14 @@ class WithdrawController extends Controller
         $user = $request->user();
 
         $paymentMethod = $user->paymentMethods()->first();
-
         if (!$paymentMethod) {
-            return redirect()->back()->withErrors('Bạn cần thêm phương thức thanh toán trước khi thực hiện việc rút tiền.');
+            return redirect()->back()->withErrors(__('member/message/withdraw.withdraw_need_payment_method'));
+        }
+        if ($paymentMethod->min_withdraw_amount > $user->balance) {
+            return redirect()->back()->withErrors(__('member/message/withdraw.withdraw_min_amount', ['amount' => '$' . $paymentMethod->min_withdraw_amount]));
         }
         $data = [
-            'amount' => $validated['amount'],
+            'amount' => $user->balance,
             'costs' => $costs,
             'type' => $type,
             'user_id' => $user->id,
@@ -68,8 +87,9 @@ class WithdrawController extends Controller
         ];
 
         $withdraw = $this->withdrawRepository->create($data);
-        
-        $user->balance -= $validated['amount'];
+
+        $user->balance -= $user->balance;
+        $user->balance = max($user->balance, 0);
         $user->save();
 
         $admin = $this->userRepository->findFirst(['id' => 2]);
@@ -110,6 +130,6 @@ class WithdrawController extends Controller
         // Mail::to($admin->email)->queue(new WithdrawNotification($templateMailAdmin));
         // Mail::to($withdraw->user->email)->queue(new WithdrawNotification($templateMailMember));
 
-        return redirect()->back()->with('success', 'Đơn rút ($'.$request->amount.') của bạn đang được xử lý.');
+        return redirect()->back()->with('success', __('member/message/withdraw.withdraw_processing', ['amount' => '$'.$request->amount]));
     }
 }

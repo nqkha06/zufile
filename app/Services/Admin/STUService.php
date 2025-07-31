@@ -3,7 +3,6 @@
 namespace App\Services\Admin;
 use Illuminate\Support\Facades\DB;
 
-use App\Services\Admin\Interfaces\STUServiceInterface;
 use App\Repositories\Interfaces\STURepositoryInterface as STURepository;
 use App\Repositories\Interfaces\STUAccessRepositoryInterface as STUAccessRepository;
 use App\Repositories\Interfaces\STUStatisticRepositoryInterface as STUStatisticRepository;
@@ -12,7 +11,7 @@ use App\Repositories\Interfaces\STUStatisticRepositoryInterface as STUStatisticR
  * Class STUService
  * @package App\Services
  */
-class STUService implements STUServiceInterface
+class STUService
 {
     protected $STURepository;
     protected $STUAccessRepository;
@@ -186,7 +185,7 @@ class STUService implements STUServiceInterface
             'conditions' => $search,
             'sort' => [['total_views', 'desc'], [$sortBy ?? 'created_at', $sortOrder ?? 'desc']]
         ]);
-    
+
         return $links;
     }
 

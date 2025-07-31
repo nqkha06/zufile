@@ -1,1 +1,46 @@
-hihihi
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer components {
+  /* Custom component styles for the member dashboard - không can thiệp vào sidebar logic */
+  .member-main {
+    @apply min-h-screen bg-gray-50 dark:bg-zinc-900;
+  }
+
+  .member-header {
+    @apply bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700;
+  }
+
+  .member-content {
+    @apply p-4 lg:p-6;
+  }
+
+  /* Chỉ áp dụng layout cho desktop - sidebar được xử lý bởi CSS gốc và JavaScript */
+  @media (min-width: 1024px) {
+    .member-main {
+      @apply pl-72;
+    }
+  }
+}
+
+@layer utilities {
+  /* Custom utility classes */
+  .text-member-primary {
+    @apply text-blue-600 dark:text-blue-400;
+  }
+
+  .bg-member-card {
+    @apply bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg;
+  }
+}

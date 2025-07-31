@@ -15,6 +15,17 @@ class SystemController extends Controller
         return view('backend.admin.system.index2');
     }
 
+    public function email()
+    {
+        return view('backend.admin.system.email');
+    }
+
+    public function emailSave(Request $request)
+    {
+        dd($request->all());
+
+        return redirect()->back()->with('success', 'Email settings saved successfully!');
+    }
     /**
      * Show the form for creating a new resource.
      */

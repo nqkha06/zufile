@@ -18,7 +18,7 @@ class AuthenticatedSessionController extends Controller
     public function create(): View
     {
         $data['title'] = 'Đăng nhập';
-        
+
         return view('backend.auth.login', $data);
     }
 

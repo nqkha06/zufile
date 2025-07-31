@@ -9,13 +9,13 @@ class StuAnalysis extends Model
 {
     use HasFactory;
     protected $table = 'stu_link_accesses';
-    public $timestamps = false;
+    const UPDATED_AT = null;
+
     protected $fillable = [
         'user_id',
         'parent_id',
         'link_id',
-        'reason',
-        'is_earn',
+        'level_id',
         'revenue',
         'created_at',
         'ip_address',
@@ -29,6 +29,7 @@ class StuAnalysis extends Model
     protected $hidden = [
         'laravel_through_key'
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id')->withDefault([
@@ -36,12 +37,14 @@ class StuAnalysis extends Model
             'username' => 'Anonymous',
         ])->where('id', '>', 0);
     }
-    public function getLinks()
-    {
-        return $this->belongsTo(StuLink::class, 'parent_id');
-    }
+
     public function link()
     {
         return $this->belongsTo(StuLink::class, 'link_id');
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'level_id');
     }
 }

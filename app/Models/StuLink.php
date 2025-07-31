@@ -2,26 +2,28 @@
 
 namespace App\Models;
 
+use App\Enums\STUSourceTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\QueryScopes;
 
 class StuLink extends Model
 {
-    use HasFactory, QueryScopes;
+    use HasFactory;
     protected $table = 'stu_links';
+
     protected $fillable = [
         'user_id',
         'alias',
         'data',
         'status',
         'level_id',
-        'seo_meta'
+        'source_type'
     ];
+
     protected $casts = [
-        'seo_meta' => 'array'
+        'source_type' => STUSourceTypeEnum::class,
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);

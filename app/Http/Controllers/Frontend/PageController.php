@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\PageRepositoryInterface as PageRepository;
-
+use App\Models\PageTranslation;
 class PageController extends Controller
 {
     protected $pageRepository;
 
-    public function __construct(PageRepository $pageRepository = null) {
+    public function __construct(PageRepository $pageRepository) {
         $this->pageRepository = $pageRepository;
     }
 
@@ -19,10 +20,10 @@ class PageController extends Controller
      */
     public function show(string $slug)
     {
-        $page_data = $this->pageRepository->findFirst([['slug', '=', $slug]]);
-
+        $page_data = PageTranslation::where('slug', $slug)->where('lang_code', app()->getLocale())->first();
+        // $page_data = $this->pageRepository->findFirst([['slug', '=', $slug]]);
         if ($page_data) {
-            return view('fontend.blog.page', compact('page_data'));
+            return view('frontend.blog.page', compact('page_data'));
         }
 
         abort(404);

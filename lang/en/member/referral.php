@@ -1,5 +1,7 @@
 <?php
 return [
+        'title' => 'Referral',
+
     'desc_referral' => 'Earn :percent of your referrals’ revenue by recommending us',
 
     'step1_title'      => 'Share the link with your referral',

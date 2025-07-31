@@ -128,6 +128,35 @@
                                                 href="{{ route('admin.users.show', $user->id) }}">
                                                 Statistic
                                             </a>
+                                            <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('admin.stu.index', ['user' => $user->id]) }}">
+                                                    Xem liên kết
+                                                </a>
+
+                                                <a class="dropdown-item"
+                                                    href="{{ route('admin.note.index', ['user' => $user->id]) }}">
+                                                    Xem ghi chú
+                                                </a>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('admin.invoices.index', ['user' => $user->id]) }}">
+                                                    Xem đơn rút
+                                                </a>
+
+                                                <div class="dropdown-divider"></div>
+                                                @if(true)
+                                                <form action="#" method="POST"
+                                                    onsubmit="return confirm('Khoá thằng này luôn hả?');">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="dropdown-item text-warning">Khoá tài khoản</button>
+                                                </form>
+                                                @else
+                                                    <form action="#" method="POST"
+                                                        onsubmit="return confirm('Tha cho nó?');">
+                                                        @csrf @method('PATCH')
+                                                        <button type="submit" class="dropdown-item text-success">Mở khoá</button>
+                                                    </form>
+                                                @endif
                                             <a class="dropdown-item" href="#">
                                                 Delete
                                             </a>
@@ -156,14 +185,14 @@
       function dateYYYYMMDD(date) {
         return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
       }
-  
+
       const today = new Date();
       const startDateElt = document.getElementById('start_date').value;
       const endDateElt = document.getElementById('end_date').value;
-  
+
       const startDate = startDateElt || dateYYYYMMDD(new Date(today.getFullYear(), today.getMonth(), 1));
       const endDate = endDateElt || dateYYYYMMDD(today);
-      
+
       window.Litepicker && (new Litepicker({
         element: document.getElementById('datepicker-filter'),
         autoApply: false,
@@ -187,10 +216,10 @@
           picker.on('button:apply', (start, end) => {
             const startDateSelected = start.format('YYYY-MM-DD');
             const endDateSelected = end.format('YYYY-MM-DD');
-  
+
             document.getElementById('start_date').value = startDateSelected;
             document.getElementById('end_date').value = endDateSelected;
-  
+
           });
         },
         lang: 'vi'
@@ -198,5 +227,5 @@
     });
     // @formatter:on
 </script>
-  
+
 @endpush

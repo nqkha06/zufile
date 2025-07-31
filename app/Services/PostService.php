@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\PostServiceInterface;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 
 /**
  * Class PostService
  * @package App\Services
  */
-class PostService implements PostServiceInterface
+class PostService
 {
     protected $postRepository;
 
@@ -54,7 +53,7 @@ class PostService implements PostServiceInterface
         $links = [];
 
         $data = $this->postRepository->getAllPublished();
-        
+
         foreach ($data as $slug) {
             $links[] = route('blog.article', ['slug' => $slug]);
         }

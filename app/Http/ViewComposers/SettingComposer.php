@@ -3,7 +3,7 @@
 namespace App\Http\ViewComposers;
 
 use Illuminate\View\View;
-use App\Services\Interfaces\SettingServiceInterface as SettingService;
+use App\Services\SettingService as SettingService;
 
 class SettingComposer
 {

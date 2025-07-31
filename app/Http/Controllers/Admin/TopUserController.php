@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Admin\Interfaces\UserServiceInterface as UserService;
+use App\Services\Admin\UserService as UserService;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
@@ -12,7 +12,7 @@ class TopUserController extends Controller
 {
     protected $userService;
 
-    public function __construct(UserService $userService = null) {
+    public function __construct(UserService $userService) {
         $this->userService = $userService;
     }
 

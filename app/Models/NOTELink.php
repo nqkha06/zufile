@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\QueryScopes;
 
 class NOTELink extends Model
 {
-    use HasFactory, QueryScopes;
+    use HasFactory;
     protected $table = 'note_links';
 
     protected $fillable = [
@@ -18,7 +17,8 @@ class NOTELink extends Model
         'content',
         'password',
         'status',
-        'level_id'
+        'level_id',
+        'expired_at'
     ];
 
     public function user()

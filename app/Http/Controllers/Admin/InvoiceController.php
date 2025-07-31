@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\InvoiceServiceInterface as InvoiceService;
+use App\Services\InvoiceService as InvoiceService;
 use App\Repositories\Interfaces\WithdrawRepositoryInterface as WithdrawRepository;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\WithdrawNotification;
@@ -178,7 +178,7 @@ class InvoiceController extends Controller
         $userRequest = User::find($withdraw->user->id);
         if ($userRequest) {
             $userReferred_by = $userRequest->referred_by;
-            
+
             if ($userReferred_by) {
                 $checkCommission = Commission::where('commissionable_type', 'App\Models\Withdraw')->where('commissionable_id', $withdraw->id)->exists();
                 if (!$checkCommission) {

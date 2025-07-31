@@ -18,6 +18,11 @@ use App\Http\Controllers\FileEditorController;
 
 Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function () {
 
+    Route::prefix('fingerprints')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\DeviceFingerprintController::class, 'index'])->name('admin.fingerprints.index');
+        Route::get('/{id}', [\App\Http\Controllers\Admin\DeviceFingerprintController::class, 'show'])->name('admin.fingerprints.show');
+    });
+
     Route::prefix('users')->group( function () {
         Route::get('/', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
         Route::get('/create', [App\Http\Controllers\Admin\UserController::class, 'create'])->name('admin.users.create');
@@ -57,7 +62,7 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
         Route::get('/{id}/watched', [App\Http\Controllers\Admin\InvoiceController::class, 'watched'])->name('admin.invoices.watched');
         Route::get('/{id}/success', [App\Http\Controllers\Admin\InvoiceController::class, 'success'])->name('admin.invoices.success');
         Route::get('/{id}/refuse', [App\Http\Controllers\Admin\InvoiceController::class, 'refuse'])->name('admin.invoices.refuse');
-        Route::get('/{id}/contact', [App\Http\Controllers\Admin\InvoiceController::class, 'contact'])->name('admin.invoices.contact');    
+        Route::get('/{id}/contact', [App\Http\Controllers\Admin\InvoiceController::class, 'contact'])->name('admin.invoices.contact');
     });
     Route::prefix('stats')->group( function () {
         Route::get('/access', [App\Http\Controllers\Admin\AccessController::class, 'index'])->name('admin.access.index');
@@ -79,7 +84,7 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
         Route::post('/', [App\Http\Controllers\Admin\PermissionController::class, 'store'])->name('admin.permissions.store');
         Route::get('/{id}/edit', [App\Http\Controllers\Admin\PermissionController::class, 'edit'])->name('admin.permissions.edit');
         Route::put('/{id}', [App\Http\Controllers\Admin\PermissionController::class, 'update'])->name('admin.permissions.update');
-        Route::get('/{id}/delete', [App\Http\Controllers\Admin\PermissionController::class, 'destroy'])->name('admin.permissions.destroy');    
+        Route::get('/{id}/delete', [App\Http\Controllers\Admin\PermissionController::class, 'destroy'])->name('admin.permissions.destroy');
     });
 
     Route::prefix('permission-group')->group(function () {
@@ -117,6 +122,9 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
         Route::put('/{id}/config', [NOTELevelController::class, 'updateConfig'])->name('admin.note_levels.updateConfig');
         Route::get('/{id}/pageload', [NOTELevelController::class, 'editPageload'])->name('admin.note_levels.editPageload');
         Route::put('/{id}/pageload', [NOTELevelController::class, 'updatePageload'])->name('admin.note_levels.updatePageload');
+
+        Route::get('/{id}/rate', [NOTELevelController::class, 'rate'])->name('admin.note_levels.rate');
+        Route::put('/{id}/rate', [NOTELevelController::class, 'postRate'])->name('admin.note_levels.postRate');
     });
 
     Route::prefix('payment-methods')->group( function () {
@@ -125,7 +133,7 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
         Route::post('/store', [App\Http\Controllers\Admin\PaymentMethodController::class, 'store'])->name('admin.payment-methods.store');
         Route::get('/{id}/edit', [App\Http\Controllers\Admin\PaymentMethodController::class, 'edit'])->name('admin.payment-methods.edit');
         Route::put('/{id}', [App\Http\Controllers\Admin\PaymentMethodController::class, 'update'])->name('admin.payment-methods.update');
-    
+
     });
 
     Route::prefix('categories')->group( function () {
@@ -195,6 +203,9 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
     });
     Route::prefix('system')->group( function () {
         Route::get('/', [SystemController::class, 'index'])->name('admin.system.index');
+        Route::get('/email', [SystemController::class, 'email'])->name('admin.system.email');
+        Route::put('/email', [SystemController::class, 'emailSave'])->name('admin.system.email_save');
+
     });
 
     Route::get('/file-editor', [FileEditorController::class, 'index'])->name('file_editor.index');

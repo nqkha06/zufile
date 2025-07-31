@@ -5,6 +5,7 @@ use GuzzleHttp\Client;
 use proxycheck\proxycheck;
 use Illuminate\Support\Facades\Log;
 use App\Models\Language;
+use App\Facades\Setting;
 
 if (!function_exists('round_views')) {
     function round_views($views)
@@ -148,7 +149,7 @@ if (!function_exists('convertPaginData')) {
                 'views' => (int)$visits,
                 'cpm' => round($cpm, 3)
             ];
-        
+
         }
         return $data;
     }
@@ -174,24 +175,24 @@ if (!function_exists('daysBetweenMonths')) {
     {
         $start = Carbon::parse($startDate);
         $end = Carbon::parse($endDate);
-        
+
         if ($start->gt($end)) {
             throw new InvalidArgumentException('Invalid date range: start date must be less than or equal to end date');
         }
-        
+
         $carbonDays = [];
-        
+
         for ($date = $start; $date->lte($end); $date->addDay()) {
             $carbonDays[] = $date->format($dateFormat);
         }
-        
+
         return $carbonDays;
     }
 }
 
 if (!function_exists('generateUniqueIdentifier')) {
     function generateUniqueIdentifier($request)
-    {    
+    {
         $agent = $request->header('User-Agent');
         $accept = $request->header('Accept');
         $acceptLanguage = $request->header('Accept-Language');
@@ -273,7 +274,7 @@ if (!function_exists('render_article')) {
                     </div>
                 </div>
                 ' : '') . '
-    
+
                 <h2 class="pTtl aTtl">
                     <a data-text="' . $article['title'] . '" href="' . route('blog.show', $article['slug']) . '" rel="bookmark">' . $article['title'] . '</a>
                 </h2>
@@ -322,7 +323,7 @@ if (!function_exists('render_article')) {
         </article>
         ';
     }
-    
+
 }
 
 if (!function_exists('handle_date_range')) {
@@ -338,7 +339,7 @@ if (!function_exists('handle_date_range')) {
 
         return [$startDate, $endDate];
     }
-    
+
 }
 // app/Helpers/helpers.php
 if (!function_exists('sortable_url')) {
@@ -523,7 +524,7 @@ if (!function_exists('checkProxyVPN')) {
     function checkProxyVPN($address_ip)
     {
         $proxycheck_options = [
-            'API_KEY' => env("PROXY_CHECK_API", ""),
+            'API_KEY' => Setting::get('stu_proxycheck_key', ''),
             'ASN_DATA' => 1,
             'DAY_RESTRICTOR' => 7,
             'VPN_DETECTION' => 1,
@@ -534,10 +535,10 @@ if (!function_exists('checkProxyVPN')) {
             'MASK_ADDRESS' => 1,
             'CUSTOM_TAG' => 'link4sub_dev',
         ];
-        
+
         try {
             $result_array = proxycheck::check($address_ip, $proxycheck_options);
-            
+
             if ($result_array['status'] == 'ok' || $result_array['status'] == 'warning') {
                 return [
                     'status' => "success",
@@ -549,7 +550,7 @@ if (!function_exists('checkProxyVPN')) {
         } catch (\Exception $e) {
             Log::error('Error in checkProxyVpn: ' . $e->getMessage());
         }
-        
+
         return [
             'status' => "error",
             'result' => 'unknown',
@@ -564,8 +565,8 @@ if (!function_exists('getAllLanguages')) {
     }
 }
 if (!function_exists('currencyFormat')) {
-    function currencyFormat($amount) {
-        $format = round($amount, 3);
+    function currencyFormat($amount, $currencySymbol = '$', $decimals = 3) {
+        $format = round($amount, $decimals);
 
         return "$".$format;
     }
@@ -582,5 +583,13 @@ if (!function_exists('formatTime')) {
         $format = date('H:i, d/m/Y', strtotime($time));
         return $format;
     }
+}
+if (!function_exists('formatBytes')) {
+    function formatBytes($bytes, $decimals = 2) {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $factor = floor((strlen($bytes) - 1) / 3);
+        return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $units[$factor];
+    }
+
 }
 ?>

@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'title_label' => 'Tiêu đề',
+    'title_placeholder' => 'Nhập tiêu đề mô tả (không chứa liên kết)',
+    'content_label' => 'Nội dung',
+    'content_placeholder' => 'Nhập văn bản, mã hoặc liên kết của bạn tại đây...',
+    'visibility_label' => 'Hiển thị',
+    'visibility_public' => 'Công khai',
+    'visibility_private' => 'Riêng tư',
+    'visibility_password_placeholder' => 'Đặt mật khẩu truy cập',
+    'expiry_label' => 'Thời hạn',
+    'expiry_never' => 'Không giới hạn',
+    'expiry_custom' => 'Tùy chỉnh',
+    'expiry_date_placeholder' => 'Hết hạn vào',
+    'style_label' => 'Kiểu dáng',
+    'style_default' => 'Mặc định',
+    'style_flat' => 'Phẳng',
+    'style_neumorphism' => 'Nổi khối',
+    'level_label' => 'Cấp độ kiếm tiền: ',
+    'level_placeholder' => 'Chọn cấp độ',
+    'level_free' => 'Ko Q.Cáo',
+    'level_1' => 'Plus',
+    'level_2' => 'Pro Max',
+    'create_button' => 'Tạo liên kết',
+    'update_button' => 'Cập nhật',
+    'message' => [
+        'link_created_successfully' => 'Liên kết đã được tạo thành công!',
+    ],
+];

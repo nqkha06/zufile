@@ -3,7 +3,7 @@
 namespace App\Http\ViewComposers;
 
 use Illuminate\View\View;
-use App\Services\Interfaces\PostServiceInterface as PostService;
+use App\Services\PostService as PostService;
 
 class PopularPostsComposer
 {

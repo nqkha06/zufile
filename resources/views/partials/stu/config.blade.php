@@ -468,6 +468,21 @@ const fbSTU = {
             },
         ],
     },
+    tw: {
+      tx: 'X',
+      clr: '#000000',
+      sclr: '#1a1a1a',
+      df: ['x.com'],
+      fb: 1,
+      dt: [
+        { id: 'g_tw1', name: 'Follow #1', fi: [{ i: 'tw1', t: 'url', ic: 'tw', r: 1 }] },
+        { id: 'g_tw2', name: 'Follow #2', fi: [{ i: 'tw2', t: 'url', ic: 'tw', r: 1 }] },
+        { id: 'g_tw3', name: 'Follow #3', fi: [{ i: 'tw3', t: 'url', ic: 'tw', r: 1 }] },
+        { id: 'g_twl1', name: 'Like #1', fi: [{ i: 'twl1', t: 'url', ic: 'like', r: 1 }] },
+        { id: 'g_twl2', name: 'Like #2', fi: [{ i: 'twl2', t: 'url', ic: 'like', r: 1 }] },
+        { id: 'g_twl3', name: 'Like #3', fi: [{ i: 'twl3', t: 'url', ic: 'like', r: 1 }] },
+      ],
+    },
     zl: {
         tx: '{{ __('stu.zl.name') }}',
         clr: '#2d62ff',

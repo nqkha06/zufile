@@ -25,6 +25,7 @@ class GeoIPService
             if ($this->dbType === 'city') {
                 // Nếu sử dụng GeoLite2-City.mmdb
                 $record = $this->reader->city($ipAddress);
+
                 return [
                     'country' => $record->country->name,
                     'iso_code' => $record->country->isoCode,  // Lấy mã quốc gia
@@ -35,6 +36,7 @@ class GeoIPService
             } else {
                 // Nếu sử dụng GeoLite2-Country.mmdb
                 $record = $this->reader->country($ipAddress);
+
                 return [
                     'ip_address' => $ipAddress,
                     'country' => $record->country->name,

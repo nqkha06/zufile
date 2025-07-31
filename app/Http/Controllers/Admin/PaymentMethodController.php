@@ -7,21 +7,23 @@ use Illuminate\Http\Request;
 use App\Services\PaymentMethodService;
 use App\Http\Requests\PaymentMethod\PaymentMethodFilterRequest;
 use App\Http\Requests\PaymentMethod\UpdatePaymentMethodRequest;
+use App\Models\PaymentMethod;
+use App\Models\PaymentMethodTranslation;
+use App\Models\Language;
 
 class PaymentMethodController extends Controller
 {
     protected $paymentMethodService;
 
-    public function __construct(PaymentMethodService $paymentMethodService = null) {
+    public function __construct(PaymentMethodService $paymentMethodService) {
         $this->paymentMethodService = $paymentMethodService;
     }
-    
 
     public function index(PaymentMethodFilterRequest $request)
     {
         $filter = $request->validated();
         $methods = $this->paymentMethodService->getAllPaginated($filter);
-        
+
         return view('backend.admin.payment-method.index', compact('methods'));
     }
 
@@ -62,9 +64,12 @@ class PaymentMethodController extends Controller
      */
     public function edit(string $id)
     {
+        $lang_code = request()->query('ref_lang', 'en');
+        $lang = Language::where(['code' => $lang_code])->first();
+
         $method = $this->paymentMethodService->findOrFail($id);
 
-        return view('backend.admin.payment-method.edit', compact('method'));
+        return view('backend.admin.payment-method.edit', compact('method', 'lang'));
     }
 
     /**
@@ -76,7 +81,7 @@ class PaymentMethodController extends Controller
         $method = $this->paymentMethodService->findOrFail($id);
 
         $fields = [];
-        
+
         foreach ($request->fields as $field) {
             $fieldData = [
                 'label' => $field['label'],
@@ -121,8 +126,19 @@ class PaymentMethodController extends Controller
             'status' => $request->status,
         ]);
 
+        PaymentMethodTranslation::updateOrCreate(
+            [
+                'payment_method_id' => $id,
+                'lang_code' => $request->lang,
+            ],
+            [
+                'name' => $request->name,
+                'fields' => $fields
+            ]
+        );
+
         return redirect(route('admin.payment-methods.index'))->with('success', 'Phương thức <b>'.$request->name.'</b> cập nhật thành công!');
-        
+
     }
 
     /**

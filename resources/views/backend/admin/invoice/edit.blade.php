@@ -9,10 +9,10 @@
 <script>
     const BotbleVariables = true;
 </script>
-<script src="https://cms.botble.com/vendor/core/core/base/libraries/jquery.min.js?v=7.4.6"></script>
+{{-- <script src="https://cms.botble.com/vendor/core/core/base/libraries/jquery.min.js?v=7.4.6"></script>
 <script src="https://cms.botble.com/vendor/core/core/base/libraries/jquery-waypoints/jquery.waypoints.min.js?v=7.4.6"></script>
 
-<script src="https://cms.botble.com/vendor/core/core/base/js/core.js?v=7.4.6"></script>
+<script src="https://cms.botble.com/vendor/core/core/base/js/core.js?v=7.4.6"></script> --}}
 
     <form class="col-12" action="{{ route('admin.invoices.update', $invoice->id) }}" method="POST">
         @csrf
@@ -22,7 +22,7 @@
 
 
 
-{{-- 
+{{--
 
                 <div class="col-lg-12">
                     <div class="mb-3 position-relative">
@@ -250,7 +250,7 @@
                             @endforeach
                         </select>
                     </div>
-                    
+
                 </div>
 
             </div>

@@ -2,14 +2,13 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\InvoiceServiceInterface;
 use App\Repositories\Interfaces\WithdrawRepositoryInterface as WithdrawRepository;
 
 /**
  * Class InvoiceService
  * @package App\Services
  */
-class InvoiceService implements InvoiceServiceInterface
+class InvoiceService
 {
     protected $withdrawRopistory;
 
@@ -52,9 +51,9 @@ class InvoiceService implements InvoiceServiceInterface
             $search[] = ['costs', 'ORlike', '%'.$keyword.'%'];
             $search[] = ['amount', 'ORlike', '%'.$keyword.'%'];
             $search[] = ['id', 'ORlike', '%'.$keyword.'%'];
-            
+
         }
-        
+
         return $this->withdrawRopistory->with(['user'])->getAllPaginated($search);
     }
 

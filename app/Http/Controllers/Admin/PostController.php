@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\PostServiceInterface as PostService;
+use App\Services\PostService as PostService;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 use App\Repositories\Interfaces\CategoryRepositoryInterface as CategoryRepository;
 use App\Repositories\Interfaces\TagRepositoryInterface as TagRepository;
@@ -14,7 +14,7 @@ use App\Enums\BaseStatusEnum;
 use App\Models\Tag;
 
 class PostController extends Controller
-{   
+{
     protected $postService;
     protected $postRepository;
     protected $categoryRepository;
@@ -61,7 +61,7 @@ class PostController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => ['required', Rule::enum(BaseStatusEnum::class)],
             'categories' => ['required', 'array'],
-            'categories.*' => ['integer', 'exists:categories,id'], 
+            'categories.*' => ['integer', 'exists:categories,id'],
         ]);
         // Handle the file upload
         if ($request->hasFile('image')) {
@@ -83,13 +83,13 @@ class PostController extends Controller
             'image' => $path ?? null,
             'status' => $request->status
         ];
-        
+
         $dataUpd = array_filter($dataUpd, function($value) {
             return !is_null($value);
         });
 
         $this->postRepository->create($dataUpd);
-        
+
         return redirect()->route('admin.posts.index')->with('success', 'Thêm mới bài viết thành công');
     }
 
@@ -104,7 +104,7 @@ class PostController extends Controller
 
         return view('backend.admin.post.edit', compact('post', 'categories', 'tags'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      */
@@ -114,9 +114,9 @@ class PostController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => ['required', Rule::enum(BaseStatusEnum::class)],
             'categories' => ['array'],
-            'categories.*' => ['integer', 'exists:categories,id'], 
+            'categories.*' => ['integer', 'exists:categories,id'],
             'tags' => ['array'],
-            'tags.*' => ['integer', 'exists:tags,id'], 
+            'tags.*' => ['integer', 'exists:tags,id'],
         ]);
         // Handle the file upload
         if ($request->hasFile('image')) {

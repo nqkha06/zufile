@@ -1,4 +1,3 @@
-
 <?php
 use Illuminate\Support\Facades\Route;
 
@@ -7,38 +6,59 @@ use App\Http\Controllers\Member\ProfileController;
 use App\Http\Controllers\Member\PaymentController;
 use App\Http\Controllers\Member\ChangePasswordController;
 use App\Http\Controllers\Member\DashboardController;
+use App\Http\Controllers\Member\FileController;
 use App\Http\Controllers\Member\LeaderboardController;
 use App\Http\Controllers\Member\PayoutRateController;
 use App\Http\Controllers\Member\STUController;
 use App\Http\Controllers\Member\NOTEController;
 use App\Http\Controllers\Member\ReferralController;
+use App\Http\Controllers\Member\ToolControler;
+use App\Http\Controllers\Member\NotePayoutRateController;
+use App\Http\Controllers\Member\FolderController;
+use App\Http\Controllers\Member\UController;
+use App\Http\Controllers\Member\AccountController;
+use App\Http\Controllers\Member\SupportController;
+use App\Http\Controllers\Member\StatisticController;
+use App\Http\Controllers\Member\TrashController;
+use App\Http\Controllers\Member\UpgradeController;
+use App\Http\Controllers\PlanController;
 
-Route::middleware(['auth', 'user_metric'])->prefix('member')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('member.index');
+Route::middleware(['auth'])->prefix('u')->group(function () {
+    Route::get('folders', [UController::class, 'index'])->name('member.u.folders');
+    Route::post('folders', [UController::class, 'createFolder'])->name('u.folders.create');
+    Route::post('folders/{alias}', [UController::class, 'updateFolder'])->name('u.folders.update');
+    Route::delete('folders/{alias}', [UController::class, 'deleteFolder'])->name('u.folders.delete');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('member.dashboard.index');
-    Route::get('/payout-rates', [PayoutRateController::class, 'index'])->name('member.payout_rates');
-    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('member.leaderboard');
-    Route::get('/stu-links', [STUController::class, 'index'])->name('member.stu_links');
-    Route::delete('/stu-links/{alias}', [STUController::class, 'destroy'])->name('member.stu.destroy');
-    Route::get('/referral', [ReferralController::class, 'index'])->name('member.referral');
+    Route::get('files', [UController::class, 'files'])->name('member.u.files');
+    Route::post('files/{alias}', [UController::class, 'update'])->name('u.files.update');
+    Route::delete('files/{alias}', [FileController::class, 'destroy'])->name('u.files.destroy');
+    Route::get('drive/1/home', [FileController::class, 'index'])->name('u.files.home');
+    Route::get('drive/search', [FileController::class, 'search'])->name('u.files.search');
+    Route::get('/trash', [TrashController::class, 'index'])->name('u.trash');
+    Route::delete('/trash', [TrashController::class, 'emptyTrash'])->name('u.trash.emptyTrash');
 
-    Route::get('/note-links', [NOTEController::class, 'index'])->name('member.note_links');
-    Route::delete('/note-links/{alias}', [NOTEController::class, 'destroy'])->name('member.note.destroy');
+    Route::post('trash/{alias}', [TrashController::class, 'update'])->name('u.trash.update');
+    Route::delete('trash/{alias}', [TrashController::class, 'destroy'])->name('u.trash.destroy');
 
-    Route::post('/notes', [App\Http\Controllers\NoteController::class, 'create'])->name('member.notes.create');
-    Route::put('/notes/{alias}/update', [App\Http\Controllers\NoteController::class, 'update'])->name('member.notes.update');
+    Route::get('drive/1/{alias}', [UController::class, 'detail'])->name('u.files.show');
+    Route::get('/referrals', [ReferralController::class, 'index'])->name('u.referrals');
 
-    // Route::get('/api-tokens', [DashboardController::class, 'apiTokens'])->name('user.api.tokens');
-    // Route::get('/quick-link', [DashboardController::class, 'quickLink'])->name('user.quick.link');
-    Route::get('/withdraw', [WithdrawController::class, 'index'])->name('member.withdraw.index');
-    Route::post('/withdraw', [WithdrawController::class, 'store']);
+    Route::get('/statistics', [StatisticController::class, 'index'])->name('u.statistics');
+    Route::get('/withdraw', [WithdrawController::class, 'index'])->name('u.withdraw');
+    Route::post('/withdraw', [WithdrawController::class, 'store'])->name('u.withdraw.store');
 
-    Route::get('/change-password', [ChangePasswordController::class, 'index'])->name('member.change_password');
-    Route::post('/change-password', [ChangePasswordController::class, 'update']);
-    Route::get('/profile', [ProfileController::class, 'index'])->name('member.profile.index');
-    Route::post('/profile', [ProfileController::class, 'update']);
+    Route::get('/account', [AccountController::class, 'index'])->name('u.account');
+    Route::post('/account', [AccountController::class, 'update'])->name('u.account.update');
+    Route::post('/account/change-password', [ChangePasswordController::class, 'update']);
 
-    Route::get('/payment', [PaymentController::class, 'index'])->name('member.payment.index');
-    Route::put('/payment', [PaymentController::class, 'update'])->name('member.payment.update');
+    Route::put('/payment', [PaymentController::class, 'update'])->name('u.payment.update');
+
+    Route::get('/support', [SupportController::class, 'index'])->name('u.support');
+
+    // Plan Management Routes
+    Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
+    Route::post('/plans/{plan}/upgrade', [PlanController::class, 'upgrade'])->name('plans.upgrade');
+    Route::post('/plans/renew', [PlanController::class, 'renew'])->name('plans.renew');
+    Route::post('/plans/downgrade', [PlanController::class, 'downgrade'])->name('plans.downgrade');
+    Route::get('/plan/status', [PlanController::class, 'status'])->name('plan.status');
 });

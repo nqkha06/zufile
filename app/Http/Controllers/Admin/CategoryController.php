@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\BaseStatusEnum;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Interfaces\CategoryServiceInterface as CategoryService;
+use App\Services\CategoryService as CategoryService;
 use App\Repositories\Interfaces\CategoryRepositoryInterface as CategoryRepository;
 use Illuminate\Validation\Rule;
 use App\Models\Category;

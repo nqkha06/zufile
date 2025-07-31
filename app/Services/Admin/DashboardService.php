@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin;
 
-use App\Services\Admin\Interfaces\DashboardServiceInterface;
+use App\Models\NoteAnalysis;
 use App\Repositories\Interfaces\STUStatisticRepositoryInterface as STUStatisticRepository;
 use App\Repositories\Interfaces\NOTEStatisticRepositoryInterface as NOTEStatisticRepository;
 use App\Repositories\Interfaces\WithdrawRepositoryInterface as WithdrawRepository;
@@ -10,12 +10,13 @@ use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use App\Repositories\Interfaces\STURepositoryInterface as STURepository;
 use App\Repositories\Interfaces\NOTERepositoryInterface as NOTERepository;
 use Carbon\Carbon;
+use App\Models\StuAnalysis;
 
 /**
  * Class DashboardService
  * @package App\Services
  */
-class DashboardService implements DashboardServiceInterface
+class DashboardService
 {
     protected $STUStatisticRepository;
     protected $NOTEStatisticRepository;
@@ -40,7 +41,7 @@ class DashboardService implements DashboardServiceInterface
         $this->STURepository = $STURepository;
         $this->NOTERepository = $NOTERepository;
     }
-    
+
     public function index($request)
     {
         $start = $request->query('startDate');
@@ -58,14 +59,55 @@ class DashboardService implements DashboardServiceInterface
             [['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
         $NOTELinks = $this->NOTERepository->findMany(
             [['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
+        $newSTULinks = $this->STURepository->query()
+            ->selectRaw('count(*) as count, level_id')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('level_id')
+            ->get();
 
+        $newNOTELinks = $this->NOTERepository->query()
+            ->selectRaw('count(*) as count, level_id')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupBy('level_id')
+            ->get();
         $users = $this->userRepository->findMany([['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
         $withdraws = $this->withdrawRepository->findMany([['created_at', '>=', $startDate], ['created_at', '<=', $endDate]]);
 
-        $STUStats = $this->STUStatisticRepository->getStatsBetweenDates($startDate, $endDate);
-        $NOTEStats = $this->NOTEStatisticRepository->getStatsBetweenDates($startDate, $endDate);
+        // $STUStats = $this->STUStatisticRepository->getStatsBetweenDates($startDate, $endDate);
+        // $NOTEStats = $this->NOTEStatisticRepository->getStatsBetweenDates($startDate, $endDate);
+        $STUStats = StuAnalysis::query()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('count(*) as clicks, SUM(revenue) as revenue ,DATE(created_at) as date')
+            ->groupBy('date')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $NOTEStats = NoteAnalysis::query()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('count(*) as clicks, SUM(revenue) as revenue ,DATE(created_at) as date')
+            ->groupBy('date')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $STUStatsLevel = StuAnalysis::query()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('count(*) as clicks, SUM(revenue) as revenue ,level_id')
+            ->groupBy('level_id')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $NOTEStatsLevel = NoteAnalysis::query()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('count(*) as clicks, SUM(revenue) as revenue ,level_id')
+            ->groupBy('level_id')
+            ->orderBy('created_at', 'asc')
+            ->get();
+        $popular_STU = StuAnalysis::query()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('count(*) as clicks, SUM(revenue) as revenue ,level_id, link_id')
+            ->groupBy('link_id')
+            ->orderBy('clicks', 'asc')
+            ->with(['link', 'level'])
+            ->take(10)
+            ->get();
 
-        $popular_STU = $this->STURepository->getPopularBetween($startDate, $endDate, ['user', 'level'], ['total_clicks', 'desc'], $request->url());
         $merged = $STUStats->concat($NOTEStats)
         ->groupBy('date')
         ->map(function($items, $date) {
@@ -75,9 +117,15 @@ class DashboardService implements DashboardServiceInterface
                 'revenue' => $items->sum('revenue'),
             ];
         })->values();
-    
-        $popular_NOTE = $this->NOTERepository->getPopularBetween($startDate, $endDate, [], ['total_clicks', 'desc'], $request->url());
 
+        $popular_NOTE = NoteAnalysis::query()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->selectRaw('count(*) as clicks, SUM(revenue) as revenue ,level_id, link_id')
+            ->groupBy('link_id')
+            ->orderBy('clicks', 'asc')
+            ->with(['link', 'level', 'user'])
+            ->take(10)
+            ->get();
         $data_chart = convertChartStats($STUStats, $NOTEStats, $startDate, $endDate);
 
         return collect([
@@ -123,6 +171,14 @@ class DashboardService implements DashboardServiceInterface
             ],
             'dataChart' => [
                 'stats' => $data_chart
+            ],
+            'level' => [
+                'STU' => $STUStatsLevel,
+                'NOTE' => $NOTEStatsLevel,
+                'new' => [
+                    'STU' => $newSTULinks,
+                    'NOTE' => $newNOTELinks,
+                ]
             ]
         ]);
     }

@@ -14,6 +14,8 @@ class NoteAnalysis extends Model
         'user_id',
         'parent_id',
         'revenue',
+        'link_id',
+        'level_id',
         'created_at',
         'ip_address',
         'referral',
@@ -23,4 +25,19 @@ class NoteAnalysis extends Model
         'device',
         'detection'
     ];
+
+    public function level()
+    {
+        return $this->belongsTo(NoteLevel::class, 'level_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function link()
+    {
+        return $this->belongsTo(NoteLink::class, 'link_id');
+    }
 }

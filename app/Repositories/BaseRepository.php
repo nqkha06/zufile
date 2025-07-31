@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\BaseRepositoryInterface;
 use App\Traits\Queryable;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\QueryScopes;
 
 /**
  * Class BaseService
@@ -22,11 +21,11 @@ class BaseRepository implements BaseRepositoryInterface
     ){
         $this->model = $model;
     }
-    
+
     public function getModel(): Model {
         return $this->model;
     }
-    
+
     public function create(array $payload = []){
         $model = $this->model->create($payload);
         return $model->fresh();
@@ -48,6 +47,11 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function createPivot($model, array $payload = [], string $relation = ''){
         return $model->{$relation}()->attach($model->id, $payload);
+    }
+
+    public function query()
+    {
+        return $this->model;
     }
 
 }

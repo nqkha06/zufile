@@ -10,7 +10,9 @@
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route("member.index")}}" class="text-muted text-hover-primary">Trang chủ</a>
+                    <a href="{{ route("member.index")}}" class="text-muted text-hover-primary">
+                        {{ __('member/partials/breadcrumb.home') }}
+                    </a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->

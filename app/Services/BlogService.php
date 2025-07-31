@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\BlogServiceInterface;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 use App\Repositories\Interfaces\PostViewRepositoryInterface as PostViewRepository;
 use Carbon\Carbon;
@@ -12,7 +11,7 @@ use Illuminate\Support\Facades\DB;
  * Class BlogService
  * @package App\Services
  */
-class BlogService implements BlogServiceInterface
+class BlogService
 {
     protected $postRepository;
     protected $postViewRepository;
@@ -63,5 +62,5 @@ class BlogService implements BlogServiceInterface
             echo "LỖI DỮ LIỆU";
             dd();
         }
-    }   
+    }
 }

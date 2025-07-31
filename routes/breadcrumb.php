@@ -13,14 +13,15 @@ Breadcrumbs::for('blog', function (BreadcrumbTrail $trail) {
 });
 // Blog > [post]
 Breadcrumbs::for('blog.article', function (BreadcrumbTrail $trail, $article) {
-    $trail->parent('blog'); 
+    $trail->parent('blog');
     $trail->push(__('Bài đăng'), route('blog.article', $article));
 });
 
 $breadcrumbs = [
+    'admin.fingerprints.index' => __('ingerprints.index'),
     'admin.dashboard.index' => __('Dashboard'),
     'admin.top-users.index' => __('Top Users'),
-    
+
     'admin.access.index' => __('Access'),
     'admin.stats.level' => __('Level'),
     'admin.invoices.index' => __('Invoices'),
@@ -44,6 +45,8 @@ $breadcrumbs = [
     'admin.popular.stu' => __('STU Phổ biến'),
 
     'admin.system.index' => __('System'),
+    'admin.system.email' => __('System'),
+
     'file_editor.index' => __('Quản lý mã nguồn')
 
 ];
@@ -55,6 +58,11 @@ foreach ($breadcrumbs as $route => $title) {
         $trail->push($title, route($route));
     });
 }
+
+Breadcrumbs::for('admin.fingerprints.show', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.fingerprints.index');
+});
+
 
 // Admin > Users > [user]
 Breadcrumbs::for('admin.users.show', function (BreadcrumbTrail $trail, $user) {

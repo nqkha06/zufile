@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\STULevelServiceInterface;
 use App\Repositories\Interfaces\LevelRepositoryInterface as LevelRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -10,7 +9,7 @@ use Illuminate\Support\Facades\DB;
  * Class STULevelService
  * @package App\Services
  */
-class STULevelService implements STULevelServiceInterface
+class STULevelService
 {
     protected $levelRopistory;
 
@@ -34,7 +33,7 @@ class STULevelService implements STULevelServiceInterface
             $search[] = ['costs', 'ORlike', '%'.$keyword.'%'];
             $search[] = ['amount', 'ORlike', '%'.$keyword.'%'];
             $search[] = ['id', 'ORlike', '%'.$keyword.'%'];
-            
+
         }
 
         if (!empty($searchParams['type']) || !empty($searchParams['type']) && $searchParams['type'] == 0) {

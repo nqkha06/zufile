@@ -7,14 +7,15 @@ use App\Repositories\Interfaces\NOTERepositoryInterface as NOTERepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Abstracts\CrudServiceAbstract;
+use App\Models\NOTELink;
 
 /**
  * Class NOTEService
  * @package App\Services
  */
-class NOTEService extends CrudServiceAbstract implements NOTEServiceInterface
+class NOTEService extends CrudServiceAbstract
 {
-    
+
     protected function getRepositoryClass(): string {
         return NOTERepository::class;
     }
@@ -63,17 +64,20 @@ class NOTEService extends CrudServiceAbstract implements NOTEServiceInterface
                 }];
             }
         }
- 
-        $links = $this->with(['stats', 'user'])->getAllPaginated($search);
+
+        $links = $this->with(['stats', 'user', 'level'])->getAllPaginated($search);
 
         return $links;
     }
 
     public function softDeleteOwn($alias)
     {
+
         DB::beginTransaction();
         try{
-            $this->softDeleteOwn($alias, Auth::user()->id);
+            NOTELink::where('alias', $alias)
+            ->where('user_id', Auth::user()->id)
+            ->update(['status' => 'deleted']);
 
             DB::commit();
             return true;
@@ -101,7 +105,7 @@ class NOTEService extends CrudServiceAbstract implements NOTEServiceInterface
         }
     }
 
-    public function restore($alias): void 
+    public function restore($alias): void
     {
         DB::beginTransaction();
         try{

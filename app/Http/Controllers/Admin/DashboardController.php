@@ -4,18 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Admin\Interfaces\DashboardServiceInterface as DashboardService;
-use App\Services\SystemMonitorService;
+use App\Services\Admin\DashboardService as DashboardService;
 
 class DashboardController extends Controller
 {
     protected $dashboardService;
-    protected $systemMonitorService;
 
-    public function __construct(DashboardService $dashboardService, SystemMonitorService $systemMonitorService)
+    public function __construct(DashboardService $dashboardService)
     {
         $this->dashboardService = $dashboardService;
-        $this->systemMonitorService = $systemMonitorService;
     }
     /**
      * Display a listing of the resource.

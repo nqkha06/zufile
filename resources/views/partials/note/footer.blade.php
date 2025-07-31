@@ -3,7 +3,7 @@
         <div class="PLSfooter-wrapper-section-left">
             <span
                 style="display:inline-block!important;opacity:1!important;position:static!important;visibility:visible!important;text-indent:0px!important;color:currentColor!important">©
-                {{ date('Y') }} ‧ <a style="text-decoration: none;" href="#" target="_blank">LINK4SUB</a>
+                {{ date('Y') }} ‧ <a style="text-decoration: none;" href="{{ Setting::get("web_url", config("app.url")) }}" target="_blank">{{ Setting::get("web_name", config("app.name")) }}</a>
             </span>
         </div>
         <div class="bT flex fontS noWrap opacity i14 noJava" data-text="Top" onclick="window.scrollTo({top: 0});">

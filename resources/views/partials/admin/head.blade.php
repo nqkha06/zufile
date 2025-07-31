@@ -9,7 +9,7 @@
     <link href='{{ $settings['web_favicon'] }}' rel='apple-touch-icon' sizes='120x120'/>
     <link href='{{ $settings['web_favicon'] }}' rel='apple-touch-icon' sizes='152x152'/>
     <link href='{{ $settings['web_favicon'] }}' rel='icon' type='image/x-icon'/>
-    <link href='{{ $settings['web_favicon'] }}' rel='shortcut icon' type='image/x-icon'/>  
+    <link href='{{ $settings['web_favicon'] }}' rel='shortcut icon' type='image/x-icon'/>
     <!-- CSS files -->
     <link href="/backend/dist/css/tabler.min.css?v={{ time() }}" rel="stylesheet"/>
     <link href="/backend/dist/css/tabler-flags.min.css?v={{ time() }}" rel="stylesheet"/>
@@ -27,5 +27,5 @@
       const NOTE_URL = "";
       const NOTE_ALIAS_LEN = 4;
     </script>
-    
-  </head>
+
+</head>

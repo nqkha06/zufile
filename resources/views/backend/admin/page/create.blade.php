@@ -53,7 +53,7 @@
                                 <label class="form-label" for="meta_title">Meta title</label>
                                 <input type="text" id="meta_title" name="meta_title" placeholder="Enter meta_title" class="form-control" value="{{ old('meta_title') }}">
                             </div>
-    
+
                             <div class="mb-3">
                                 <label class="form-label" for="meta_description">Meta description</label>
                                 <input type="text" id="meta_description" name="meta_description" placeholder="Enter meta_description" class="form-control" value="{{ old('meta_description') }}">
@@ -74,7 +74,7 @@
 @endsection
 
 @push('styles')
-    <script src="https://link4sub.qkt/js/ckeditor5/ckeditor.js"></script>
+    <script src="{{ asset('js/ckeditor5/ckeditor.js') }}"></script>
 
     <style>
         .ck-editor__editable_inline {

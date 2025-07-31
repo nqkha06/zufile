@@ -19,11 +19,8 @@ class STULevelComposer
 
     public function compose(View $view)
     {
-        $levels = $this->levelRepository->with(['translations'])->wherePublished()->getAll();
-        // $levels = Cache::remember('active_levels', 60 * 60, function() {
-        //     return $this->levelRepository->wherePublished()->findMany();
-        // });
-        
-        $view->with('levels', $levels);
+
+
+        $view->with('levels', []);
     }
 }

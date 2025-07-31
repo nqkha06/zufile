@@ -79,9 +79,9 @@
                                 <option value="">[-- Trạng thái --]</option>
                                 @foreach ($baseStatus as $status)
                                     <option value="{{ $status->value }}" @selected(old('status', request('status')) == $status->value)>{{ $status->label() }}</option>
-                                    
+
                                 @endforeach
-        
+
                             </select>
                         </div>
                         <div class="col-sm-2 d-flex align-items-end gap-1 mb-2">
@@ -107,6 +107,12 @@
                                 <th style="white-space: nowrap">#Slug</th>
                                 <th style="white-space: nowrap">#Ngày đăng</th>
                                 <th style="white-space: nowrap">{{ __('links.views') }}</th>
+                                <th class="text-nowrap language-header text-center sorting_disabled">
+                                    @foreach (Language::getSupportedLanguages() as $lang)
+                                        <img src="{{ asset('backend/media/flags/' . $lang->flag . '.svg') }}" title="{{ $lang->name }}"
+                                            class="flag" style="height: 16px" loading="lazy" alt="English flag">
+                                    @endforeach
+                                </th>
                                 <th style="white-space: nowrap">#Status</th>
                                 <th class="w-1"></th>
                             </tr>
@@ -115,16 +121,14 @@
                             @if (!$pages->isEmpty())
                                 @foreach ($pages as $key => $value)
                                     <tr>
-                                        {{-- <td>{{ $key+1 }}</td> --}}
-                                        {{-- <td><img alt="{{ $value->title }}" src="{{ $value->image }}" /></td> --}}
-                                        <td style="overflow: hidden;text-overflow: ellipsis;">{{ $value->title }}</td>
+                                        <td style="overflow: hidden;text-overflow: ellipsis;">{{ $value->translation()?->title ?? '' }}</td>
                                         <td>
                                             <div style="display: flex; align-items: center; max-width: 200px;">
                                                 <span
                                                     style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                                    {{ $value->slug }}
+                                                    {{ $value->translation()?->slug ?? '' }}</span>
                                                 </span>
-                                                <a href="{{ route('blog.page', $value->slug) }}" target="_blank"
+                                                <a href="{{ route('blog.page', $value->translation()?->slug ?? '') }}" target="_blank"
                                                     class="ms-1" aria-label="Open website"
                                                     style="flex-shrink: 0; margin-left: 5px;">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
@@ -147,21 +151,42 @@
                                         <td> <span
                                                 class="badge bg-blue text-blue-fg badge-pill">{{ $value->views->sum('views') }}</span>
                                             views</td>
-                                        <td>
-                                            @if ($value->status == 'public')
-                                                <span class="badge bg-green text-green-fg">
-                                                    {{ __('Công khai') }}
-                                                </span>
-                                            @elseif ($value->status == 'private')
-                                                <span class="badge bg-red text-red-fg">
-                                                    {{ __('Riêng tư') }}
-                                                </span>
-                                            @else
-                                                <span class="badge">
-                                                    {{ __('Nháp') }}
-                                                </span>
-                                            @endif
-                                        </td>
+                                        <td class="text-nowrap language-header text-center">
+                                    <div class="text-center language-column">
+                                        @foreach (getAllLanguages() as $lang)
+                                        @if (false)
+                                        <a href="{{ route('admin.pages.edit', $value->id) }}">
+                                            <svg class="icon text-success" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M5 12l5 5l10 -10"></path>
+                                            </svg> </a>
+                                        @else
+                                        <a data-bs-toggle="tooltip"
+                                        href="{{ route('admin.pages.edit', [
+                                        $value->id,
+                                        'ref_lang' => $lang->code
+                                        ]) }}"
+                                        aria-label="Sửa bản ngôn ngữ khác của bản ghi này"
+                                        data-bs-original-title="Sửa bản ngôn ngữ khác của bản ghi này">
+                                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                <path
+                                                    d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z">
+                                                </path>
+                                                <path d="M16 5l3 3"></path>
+                                            </svg>
+                                        </a>
+                                        @endif
+                                        @endforeach
+                                    </div>
+                                </td>
+                                        <td>{!! $value->status->html() !!}</td>
+
                                         <td>
                                             <div class="btn-list flex-nowrap">
                                                 <a href="{{ route('admin.pages.edit', $value->id) }}" class="btn">Chỉnh

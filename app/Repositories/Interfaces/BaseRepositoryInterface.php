@@ -25,5 +25,5 @@ interface BaseRepositoryInterface
     public function deleteAll(array $search = []): int;
     public function wherePublished();
     public function getModel();
-
+    public function query();
 }

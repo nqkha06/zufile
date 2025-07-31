@@ -1,99 +1,59 @@
 <?php
-
+// config/sidebar.php
 return [
-    [
-        'title' => 'member/partials/sidebar.dashboard',
-        'url' => 'member.dashboard.index',
-        'icon' => 'ki-outline ki-element-11 fs-2'
-    ],
-    [
-        'title' => 'member/partials/sidebar.level_rate',
-        'icon' => 'ki-outline ki-abstract-32 fs-2',
-        'url' => 'member.payout_rates',
-
-    ],
-    [
-        'title' => 'member/partials/sidebar.leaderboard',
-        'icon' => 'ki-outline ki-ranking fs-2',
-        'url' => 'member.leaderboard',
-        'badge' => 'New',
-        'badge_class' => 'badge badge-light-success badge-pill ms-3'
-
-    ],
-    [
-        'title' => 'member/partials/sidebar.manage_links',
-        'url' => 'admin.access.index',
-        'icon' => 'ki-outline ki-abstract-49 fs-2',
-        'children' => [
-            [
-                'title' => 'Sub unlock',
-                'url' => 'member.stu_links',
-                'active' => ['member.stu_links']
-
-            ],
-            [
-                'title' => 'Ghi chú',
-                'url' => 'member.note_links'
-            ]
-        ]
-    ],
-   
     // [
-    //     'title' => 'Liên kết phổ biến',
-    //     'icon' => 'ki-outline ki-share fs-2',
-    //     'children' => [
+    //     'section' => null,
+    //     'items' => [
     //         [
-    //             'title' => 'Hôm nay',
-    //             'url' => 'member.coming.soon'
+    //             'title' => 'Free Drive',
+    //             'href' => '/u/drive/1/home',
+    //             'icon_svg' => 'drive',
+    //             'progress' => [
+    //                 'used' => '71.76 MB',
+    //                 'total' => '10.00 TB',
+    //                 'percent' => 0.00068431151703408
+    //             ]
     //         ],
     //         [
-    //             'title' => '48h qua',
-    //             'url' => 'member.coming.soon'
+    //             'title' => 'Get more storage',
+    //             'href' => '/u/upgrade',
+    //             'class' => 'justify-center !text-xs border border-dashed border-zinc-300 dark:border-zinc-700'
     //         ],
-    //         [
-    //             'title' => '7 ngày qua',
-    //             'url' => 'member.coming.soon'
-    //         ],
-    //         [
-    //             'title' => '28 ngày qua',
-    //             'url' => 'member.coming.soon'
-    //         ]
-    //     ]
+    //     ],
     // ],
     [
-        'title' => 'member/partials/sidebar.referrals',
-        'url' => 'member.referral',
-        'icon' => 'ki-outline ki-people fs-2'
-    ],
-    [
-        'title' => 'member/partials/sidebar.withdraw',
-        'url' => 'member.withdraw.index',
-        'icon' => 'ki-outline ki-wallet fs-2'
-    ],
-   
-    [
-        'title' => 'member/partials/sidebar.account',
-        'icon' => 'ki-outline ki-abstract-13 fs-2',
-        'children' => [
-            [
-                'title' => 'member/partials/sidebar.account_info',
-                'url' => 'member.profile.index'
-            ],
-            [
-                'title' => 'member/partials/sidebar.account_pay',
-                'url' => 'member.payment.index'
-            ],
-            [
-                'title' => 'member/partials/sidebar.account_pass',
-                'url' => 'member.change_password'
-            ],
-        ]
-    ],
-    [
-        'title' => 'member/partials/sidebar.support',
-        'icon' => 'ki-outline ki-message-question fs-2',
-        'url' => 'member.payout_rates',
+        'section' => null,
+        'items' => [
+            ['title' => 'File Manager', 'href' => '/u/drive/1/home', 'icon_svg' => 'trash'],
 
+            ['title' => 'Trash', 'href' => '/u/trash', 'icon_svg' => 'trash'],
+        ],
     ],
-    // Thêm các mục menu khác ở đây
+    [
+        'section' => null,
+        'items' => [
+            ['title' => 'Statistics', 'href' => '/u/statistics', 'icon_svg' => 'statistics'],
+            ['title' => 'Referrals', 'href' => '/u/referrals', 'icon_svg' => 'referrals'],
+            ['title' => 'Withdraw', 'href' => '/u/withdraw', 'icon_svg' => 'revenue'],
+        ],
+    ],
+    [
+        'section' => null,
+        'items' => [
+            ['title' => 'Support', 'href' => '/u/support', 'icon_svg' => 'support'],
+        ],
+    ],
+    [
+        'section' => 'Our services',
+        'items' => [
+            ['title' => 'Link4sub', 'href' => 'https://link4sub.com/?utm_source=safefileku', 'icon_img' => 'https://link4sub.com/images/1721055856.png'],
+            ['title' => 'Vuotnhanh', 'href' => 'https://vuotnhanh.com/?utm_source=safefileku', 'icon_img' => 'https://vuotnhanh.com/images/app/logo.png'],
+        ],
+    ],
+    [
+        'section' => 'Partnership',
+        'items' => [
+            ['title' => 'SafelinkU', 'href' => 'https://safelinku.com/?utm_source=safefileku', 'icon_img' => 'https://safelinku.com/favicon.ico'],
+        ],
+    ],
 ];

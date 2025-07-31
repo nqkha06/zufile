@@ -4,34 +4,41 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTranslations;
+use App\Enums\BaseStatusEnum;
 
 class Page extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'user_id',
-        'title',
-        'content',
-        'meta_title',
-        'meta_description',
-        'meta_keywords',
-        'summary',
         'image',
         'slug',
         'category_id',
         'tags',
         'status'
     ];
-
-    protected $attributes = [
-        'status' => 'public',
+    protected $translatable = [
+        'title',
+        'content',
+        'slug',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ];
+    protected $attributes = [
+        'status' => BaseStatusEnum::DRAFT,
+    ];
+    protected $casts = [
+        'status' => BaseStatusEnum::class
+    ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-    
+
     public function views()
     {
         return $this->hasMany(PageView::class, 'page_id');

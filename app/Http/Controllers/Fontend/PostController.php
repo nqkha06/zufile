@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Fontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
-use App\Services\Interfaces\BlogServiceInterface as BlogService;
+use App\Services\BlogService as BlogService;
 use App\Repositories\Interfaces\CategoryRepositoryInterface as CategoryRepository;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;

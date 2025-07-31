@@ -73,4 +73,25 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+    's3' => [
+        'driver' => 's3',
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION'),
+        'bucket' => env('AWS_BUCKET'),
+        'url' => env('AWS_URL'),
+        'endpoint' => env('AWS_ENDPOINT'),
+        'use_path_style_endpoint' => true, // bắt buộc với Wasabi
+    ],
+
+    'wasabi' => [
+        'driver'   => 's3',                         // BẮT BUỘC
+        'key'      => env('WASABI_KEY', env('AWS_ACCESS_KEY_ID')),
+        'secret'   => env('WASABI_SECRET', env('AWS_SECRET_ACCESS_KEY')),
+        'region'   => env('WASABI_REGION', env('AWS_DEFAULT_REGION')),
+        'bucket'   => env('WASABI_BUCKET', env('AWS_BUCKET')),
+        'endpoint' => env('WASABI_ENDPOINT', env('AWS_ENDPOINT')),
+        'use_path_style_endpoint' => true,         // Wasabi require
+    ],
+
 ];

@@ -449,7 +449,57 @@
                         </div>
                     </div>
                 </div>
-               
+
+
+            </div>
+        </div>
+    </div>
+
+     <div class="card mb-4 panel-section panel-section-system panel-section-priority-99999" id="panel-section-system-system"
+        data-priority="99999" data-id="system" data-group-id="system">
+        <div class="card-header">
+            <div>
+                <h4 class="card-title">
+                    External Services
+                </h4>
+
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+                <div id="panel-section-item-system-users" data-priority="-9999" data-id="users" data-group-id="system"
+                    class="col-12 col-sm-6 col-md-4 panel-section-item panel-section-item-users panel-section-item-priority--9999">
+                    <div class="row g-3 align-items-start">
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center justify-content-center panel-section-item-icon">
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-block mb-1 panel-section-item-title">
+                                <a class="text-decoration-none text-primary fw-bold"
+                                    href="{{ route('admin.system.email') }}">
+
+                                    Email
+
+                                </a>
+                            </div>
+
+                            <div class="text-secondary mt-n1">Xem và cập nhật người dùng hệ thống của bạn</div>
+                        </div>
+                    </div>
+                </div>
+
+
 
             </div>
         </div>

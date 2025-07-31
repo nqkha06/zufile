@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\BaseStatusEnum;
-
+use App\Traits\HasTranslations;
 class PaymentMethod extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $casts = [
         'fields' => 'array',

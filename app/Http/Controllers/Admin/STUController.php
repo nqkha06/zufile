@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Admin\Interfaces\STUServiceInterface as STUService;
+use App\Services\Admin\STUService as STUService;
 
 class STUController extends Controller
 {

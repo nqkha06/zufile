@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\STULogService;
-use App\Services\Interfaces\AccessServiceInterface as AccessService;
+use App\Services\AccessService as AccessService;
 use App\Facades\Setting;
 
 class GeneralController extends Controller
@@ -30,7 +30,7 @@ class GeneralController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-    {   
+    {
         $action = $request->action;
         if (!empty($action)) {
             if ($action == 'access') {
@@ -57,17 +57,30 @@ class GeneralController extends Controller
             'stu_length' => 'nullable|integer',
             'stu_decode' => 'nullable|string',
             'note_decode' => 'nullable|string',
-            'web_favicon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'web_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'web_favicon' => 'nullable|mimes:ico|max:2048',
+            'web_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $web_f = $this->uploadImg($request, 'web_favicon');
+        // $web_f = $this->uploadImg($request, 'web_favicon');
         $web_i = $this->uploadImg($request, 'web_image');
 
         $param = $request->except('_token', 'web_favicon', 'web_image', 'stu_axaj');
 
-        if (!empty($web_f)) {
-            $param['web_favicon'] = $web_f;
+        if ($request->file('web_favicon')) {
+
+            $file = $request->file('web_favicon');
+
+            // Đặt tên chuẩn để thay thế favicon mặc định
+            $filename = 'favicon.ico';
+
+            // Đường dẫn public
+            $destination = public_path($filename);
+
+            // Ghi đè file cũ
+            $file->move(public_path(), $filename);
+
+
+            // $param['web_favicon'] = $web_f;
         }
         if (!empty($web_i)) {
             $param['web_image'] = $web_i;

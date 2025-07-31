@@ -24,9 +24,10 @@
                     @endif
                     <form action="{{ route('auth.login') }}" method="post">
                         @csrf
+                        @method('POST')
                         <label class="form-label" for="email">Địa chỉ Email <span style="color: #f1416c">*</span></label>
                         <input class="form-control" type="text" id="email" name="email" placeholder="" value="{{ old('email') }}" required>
-                        
+
                         <label class="form-label">Mật khẩu <span style="color: #f1416c">*</span></label>
                         <div class="input-icon">
                             <input class="form-control password-input" type="password" name="password" placeholder="" required="">

@@ -2,7 +2,6 @@
 
 namespace App\Services\Admin;
 
-use App\Services\Admin\Interfaces\UserServiceInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -13,11 +12,11 @@ use Illuminate\Support\Facades\Cache;
  * Class UserService
  * @package App\Services\Admin
  */
-class UserService implements UserServiceInterface
+class UserService
 {
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository = null) {
+    public function __construct(UserRepository $userRepository) {
         $this->userRepository = $userRepository;
     }
 
@@ -46,7 +45,7 @@ class UserService implements UserServiceInterface
             'conditions' => $search,
             'sort' => $sort
         ]);
-        
+
         return $users;
     }
 
@@ -54,17 +53,17 @@ class UserService implements UserServiceInterface
         $keyword = addslashes($request->input('keyword'));
         $sortColumn = $request->input('sort_column') && $request->input('sort_column') != '-1' ? $request->input('sort_column') : 'balance';
         $sortDirection = $request->input('sort_direction') ? $request->input('sort_direction') : 'desc';
-    
+
         // Cache key based on search criteria
         $cacheKey = 'user_stats_' . md5($keyword . $sortColumn . $sortDirection . $request->get('page', 1));
-    
+
         // Try to get the cached data
         $cachedData = Cache::get($cacheKey);
-    
+
         if ($cachedData) {
             return $cachedData; // Return cached data if available
         }
-    
+
         $condition = [
             'keyword' => $keyword,
             'orWhere' => [
@@ -72,17 +71,17 @@ class UserService implements UserServiceInterface
                 ['users.id', 'LIKE', ('%' . $keyword . '%')]
             ],
         ];
-    
+
         $perPage = 10;
         $currentPage = request()->get('page', 1);
-        
+
         $data = $this->userRepository->with(['STUstats', 'invoices'])->getAll();
         $new_data = $data->map(function ($value) {
             $total_revenue = $value->STUstats->sum('revenue');
             $total_clicks = $value->STUstats->sum('clicks');
             $total_withdraw = $value->invoices->whereNotIn('status', ['hold', 'cancelled'])->sum('amount');
             $balance = $total_revenue - $total_withdraw;
-        
+
             return [
                 'data_user' => $value,
                 'data_stats' => $value->STUstats,
@@ -103,14 +102,14 @@ class UserService implements UserServiceInterface
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-    
+
         // Cache the data for 60 minutes
         Cache::put($cacheKey, $paginatedUsers, now()->addMinutes(60));
-    
+
         return $paginatedUsers;
     }
-    
-    
+
+
     public function show($request, $id)
     {
         $startDate = $request->query('startDate');
@@ -182,7 +181,7 @@ class UserService implements UserServiceInterface
             'ctSTUlinks' => $ctSTUlinks->sortByDesc('created_at'),
             'ctStatsTable' => new LengthAwarePaginator($items, $total, $perPage, $currentPage, [
                 'path' => url()->current(),
-                'pageName' => 'p_sats', 
+                'pageName' => 'p_sats',
             ]),
             'NOTEstats' => $NOTEstats,
             'ctNOTEstats' => $ctNOTEstats,

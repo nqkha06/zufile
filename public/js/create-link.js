@@ -42,7 +42,7 @@ class STU {
     }
 
     loadSTU() {
-        
+
         let conStrs = arr => {
             let res = "";
             arr.forEach(str => {
@@ -53,16 +53,16 @@ class STU {
 
         let renderInputs = (btnId, e) => {
             let result = "";
-            
+
             if (fbSTU[btnId].dt) {
                 let inputSection = "";
                 fbSTU[btnId].dt.forEach(item => {
                     inputSection += item.fi ? ((fields, name, id, isFeedback, color) => {
                         // if (isFeedback) {
                         //     console.log(fields, name, id, isFeedback, color);
-                            
+
                         // }
-                        
+
                         let inputElements = "";
                         fields.forEach(field => {
                             let attributes = "";
@@ -74,18 +74,18 @@ class STU {
                             }
                             if (field.t == 'select') {
                                 elt += `<label class="grp__label" for="i_${field.i}">${field.label ? field.label : fbSTU[btnId].tx + ' ' + name}</label>
-                                            
+
                                             <div class="grp__style-wrapper">
                                                 <div id="i_${field.i}" class="grp__style"
                                                     name="${field.i}"
                                                     ${field.r ? 'data-req="true"' : ''}
-                                                  
+
                                                     data-in="${btnId}">
                                                         ${field.opts.map(function(option) {
                                                             return `
                                                             <div>
                                                             <img style="width:100px; display: block" alt="Style Default" class="arlbItem" src="https://t3.ftcdn.net/jpg/05/99/53/58/360_F_599535831_pwQFVG0qtf6ksLXeVTnUwFMvoW5H0WiS.jpg" onclick="return false"/>
-                                                                <input 
+                                                                <input
                                                                 data-in="${btnId}"
                                                                 class="stu_fi"
                                                                 type="radio"
@@ -96,15 +96,15 @@ class STU {
                                                         }).join('') }
                                                 </div>
                                         </div>`;
-                            } else {           
-                                
+                            } else {
+
                                 elt += `<label class="grp__label" for="i_${field.i}">${field.label ? field.label : fbSTU[btnId].tx + ' ' + name}</label>
                                                     <div class="grp__input-wrapper">
                                                         <input ${attributes} class="grp__input stu_fi"
                                                             id="i_${field.i}"
                                                             type="${field.t}"
                                                             name="${field.i}"
-                                                            placeholder="${field.ph ? field.ph : `Enter ${name}...`}" 
+                                                            placeholder="${field.ph ? field.ph : `Enter ${name}...`}"
                                                             data-in="${btnId}"
                                                             data-parent="${id}"
                                                             ${field.df || fbSTU[btnId].df ? 'data-df="true"' : ''}
@@ -113,24 +113,24 @@ class STU {
                                                             ${field.a && field.r ? 'required' : ''}>
                                                         <span class="grp__icon grp__icon--left">${icSTU[field.ic] ? icSTU[field.ic] : field.ic}</span>
                                                         <span class="grp__icon grp__icon--right">${icSTU.df}</span>
-                                                    </div>`;  
+                                                    </div>`;
                             }
                             inputElements += `<div class="grp__item" ${isFeedback ? 'data-fb=true' : ''} data-group="${id}" class="${field.a ? 'a' : ''}" style="--clr:${color}">
-                                    
+
                                                     ${elt}
                                             </div>
 
 
                                             ${field.img ? '<div class="stu-image"><div class="loading-overlay"></div><img src=""></div>' : ''}`;
                         });
-        
+
                         return `<div data-cgroup="${id}" class="grp ${fields[1]?.a ? 'a' : ''}">${inputElements}</div>`;
                     })(item.fi, item.name, item.id, fbSTU[btnId].fb, item.clr ? item.clr : e) : '';
                 });
-        
+
                 result += inputSection;
             }
-        
+
             return result;
         }
 
@@ -205,18 +205,18 @@ class STU {
                     </div>
                 </div>
             </form>
-        `;    
+        `;
     }
     old() {
         const oldI = (this.type === 'edit') ? (this.inp || null) : (this.type === 'api') ? (JSON.parse(localStorage.getItem("input_STU_TK")) || null) : (JSON.parse(localStorage.getItem("input_STU")) || null);
         const oldB = (this.type === 'edit') ? (this.btn || null) : (this.type === 'api') ? (JSON.parse(localStorage.getItem("btn_STU_TK")) || null) : (JSON.parse(localStorage.getItem("btn_STU")) || null);
-        if (oldI) {            
+        if (oldI) {
             for (const key in oldI) {
-                
+
                 const s = this.selector.querySelector("[name=" + key + "]");
-                
+
                 if (s) {
-                    
+
                     if ("date" == s.type) {
                         if (Date.parse(new Date(oldI[key])) >= Date.parse(new Date().toISOString().split("T")[0])) {
                             s.value = oldI[key];
@@ -224,7 +224,7 @@ class STU {
                         }
                     } else if (key == 'sty') {
                         const eltSty = this.selector.querySelector(`#sty_${oldI[key]}`);
-                        
+
                         if (eltSty) eltSty.checked = true;
                     } else {
                         s.value = oldI[key];
@@ -238,8 +238,8 @@ class STU {
                     if (s.dataset.img) {
                         const eltImgThumb = this.selector.querySelector(".stu-image img");
                         if (eltImgThumb) eltImgThumb.src = oldI[key];
-                        
-                        /*n.classList.add("a"), */ 
+
+                        /*n.classList.add("a"), */
                     }
                 }
             }
@@ -258,7 +258,7 @@ class STU {
     handleClick() {
         this.selector.querySelectorAll(".stu_b_ftr").forEach(button => {
             button.addEventListener("click", () => {
-                
+
                 let id = button.dataset.id;
                 if (button.classList.contains("a")) {
                     this.selector.querySelector(".stu_ftr[data-ftr=" + id + "]").classList.remove("a");
@@ -277,9 +277,9 @@ class STU {
         });
         this.selector.querySelectorAll(".btn_iftr:not(.d)").forEach(button => {
             button.addEventListener("click", () => {
-                
+
                 button.classList.toggle("a");
-        
+
                 let groupId = button.dataset.id;
 
                 if (groupId) {
@@ -290,34 +290,34 @@ class STU {
                             if (requiredInput !== null) {
                                 requiredInput.required = false;
                             }
-        
+
                             let inputElement = element.querySelector(".grp__input-wrapper>*");
                             if (inputElement && inputElement.value && inputElement.classList.contains("er")) {
                                 inputElement.value = "";
                                 inputElement.classList.remove("er");
                             }
-        
+
                             delete inputElement.dataset.fill;
                         } else {
 
                             let inputElement = element.querySelector(".grp__input-wrapper>*");
                             if (inputElement) {
                                 inputElement.dataset.fill = true;
-                            } 
-        
+                            }
+
                             let requiredInput = element.querySelector("input[data-req]");
                             if (requiredInput !== null) {
                                 requiredInput.required = true;
                             }
                         }
                     });
-        
+
                     this.selector.querySelectorAll("[data-cgroup=" + groupId + "]").forEach(element => {
                         element.classList.toggle("a");
                     });
                 }
             });
-        }); 
+        });
 
         if (this.selector.querySelector(".stu_fi[data-img]")) {
             this.selector.querySelector(".stu_fi[data-img]").addEventListener("change", t => {
@@ -370,10 +370,10 @@ class STU {
             event.preventDefault();
             const elmError = this.selector.querySelector(".grp.a .er");
             const totalSteps = this.selector.querySelectorAll(`.stu_fi[data-fill][type=url]:not([data-in='file'], [data-in='oth'])`).length;
-            
+
             const lvElt = this.selector.querySelector('#i_level.stu_fi').selectedOptions[0];
             const minPages = lvElt.getAttribute('min-pages');
-            
+
             if (elmError) {
                 elmError.focus();
             } else if (totalSteps < minPages) {
@@ -384,14 +384,14 @@ class STU {
                     n.classList.add("a");
                     let ecSTU = t => btoa(encodeURIComponent(t)),
                         notif = this.toastr.success({
-                            message: 
+                            message:
                             `<div class="xldg">
                                 ${icSTU.gen}<span>${STUtxt?.msg?.["generating_link"]}</span>
                             </div>`
                             , duration: 0
                             , dismissible: false
                             , icon: false
-                        }); 
+                        });
                     this.selector.querySelector(".stu_rst").classList.remove("a");
                     const objParams = {};
                     const selectorsArr = [
@@ -405,7 +405,7 @@ class STU {
 
                                 objParams[category] = objParams[category] || {};
                                 objParams[category][input.name] = ecSTU(input.value);
-                            
+
                         });
                     })
                     const gLv = this.selector.querySelector('[name="level"]');
@@ -413,7 +413,7 @@ class STU {
                         objParams['oth'] = objParams['oth'] || {};
                         objParams['oth']['level'] = ecSTU(gLv.value);
                     }
-                    
+
                     if (Object.keys(objParams).length === 0) {
                         this.toastr.dismiss(notif);
                         this.toastr.error('Vui lòng điền đầy đủ thông tin trước khi tạo link');
@@ -426,15 +426,15 @@ class STU {
                         .then((res) => {
                             // Handle success
                             if (res.status == 'success') {
-                                const shortUrl = STU_URL + '/' + res.alias;
+                                const shortUrl = res.shortUrl;
 
                                 setTimeout(() => {
                                     this.toastr.dismiss(notif);
 
                                     if (type == 'edit') {
-                                        this.toastr.success('Liên kết đã được cập nhật thành công!');
+                                        this.toastr.success(res.message);
                                     } else if (type == 'create') {
-                                        this.toastr.success(STUtxt?.msg?.["link_created"]);
+                                        this.toastr.success(res.message);
                                         this.selector.querySelector("#i_rst").value = shortUrl;
                                         this.selector.querySelector(".stu_rst").classList.add("a");
                                         this.selector.querySelector(".stu_rst").scrollIntoView({
@@ -447,7 +447,7 @@ class STU {
                             } else {
                                 setTimeout(() => {
                                     this.toastr.dismiss(notif);
-                                    this.toastr.error('Error: '+ res.message)+'!';
+                                    this.toastr.error('Error: '+ res.message);
                                     n.classList.remove("a");
                                 }, 1e3)
                             }
@@ -457,10 +457,10 @@ class STU {
                             if (error.status) {
                                 this.toastr.error('Error:', error.message);
                             } else {
-                                this.toastr.error('Network error:', error);
+                                this.toastr.error('Network error: ' + error);
                             }
                             n.classList.remove("a");
-                        });            
+                        });
 
                 }
             }
@@ -479,7 +479,7 @@ class STU {
                 this.toastr.success(STUtxt?.msg?.["reset_successful"])
             }
         }
-                
+
         this.selector.querySelector("#rsSTU").addEventListener("click", function() {
             func();
         })
@@ -507,7 +507,7 @@ class STU {
                 let dataIn = element.dataset.in;
                 let currentElement = element;
                 let idInp = element.getAttribute("id");
-                
+
                 if (!currentElement.dataset.df && currentElement.type === "url") {
                     if (currentElement.value.includes("://")) {
                         currentElement.classList.remove("er");
@@ -519,7 +519,7 @@ class STU {
                         currentElement.focus();
                     }
                 }
-                
+
                 if (!currentElement.dataset.df && currentElement.type === "text") {
                     if (currentElement.value.includes("://")) {
                         currentElement.classList.remove("ok");
@@ -535,7 +535,7 @@ class STU {
                         currentElement.classList.remove("er"), currentElement.classList.remove("ok")
                     }
                 }
-                
+
                 if (currentElement.value && !currentElement.dataset.df && currentElement.type === "datetime-local") {
                     let inputDate = new Date(currentElement.value);
                     let currentDate = new Date();
@@ -553,15 +553,15 @@ class STU {
                         currentElement.classList.add("ok");
                     }
                 }
-                
+
                 if (dataIn && currentElement.dataset.df) {
                     let allowedDomains = fbSTU[dataIn].dt.find(item => item.id == groupId).fi.find(item => item.i == inputName).df;
                     allowedDomains = allowedDomains || fbSTU[dataIn].df;
-                
+
                     let containsAllowedDomain = (value, domains) => {
                         return domains.some(domain => value.includes(domain));
                     };
-                
+
                     if (containsAllowedDomain(currentElement.value, allowedDomains)) {
                         currentElement.classList.remove("er");
                         currentElement.classList.add("ok");
@@ -609,7 +609,7 @@ class STU {
             localStorage.setItem("input_STU", JSON.stringify(data));
             return data;
         }
-        
+
         this.selector.querySelectorAll(".stu_fi:not(.ndf)").forEach(t => {
             t.addEventListener("change", () => {
                 let e = t.getAttribute("name");
@@ -646,389 +646,389 @@ class STU {
     }
 }
 
-class NOTE {
-    constructor(config = {}) {
-        this.CONFIG = config;
-        this.select = config.select ? config.select : false;
-        this.type = config.type ? config.type : 'create';
-        if (this.type == 'edit') {
-            const data = config.data;
-            this.content = (data && data.content) ? data.content : false;
-            this.alias = (data && data.alias) ? data.alias : false;
-        }
-        this.SELECTOR = document.querySelector(this.select);
+// class NOTE {
+//     constructor(config = {}) {
+//         this.CONFIG = config;
+//         this.select = config.select ? config.select : false;
+//         this.type = config.type ? config.type : 'create';
+//         if (this.type == 'edit') {
+//             const data = config.data;
+//             this.content = (data && data.content) ? data.content : false;
+//             this.alias = (data && data.alias) ? data.alias : false;
+//         }
+//         this.SELECTOR = document.querySelector(this.select);
 
-        this.toastr = new Notyf({
-            duration: 4500,
-            position: {
-                x: "center",
-                y: "top"
-            },
-            dismissible: true
-        });
-        //
-        this.loadSTU();
-        this.autoSetOld();
-        this.setOld();
-        this.loadEditor();
-        this.validate();
-        this.submit();
-        this.reset();
-        this.copy();
+//         this.toastr = new Notyf({
+//             duration: 4500,
+//             position: {
+//                 x: "center",
+//                 y: "top"
+//             },
+//             dismissible: true
+//         });
+//         //
+//         this.loadSTU();
+//         this.autoSetOld();
+//         this.setOld();
+//         this.loadEditor();
+//         this.validate();
+//         this.submit();
+//         this.reset();
+//         this.copy();
 
 
-    }
+//     }
 
-    loadSTU() {
-        const selector = document.querySelector(this.select);
-        let options = '';
-        Object.keys(NOTELv).forEach(key => {
-            options += `<option value="${NOTELv[key].id}">- ${NOTELv[key].name}</option>`;
-        });
-                
-        selector.innerHTML = `
-            <form class="fgNOTE" id="fgNOTE">
-                <div class="note_ftr_inp">
-                    <div class="column">
-                        <div class="input-box">
-                            <label>Tiêu đề <span style="color: #f1416c">*</span></label>
-                            <input type="text" id="n_title" name="n_title" placeholder="Nhập tiêu đề.." required>
-                        </div>
-                    </div> 
-                    <div class="column">
-                        <div class="input-box">
-                            <label>Mật khẩu</label>
-                            <input type="text" id="n_pasw" name="n_pasw" placeholder="Nhập mật khẩu.. (tuỳ chọn)">
-                        </div>
-                    </div>
-                </div>      
-                <div class="input-box" style="margin-top: 15px">
-                    <label>Mô tả <span style="color: #f1416c">*</span></label>
-                    <textarea id="editor" name="n_content" placeholder="Điền cái gì đó vào đây.."></textarea>
-                </div>
-                <div class="note_lv a">
-                    <label for="note_level">Chọn cấp độ:</label>
-                    <select id="note_level" class="stu_fi d ok" name="note_level">
-                        ${options}
-                    </select>
-                </div>
-                <div class="note_ftr_btn">
-                    <button type="submit"> ${this.type == 'edit' ? 'Cập nhật ghi chú' : 'Tạo ghi chú'}</button>
-                    <button id="rsNOTE" type="button">Đặt lại</button>
-                </div>
-                
-                <div class="note_rst">
-                    <div>
-                        <input id="i_n_rst" type="url" name="rst" readonly="">
-                        <span><svg fill="currentColor" viewBox="0 0 640 512"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"></path></svg></span> <i>Copy</i>
-                    </div>
-                </div>
-                </div>
-            </form>
-        `;
-    }
-    submit() {
-        const toastr = this.toastr;
-        const type = this.type;
-        const selector = document.querySelector(this.select);
+//     loadSTU() {
+//         const selector = document.querySelector(this.select);
+//         let options = '';
+//         Object.keys(NOTELv).forEach(key => {
+//             options += `<option value="${NOTELv[key].id}">- ${NOTELv[key].name}</option>`;
+//         });
 
-        selector.querySelector("#fgNOTE").addEventListener("submit", event => {
-            event.preventDefault();
-            const elmError = selector.querySelector("label.a>.stu_fi.er");
-            if (elmError) {
-                elmError.focus();
-            } else {
-                let n = event.target.querySelector("[type=submit]");
-                if (!n.classList.contains("a")) {
-                    n.classList.add("a");
-                    let ecSTU = t => btoa(encodeURIComponent(t))
-                    let notif = this.toastr.success({
-                            message: 
-                            `<div class="xldg">
-                                ${icSTU.gen}<span>${ type == 'create' ? 'Đang tạo liên kết, vui lòng đợi..!' : 'Đang cập nhật liên kết, vui lòng đợi..!'}</span>
-                            </div>`
-                            , duration: 0
-                            , dismissible: false
-                            , icon: false
-                        });
-                    selector.querySelector(".note_rst").classList.remove("a");
-                    const objParams = {};
+//         selector.innerHTML = `
+//             <form class="fgNOTE" id="fgNOTE">
+//                 <div class="note_ftr_inp">
+//                     <div class="column">
+//                         <div class="input-box">
+//                             <label>Tiêu đề <span style="color: #f1416c">*</span></label>
+//                             <input type="text" id="n_title" name="n_title" placeholder="Nhập tiêu đề.." required>
+//                         </div>
+//                     </div>
+//                     <div class="column">
+//                         <div class="input-box">
+//                             <label>Mật khẩu</label>
+//                             <input type="text" id="n_pasw" name="n_pasw" placeholder="Nhập mật khẩu.. (tuỳ chọn)">
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div class="input-box" style="margin-top: 15px">
+//                     <label>Mô tả <span style="color: #f1416c">*</span></label>
+//                     <textarea id="editor" name="n_content" placeholder="Điền cái gì đó vào đây.."></textarea>
+//                 </div>
+//                 <div class="note_lv a">
+//                     <label for="note_level">Chọn cấp độ:</label>
+//                     <select id="note_level" class="stu_fi d ok" name="note_level">
+//                         ${options}
+//                     </select>
+//                 </div>
+//                 <div class="note_ftr_btn">
+//                     <button type="submit"> ${this.type == 'edit' ? 'Cập nhật ghi chú' : 'Tạo ghi chú'}</button>
+//                     <button id="rsNOTE" type="button">Đặt lại</button>
+//                 </div>
 
-                    if (this.type == 'edit') objParams['alias'] = this.alias;
-                    objParams['title'] = selector.querySelector("[name='n_title']").value;
-                    objParams['password'] = selector.querySelector("[name='n_pasw']").value;
-                    objParams['content'] = editor.getData();
-                    objParams['level'] = selector.querySelector("[name='note_level']").value;
-                    console.log(this.alias);
-                    
-                    const methodXhr = 'POST';
-                    var urlXhr = '';
-                    if (type == 'create') {
-                        var urlXhr = '/member/notes';
-                    } else {
-                        var urlXhr = '/member/notes/'+this.alias+'/update';
-                    }
-                    const CR_TOKEN = document.head.querySelector("[name~=csrf-token]").content;
+//                 <div class="note_rst">
+//                     <div>
+//                         <input id="i_n_rst" type="url" name="rst" readonly="">
+//                         <span><svg fill="currentColor" viewBox="0 0 640 512"><path d="M579.8 267.7c56.5-56.5 56.5-148 0-204.5c-50-50-128.8-56.5-186.3-15.4l-1.6 1.1c-14.4 10.3-17.7 30.3-7.4 44.6s30.3 17.7 44.6 7.4l1.6-1.1c32.1-22.9 76-19.3 103.8 8.6c31.5 31.5 31.5 82.5 0 114L422.3 334.8c-31.5 31.5-82.5 31.5-114 0c-27.9-27.9-31.5-71.8-8.6-103.8l1.1-1.6c10.3-14.4 6.9-34.4-7.4-44.6s-34.4-6.9-44.6 7.4l-1.1 1.6C206.5 251.2 213 330 263 380c56.5 56.5 148 56.5 204.5 0L579.8 267.7zM60.2 244.3c-56.5 56.5-56.5 148 0 204.5c50 50 128.8 56.5 186.3 15.4l1.6-1.1c14.4-10.3 17.7-30.3 7.4-44.6s-30.3-17.7-44.6-7.4l-1.6 1.1c-32.1 22.9-76 19.3-103.8-8.6C74 372 74 321 105.5 289.5L217.7 177.2c31.5-31.5 82.5-31.5 114 0c27.9 27.9 31.5 71.8 8.6 103.9l-1.1 1.6c-10.3 14.4-6.9 34.4 7.4 44.6s34.4 6.9 44.6-7.4l1.1-1.6C433.5 260.8 427 182 377 132c-56.5-56.5-148-56.5-204.5 0L60.2 244.3z"></path></svg></span> <i>Copy</i>
+//                     </div>
+//                 </div>
+//                 </div>
+//             </form>
+//         `;
+//     }
+//     submit() {
+//         const toastr = this.toastr;
+//         const type = this.type;
+//         const selector = document.querySelector(this.select);
 
-                    this.request(methodXhr, urlXhr, CR_TOKEN, objParams)
-                        .then((res) => {
-                            // Handle success
-                            if (res.status == 'success') {
-                                const shortUrl = res.url;
+//         selector.querySelector("#fgNOTE").addEventListener("submit", event => {
+//             event.preventDefault();
+//             const elmError = selector.querySelector("label.a>.stu_fi.er");
+//             if (elmError) {
+//                 elmError.focus();
+//             } else {
+//                 let n = event.target.querySelector("[type=submit]");
+//                 if (!n.classList.contains("a")) {
+//                     n.classList.add("a");
+//                     let ecSTU = t => btoa(encodeURIComponent(t))
+//                     let notif = this.toastr.success({
+//                             message:
+//                             `<div class="xldg">
+//                                 ${icSTU.gen}<span>${ type == 'create' ? 'Đang tạo liên kết, vui lòng đợi..!' : 'Đang cập nhật liên kết, vui lòng đợi..!'}</span>
+//                             </div>`
+//                             , duration: 0
+//                             , dismissible: false
+//                             , icon: false
+//                         });
+//                     selector.querySelector(".note_rst").classList.remove("a");
+//                     const objParams = {};
 
-                                setTimeout(() => {
-                                    this.toastr.dismiss(notif);
+//                     if (this.type == 'edit') objParams['alias'] = this.alias;
+//                     objParams['title'] = selector.querySelector("[name='n_title']").value;
+//                     objParams['password'] = selector.querySelector("[name='n_pasw']").value;
+//                     objParams['content'] = editor.getData();
+//                     objParams['level'] = selector.querySelector("[name='note_level']").value;
+//                     console.log(this.alias);
 
-                                    if (type == 'edit') {
-                                        this.toastr.success('Liên kết đã được cập nhật thành công!');
-                                    } else if (type == 'create') {
-                                        this.toastr.success(res.message);
-                                        selector.querySelector("#i_n_rst").value = shortUrl;
-                                        selector.querySelector(".note_rst").classList.add("a");
-                                        selector.querySelector(".note_rst").scrollIntoView({
-                                            behavior: "smooth",
-                                            block: "center"
-                                        });
-                                    }
-                                    n.classList.remove("a");
-                                }, 1e3);
-                            } else {
-                                setTimeout(() => {
-                                    this.toastr.dismiss(notif);
-                                    this.toastr.error(res.message)+'!';
-                                    n.classList.remove("a");
-                                }, 1e3)
-                            }
-                        })
-                        .catch((error) => {
-                            this.toastr.dismiss(notif);
-                            if (error.status) {
-                                this.toastr.error('Error:', error.message);
-                            } else {
-                                this.toastr.error('Network error:', error);
-                            }
-                            n.classList.remove("a");
-                        });            
+//                     const methodXhr = 'POST';
+//                     var urlXhr = '';
+//                     if (type == 'create') {
+//                         var urlXhr = '/member/notes';
+//                     } else {
+//                         var urlXhr = '/member/notes/'+this.alias+'/update';
+//                     }
+//                     const CR_TOKEN = document.head.querySelector("[name~=csrf-token]").content;
 
-                }
-            }
-        })
-    }
-    reset() {
-        const toastr = this.toastr;
-        const type = this.type;
-        const selector = document.querySelector(this.select);
-        const func = () => {
-            Swal.fire({
-                title: 'Đặt lại mẫu?'
-                , text: "Bạn chắc chắn muốn đặt lại (reset) mẫu không?"
-                , icon: "warning"
-                , confirmButtonText: 'Chắc chắn!'
-                , showCancelButton: true
-                , cancelButtonText: 'Huỷ'
-            }).then(res => {
-                if (res.isConfirmed) {
-                    const eltInps = this.SELECTOR.querySelectorAll('.input-box input, .input-box textarea');
-                    const self = this;
-                
-                    eltInps.forEach(inp => {
-                        inp.value = '' 
-                    });
-                    editor.setData('');
-                    localStorage.removeItem('input_NOTE');
-                    Swal.fire({
-                        title: 'Thành công'
-                        , icon: 'success'
-                    })
-                }
-            })
-    
-        }
-                
-        selector.querySelector("#rsNOTE").addEventListener("click", function() {
-            func();
-        })
-    }
-    copy() {
-        const toastr = this.toastr;
-        const selector = document.querySelector(this.select);
+//                     this.request(methodXhr, urlXhr, CR_TOKEN, objParams)
+//                         .then((res) => {
+//                             // Handle success
+//                             if (res.status == 'success') {
+//                                 const shortUrl = res.url;
 
-        selector.querySelector(".note_rst input ~ i").addEventListener("click", () => {
-            selector.querySelector("#i_n_rst").select(), document.execCommand("copy");
-            if (document.queryCommandSupported("copy")) {
-                this.toastr.success("Đã sao chép URL thành công.")
-            } else {
-                this.toastr.error("Copying URL is not supported in this browser.")
-            }
-        });
-    }
-    validate() {
-        const toastr = this.toastr;
-        const selector = document.querySelector(this.select);
+//                                 setTimeout(() => {
+//                                     this.toastr.dismiss(notif);
 
-        selector.querySelectorAll(".stu_fi:not(.ndf)").forEach(input => {
-            input.addEventListener("focus", () => {
-                if (input.classList.contains("er")) input.classList.remove("er");
-            });
+//                                     if (type == 'edit') {
+//                                         this.toastr.success('Liên kết đã được cập nhật thành công!');
+//                                     } else if (type == 'create') {
+//                                         this.toastr.success(res.message);
+//                                         selector.querySelector("#i_n_rst").value = shortUrl;
+//                                         selector.querySelector(".note_rst").classList.add("a");
+//                                         selector.querySelector(".note_rst").scrollIntoView({
+//                                             behavior: "smooth",
+//                                             block: "center"
+//                                         });
+//                                     }
+//                                     n.classList.remove("a");
+//                                 }, 1e3);
+//                             } else {
+//                                 setTimeout(() => {
+//                                     this.toastr.dismiss(notif);
+//                                     this.toastr.error(res.message);
+//                                     n.classList.remove("a");
+//                                 }, 1e3)
+//                             }
+//                         })
+//                         .catch((error) => {
+//                             this.toastr.dismiss(notif);
+//                             if (error.status) {
+//                                 this.toastr.error('Error:', error.message);
+//                             } else {
+//                                 this.toastr.error('Network error:' + error);
+//                             }
+//                             n.classList.remove("a");
+//                         });
 
-            input.addEventListener("change", () => {
-                let element = input;
-                let e = element.parentNode.dataset.group;
-                let s = element.getAttribute("name");
-                let n = element.dataset.in;
-                let t = element;
-                if (!element.value) return delete element.dataset.fill, element.classList.remove("ok"), void element.classList.remove("er");
-                if (element.dataset.fill = !0, "sty" == t.name && t.classList.add("ok"), n && t.dataset.df) {
-                    let a = fbSTU[n].dt.find(t => t.id == e).fi.find(t => t.i == s).df;
-                    a || (a = fbSTU[n].df);
-                    let r = (t, e) => {
-                        let i = !1;
-                        return e.forEach(e => {
-                            t.includes(e) && (i = !0)
-                        }), i
-                    };
-                    if (r(t.value, a)) t.classList.remove("er"), t.classList.add("ok");
-                    else {
-                        t.classList.remove("ok"), t.classList.add("er");
-                        let o = this.toastr.error("Nhập URL chứa: <b>" + a.join(", ") + "</b>");
-                        o.on("click", ({
-                            t: e,
-                            v: s
-                        }) => {
-                            t.focus(), this.toastr.dismiss(o)
-                        })
-                    }
-                }
-                if (!t.dataset.df && "url" == t.type) {
-                    if (t.value.includes("://")) t.classList.remove("er"), t.classList.add("ok");
-                    else {
-                        t.classList.remove("ok"), t.classList.add("er");
-                        let l = this.toastr.error("Please enter links here..");
-                        l.on("click", ({
-                            t: e,
-                            v: s
-                        }) => {
-                            t.focus(), this.toastr.dismiss(l)
-                        })
-                    }
-                }
-                if (!t.dataset.df && "text" == t.type) {
-                    if (t.value.includes("://")) {
-                        t.classList.remove("ok"), t.classList.add("er");
-                        let c = this.toastr.error("Do not enter links here..");
-                        c.on("click", ({
-                            t: e,
-                            v: s
-                        }) => {
-                            t.focus(), this.toastr.dismiss(c)
-                        })
-                    } else t.classList.remove("er"), t.classList.add("ok");                    
+//                 }
+//             }
+//         })
+//     }
+//     reset() {
+//         const toastr = this.toastr;
+//         const type = this.type;
+//         const selector = document.querySelector(this.select);
+//         const func = () => {
+//             Swal.fire({
+//                 title: 'Đặt lại mẫu?'
+//                 , text: "Bạn chắc chắn muốn đặt lại (reset) mẫu không?"
+//                 , icon: "warning"
+//                 , confirmButtonText: 'Chắc chắn!'
+//                 , showCancelButton: true
+//                 , cancelButtonText: 'Huỷ'
+//             }).then(res => {
+//                 if (res.isConfirmed) {
+//                     const eltInps = this.SELECTOR.querySelectorAll('.input-box input, .input-box textarea');
+//                     const self = this;
 
-                }
-                if (t.value && !t.dataset.df && "datetime-local" == t.type) {
-                    if (Date.parse(new Date(t.value)) < Date.parse(new Date().toISOString().slice(0, 16))) {
-                        t.classList.remove("ok"), t.classList.add("er");
-                        let d = i.error("Invalid expiration date..");
-                        d.on("click", ({
-                            t: e,
-                            v: s
-                        }) => {
-                            t.focus(), this.toastr.dismiss(d)
-                        })
-                    } else t.classList.remove("er"), t.classList.add("ok")
-                }
-            });
-        });
-    }
+//                     eltInps.forEach(inp => {
+//                         inp.value = ''
+//                     });
+//                     editor.setData('');
+//                     localStorage.removeItem('input_NOTE');
+//                     Swal.fire({
+//                         title: 'Thành công'
+//                         , icon: 'success'
+//                     })
+//                 }
+//             })
 
-    request(methodXhr, urlXhr, CSRF_TOKEN, dataXhr) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open(methodXhr, urlXhr, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('X-CSRF-TOKEN', CSRF_TOKEN);
+//         }
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        const res = JSON.parse(xhr.responseText);
-                        resolve(res);
-                    } else {
-                        reject({ status: xhr.status, message: xhr.statusText });
-                    }
-                }
-            };
+//         selector.querySelector("#rsNOTE").addEventListener("click", function() {
+//             func();
+//         })
+//     }
+//     copy() {
+//         const toastr = this.toastr;
+//         const selector = document.querySelector(this.select);
 
-            xhr.send(JSON.stringify(dataXhr));
-        });
-    }
-    autoSetOld() {
-        const eltInps = this.SELECTOR.querySelectorAll('.input-box input, .input-box textarea');
-        const self = this;
-    
-        eltInps.forEach(inp => {
-            inp.addEventListener('change', function (event) {
-                self.lsHandler(event.target.getAttribute('name'), event.target.value);
-            }); 
-        });
-    }
-    
-    setOld() {
-        let obj;
-        if (this.type == 'edit') {
-            const data = this.CONFIG.data;
-            obj = {
-                'n_title' : (data && data.title) ? data.title : '',
-                'n_pasw' : (data && data.password) ? data.password : '',
-                'n_content' : (data && data.content) ? data.content : '',
-            };
-        } else {
-            obj = JSON.parse(localStorage.getItem('input_NOTE')) || {};
-        }
-        for (const [key, value] of Object.entries(obj)) {
-            const elt = this.SELECTOR.querySelector(`[name=${key}]`);
-            if (elt) {
-                elt.value = value;                
-            }
-          }
-    }
+//         selector.querySelector(".note_rst input ~ i").addEventListener("click", () => {
+//             selector.querySelector("#i_n_rst").select(), document.execCommand("copy");
+//             if (document.queryCommandSupported("copy")) {
+//                 this.toastr.success("Đã sao chép URL thành công.")
+//             } else {
+//                 this.toastr.error("Copying URL is not supported in this browser.")
+//             }
+//         });
+//     }
+//     validate() {
+//         const toastr = this.toastr;
+//         const selector = document.querySelector(this.select);
 
-    loadEditor() {        
-        const CR_TOKEN = document.head.querySelector("[name~=csrf-token]").content;
+//         selector.querySelectorAll(".stu_fi:not(.ndf)").forEach(input => {
+//             input.addEventListener("focus", () => {
+//                 if (input.classList.contains("er")) input.classList.remove("er");
+//             });
 
-        ClassicEditor.create(this.SELECTOR.querySelector('#editor'),
-        {
-            language: document.documentElement.lang,
-            ckfinder: {
-                uploadUrl: '/ckeditor/upload?_token=' + CR_TOKEN,
-            },
-            mediaEmbed: {
-                previewsInData: true
-            },
-            initialData: this.content || JSON.parse(localStorage.getItem('input_NOTE'))?.n_content
-        })
-        .catch(error => {
-            console.error(error);
-        })
-        .then(newEditor => { 
-            window.editor = newEditor;
-            
-            newEditor.model.document.on('change:data', () => {
-                const content = newEditor.getData();
-                this.lsHandler('n_content', content);
-            });
-        });        
-    }
-    
-    lsHandler(key, value) {
-        let obj = JSON.parse(localStorage.getItem('input_NOTE')) || {};
-        obj[key] = value;
-        localStorage.setItem('input_NOTE', JSON.stringify(obj));
-    }
-}
+//             input.addEventListener("change", () => {
+//                 let element = input;
+//                 let e = element.parentNode.dataset.group;
+//                 let s = element.getAttribute("name");
+//                 let n = element.dataset.in;
+//                 let t = element;
+//                 if (!element.value) return delete element.dataset.fill, element.classList.remove("ok"), void element.classList.remove("er");
+//                 if (element.dataset.fill = !0, "sty" == t.name && t.classList.add("ok"), n && t.dataset.df) {
+//                     let a = fbSTU[n].dt.find(t => t.id == e).fi.find(t => t.i == s).df;
+//                     a || (a = fbSTU[n].df);
+//                     let r = (t, e) => {
+//                         let i = !1;
+//                         return e.forEach(e => {
+//                             t.includes(e) && (i = !0)
+//                         }), i
+//                     };
+//                     if (r(t.value, a)) t.classList.remove("er"), t.classList.add("ok");
+//                     else {
+//                         t.classList.remove("ok"), t.classList.add("er");
+//                         let o = this.toastr.error("Nhập URL chứa: <b>" + a.join(", ") + "</b>");
+//                         o.on("click", ({
+//                             t: e,
+//                             v: s
+//                         }) => {
+//                             t.focus(), this.toastr.dismiss(o)
+//                         })
+//                     }
+//                 }
+//                 if (!t.dataset.df && "url" == t.type) {
+//                     if (t.value.includes("://")) t.classList.remove("er"), t.classList.add("ok");
+//                     else {
+//                         t.classList.remove("ok"), t.classList.add("er");
+//                         let l = this.toastr.error("Please enter links here..");
+//                         l.on("click", ({
+//                             t: e,
+//                             v: s
+//                         }) => {
+//                             t.focus(), this.toastr.dismiss(l)
+//                         })
+//                     }
+//                 }
+//                 if (!t.dataset.df && "text" == t.type) {
+//                     if (t.value.includes("://")) {
+//                         t.classList.remove("ok"), t.classList.add("er");
+//                         let c = this.toastr.error("Do not enter links here..");
+//                         c.on("click", ({
+//                             t: e,
+//                             v: s
+//                         }) => {
+//                             t.focus(), this.toastr.dismiss(c)
+//                         })
+//                     } else t.classList.remove("er"), t.classList.add("ok");
+
+//                 }
+//                 if (t.value && !t.dataset.df && "datetime-local" == t.type) {
+//                     if (Date.parse(new Date(t.value)) < Date.parse(new Date().toISOString().slice(0, 16))) {
+//                         t.classList.remove("ok"), t.classList.add("er");
+//                         let d = i.error("Invalid expiration date..");
+//                         d.on("click", ({
+//                             t: e,
+//                             v: s
+//                         }) => {
+//                             t.focus(), this.toastr.dismiss(d)
+//                         })
+//                     } else t.classList.remove("er"), t.classList.add("ok")
+//                 }
+//             });
+//         });
+//     }
+
+//     request(methodXhr, urlXhr, CSRF_TOKEN, dataXhr) {
+//         return new Promise((resolve, reject) => {
+//             const xhr = new XMLHttpRequest();
+//             xhr.open(methodXhr, urlXhr, true);
+//             xhr.setRequestHeader('Content-Type', 'application/json');
+//             xhr.setRequestHeader('X-CSRF-TOKEN', CSRF_TOKEN);
+
+//             xhr.onreadystatechange = function () {
+//                 if (xhr.readyState == 4) {
+//                     if (xhr.status == 200) {
+//                         const res = JSON.parse(xhr.responseText);
+//                         resolve(res);
+//                     } else {
+//                         reject({ status: xhr.status, message: xhr.statusText });
+//                     }
+//                 }
+//             };
+
+//             xhr.send(JSON.stringify(dataXhr));
+//         });
+//     }
+//     autoSetOld() {
+//         const eltInps = this.SELECTOR.querySelectorAll('.input-box input, .input-box textarea');
+//         const self = this;
+
+//         eltInps.forEach(inp => {
+//             inp.addEventListener('change', function (event) {
+//                 self.lsHandler(event.target.getAttribute('name'), event.target.value);
+//             });
+//         });
+//     }
+
+//     setOld() {
+//         let obj;
+//         if (this.type == 'edit') {
+//             const data = this.CONFIG.data;
+//             obj = {
+//                 'n_title' : (data && data.title) ? data.title : '',
+//                 'n_pasw' : (data && data.password) ? data.password : '',
+//                 'n_content' : (data && data.content) ? data.content : '',
+//             };
+//         } else {
+//             obj = JSON.parse(localStorage.getItem('input_NOTE')) || {};
+//         }
+//         for (const [key, value] of Object.entries(obj)) {
+//             const elt = this.SELECTOR.querySelector(`[name=${key}]`);
+//             if (elt) {
+//                 elt.value = value;
+//             }
+//           }
+//     }
+
+//     loadEditor() {
+//         const CR_TOKEN = document.head.querySelector("[name~=csrf-token]").content;
+
+//         ClassicEditor.create(this.SELECTOR.querySelector('#editor'),
+//         {
+//             language: document.documentElement.lang,
+//             ckfinder: {
+//                 uploadUrl: '/ckeditor/upload?_token=' + CR_TOKEN,
+//             },
+//             mediaEmbed: {
+//                 previewsInData: true
+//             },
+//             initialData: this.content || JSON.parse(localStorage.getItem('input_NOTE'))?.n_content
+//         })
+//         .catch(error => {
+//             console.error(error);
+//         })
+//         .then(newEditor => {
+//             window.editor = newEditor;
+
+//             newEditor.model.document.on('change:data', () => {
+//                 const content = newEditor.getData();
+//                 this.lsHandler('n_content', content);
+//             });
+//         });
+//     }
+
+//     lsHandler(key, value) {
+//         let obj = JSON.parse(localStorage.getItem('input_NOTE')) || {};
+//         obj[key] = value;
+//         localStorage.setItem('input_NOTE', JSON.stringify(obj));
+//     }
+// }
 const cssSTU = ``;
 const styleSTU = document.createElement("style");
-styleSTU.textContent = cssSTU, document.head.appendChild(styleSTU); 
+styleSTU.textContent = cssSTU, document.head.appendChild(styleSTU);
 
 const icSTU = {
     ct: '<svg fill="currentColor" viewBox="0 0 24 24" fill="none"><path d="M7.93974 15.2602C7.84974 15.2602 7.76973 15.2502 7.67973 15.2102C6.86973 14.9102 6.18973 14.3202 5.75973 13.5502C4.75973 11.7502 5.37974 9.40017 7.12974 8.31017L9.46974 6.86015C10.3297 6.33015 11.3397 6.17018 12.2997 6.42018C13.2597 6.67018 14.0697 7.30016 14.5597 8.18016C15.5597 9.98016 14.9397 12.3302 13.1897 13.4202L12.9297 13.6102C12.5897 13.8502 12.1197 13.7702 11.8797 13.4402C11.6397 13.1002 11.7197 12.6302 12.0497 12.3902L12.3597 12.1702C13.4797 11.4702 13.8597 10.0202 13.2497 8.91017C12.9597 8.39017 12.4897 8.02016 11.9297 7.87016C11.3697 7.72016 10.7797 7.82017 10.2697 8.13017L7.92973 9.58016C6.84973 10.2502 6.46974 11.7002 7.07974 12.8202C7.32974 13.2702 7.72974 13.6202 8.20974 13.8002C8.59974 13.9402 8.79973 14.3702 8.64973 14.7602C8.53973 15.0702 8.24974 15.2602 7.93974 15.2602Z"/><path d="M12.66 17.6501C12.36 17.6501 12.05 17.6101 11.75 17.5301C10.79 17.2801 9.97997 16.6501 9.49997 15.7701C8.49997 13.9701 9.11996 11.6201 10.87 10.5301L11.13 10.3401C11.47 10.1001 11.94 10.1801 12.18 10.5101C12.42 10.8501 12.34 11.3201 12.01 11.5601L11.7 11.7801C10.58 12.4801 10.2 13.9301 10.81 15.0401C11.1 15.5601 11.57 15.9301 12.13 16.0801C12.69 16.2301 13.28 16.1301 13.79 15.8201L16.13 14.3701C17.21 13.7001 17.59 12.2501 16.98 11.1301C16.73 10.6801 16.33 10.3301 15.85 10.1501C15.46 10.0101 15.26 9.58011 15.41 9.19011C15.55 8.80011 15.98 8.60011 16.37 8.75011C17.18 9.05011 17.86 9.64012 18.29 10.4101C19.29 12.2101 18.67 14.5601 16.92 15.6501L14.58 17.1001C13.99 17.4601 13.33 17.6501 12.66 17.6501Z"/><path d="M12 22.75C6.07 22.75 1.25 17.93 1.25 12C1.25 6.07 6.07 1.25 12 1.25C17.93 1.25 22.75 6.07 22.75 12C22.75 17.93 17.93 22.75 12 22.75ZM12 2.75C6.9 2.75 2.75 6.9 2.75 12C2.75 17.1 6.9 21.25 12 21.25C17.1 21.25 21.25 17.1 21.25 12C21.25 6.9 17.1 2.75 12 2.75Z"/></svg>',
@@ -1059,7 +1059,7 @@ const icSTU = {
     pass: '<svg fill="currentColor" viewBox="0 0 512 512"><defs><style>.fa-secondary{opacity:.4}</style></defs><path class="fa-primary" d="M336 0c-97.2 0-176 78.8-176 176c0 14.71 2.004 28.93 5.406 42.59l128 127.1C307.1 349.1 321.3 351.1 336 351.1c97.2 0 176-78.8 176-176S433.2 0 336 0zM376 176c-22.09 0-40-17.91-40-40S353.9 96 376 96S416 113.9 416 136S398.1 176 376 176z"/><path class="fa-secondary" d="M165.4 218.6l-156 156C3.371 380.6 0 388.8 0 397.3V496C0 504.8 7.164 512 16 512l96 0c8.836 0 16-7.164 16-16v-48h48c8.836 0 16-7.164 16-16v-48h57.37c4.242 0 8.312-1.688 11.31-4.688l32.72-32.72L165.4 218.6z"/></svg>',
     style: '<svg viewBox="0 0 32 32"><g><path d="M24,3H8A5,5,0,0,0,3,8V24a5,5,0,0,0,5,5H24a5,5,0,0,0,5-5V8A5,5,0,0,0,24,3Zm3,21a3,3,0,0,1-3,3H8a3,3,0,0,1-3-3V8A3,3,0,0,1,8,5H24a3,3,0,0,1,3,3Z"></path> <path d="M14.5,12H18a1,1,0,0,1,1,1,1,1,0,0,0,2,0,3,3,0,0,0-3-3H14.5a3.5,3.5,0,0,0,0,7h3a1.5,1.5,0,0,1,0,3H14a1,1,0,0,1-1-1,1,1,0,0,0-2,0,3,3,0,0,0,3,3h3.5a3.5,3.5,0,0,0,0-7h-3a1.5,1.5,0,0,1,0-3Z"></path></g></svg>',
     note: '<svg width="46" height="46" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><style>.fa-secondary{opacity:.4}</style></defs><path fill-rule="evenodd" d="M6 2a1 1 0 0 1 1 1v2h2a1 1 0 0 1 0 2H7v2a1 1 0 0 1-2 0V7H3a1 1 0 0 1 0-2h2V3a1 1 0 0 1 1-1Z" clip-rule="evenodd"></path><path fill-rule="evenodd" class="fa-secondary" d="M12 6h5a1 1 0 1 1 0 2h-5.341a5.997 5.997 0 0 1-1.187 2H17a1 1 0 1 1 0 2H7a.998.998 0 0 1-.287-.042A5.978 5.978 0 0 1 2 10.472V19a3 3 0 0 0 3 3h9v-5a3 3 0 0 1 3-3h5V5a3 3 0 0 0-3-3h-8.528A5.978 5.978 0 0 1 12 6Zm4 15.883a3 3 0 0 0 1.293-.762l3.828-3.828A3 3 0 0 0 21.883 16H17a1 1 0 0 0-1 1v4.883ZM6 15a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2H7a1 1 0 0 1-1-1Z" clip-rule="evenodd</path</svg>',
-    tw: '<svg fill="currentColor" viewBox="0 0 24 24"><path d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.7,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z"></path></svg>',
+    tw: '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 300 300.251"><path d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"/></svg>',
     exp: '<svg fill="currentColor" viewBox="0 0 512 512"><defs><style>.fa-secondary{opacity:.4}</style></defs><path class="fa-primary" d="M239 272.1c4.688 4.688 10.83 7.031 16.97 7.031c6.141 0 12.28-2.344 16.97-7.031c9.375-9.375 9.375-24.56 0-33.94l-79.1-80c-9.375-9.375-24.56-9.375-33.94 0s-9.375 24.56 0 33.94L239 272.1z"/><path class="fa-secondary" d="M389.8 56.49c-41.56-28.35-92.1-40.48-142.4-40.49C234.5 15.1 223.1 26.41 223.1 39.26l0 71.05c0 15.95 10.9 30.72 26.64 33.28c20.06 3.261 37.39-12.13 37.39-31.57V83.14c48.13 8.809 91.06 36.96 118.7 81.6c35.56 57.32 34.37 130.7-2.792 187c-63.63 96.38-195.3 106-272.5 28.81C69.43 318.5 63.47 221.3 113.6 152.4c9.276-12.73 8.662-30.08-2.477-41.22C96.12 96.21 73.86 98.17 61.41 115.4c-67.92 93.8-59.65 226 24.8 310.5c46.8 46.79 108.3 70.21 169.8 70.18c61.49 0 122.1-23.38 169.8-70.18C530.2 321.4 518.2 144.1 389.8 56.49z"/></svg>',
     thumb:
         '<svg fill="currentColor" viewBox="0 0 512 512"><defs><style>.fa-secondary{opacity:.4}</style></defs><path class="fa-primary" d="M446.1 407.6C443.3 412.8 437.9 416 432 416H82.01c-6.021 0-11.53-3.379-14.26-8.75c-2.73-5.367-2.215-11.81 1.334-16.68l70-96C142.1 290.4 146.9 288 152 288s9.916 2.441 12.93 6.574l32.46 44.51l93.3-139.1C293.7 194.7 298.7 192 304 192s10.35 2.672 13.31 7.125l128 192C448.6 396 448.9 402.3 446.1 407.6z"/><path class="fa-secondary" d="M464 32h-416C21.49 32 0 53.49 0 80v352C0 458.5 21.49 480 48 480h416c26.51 0 48-21.49 48-48v-352C512 53.49 490.5 32 464 32zM111.1 96c26.51 0 48 21.49 48 48S138.5 192 111.1 192s-48-21.49-48-48S85.48 96 111.1 96zM446.1 407.6C443.3 412.8 437.9 416 432 416H82.01c-6.021 0-11.53-3.379-14.26-8.75c-2.73-5.367-2.215-11.81 1.334-16.68l70-96C142.1 290.4 146.9 288 152 288s9.916 2.441 12.93 6.574l32.46 44.51l93.3-139.1C293.7 194.7 298.7 192 304 192s10.35 2.672 13.31 7.125l128 192C448.6 396 448.9 402.3 446.1 407.6z"/></svg>',

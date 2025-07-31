@@ -8,7 +8,6 @@ use App\Services\NOTEService as NOTEService;
 
 class NOTEController extends Controller
 {
-
     protected $NOTEService;
 
     public function __construct(NOTEService $NOTEService)
@@ -21,15 +20,29 @@ class NOTEController extends Controller
      */
     public function index(Request $request)
     {
-        $user_note_links = $this->NOTEService->getAllPaginated();
+        $serchParams = [
+            ['user_id' => auth()->id()],
+            ['status', '!=', 'deleted'],
+        ];
+        if ($request->has('keyword') && $request->keyword != '') {
+            $serchParams[] = ['alias', 'LIKE', '%' . $request->keyword . '%'];
+        }
+        if ($request->has('level') && $request->level != '') {
+            $serchParams[] = ['level_id', $request->level];
+        }
 
-        return view('backend.member.note-link.index', compact('user_note_links'));
+
+        $links = $this->NOTEService->getAllPaginated(
+            $serchParams
+        );
+
+        return view('backend.member_2.note', compact('links'));
     }
 
     public function destroy(string $alias)
     {
         $destroy = $this->NOTEService->softDeleteOwn($alias);
-        
+
         if ($destroy) {
             return redirect()->back()
             ->with('success', 'Đã xoá liên kết note: <b>'.$alias.'</b> thành công!');

@@ -8,12 +8,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Jenssegers\Agent\Agent;
 use Illuminate\Support\Arr;
-use App\Services\Admin\Interfaces\STUServiceInterface as STUService;
+use App\Services\Admin\STUService as STUService;
 use App\Repositories\Interfaces\STURepositoryInterface as STURepository;
 use App\Repositories\Interfaces\STULogReferralRepositoryInterface as STULogReferralRepository;
 use App\Repositories\Interfaces\STUAccessRepositoryInterface as STUAccessRepository;
 use App\Repositories\Interfaces\STUStatisticRepositoryInterface as STUStatisticRepository;
-use App\Services\Interfaces\PostServiceInterface as PostService;
+use App\Services\PostService as PostService;
 
 use Illuminate\Support\Facades\Log;
 use App\Services\GeoIPService;
@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Cookie;
 use App\Facades\Setting;
 
 use App\Models\User;
+use App\Models\Level as STULevel;
+
+use App\Facades\UserSetting;
 
 class StuController extends Controller
 {
@@ -52,10 +55,9 @@ class StuController extends Controller
     }
 
     public function create(Request $request)
-    {   
-
-        // DB::beginTransaction();
-        // try {
+    {
+        DB::beginTransaction();
+        try {
             $data = $request->all();
 
             if (empty($data['lnk'])) {
@@ -64,7 +66,7 @@ class StuController extends Controller
 
             $userId = $request->user() ? $request->user()->id : 0;
             $alias = Str::random(4);
-            
+
             do {
                 $alias = Str::random(4);
                 $unique = $this->STURepository->findLink($alias) ? false : true;
@@ -83,14 +85,19 @@ class StuController extends Controller
                 'seo_meta' => null
             ]);
             DB::commit();
-            return response()->json(['status' => 'success', 'alias' => $alias]);
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return response()->json(['status' => 'error', 'message' => 'An error occurred while processing your request'], 500);
-        // }
+            return response()->json([
+                'status' => 'success',
+                'alias' => $alias,
+                'shortUrl' => Setting::get('stu_url', config('app.url')) . '/' . $alias,
+                'message' => __('Link created successfully')
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => 'An error occurred while processing your request'], 500);
+        }
     }
     public function update($alias, Request $request)
-    {   
+    {
         try {
             $data = $request->all();
 
@@ -123,7 +130,7 @@ class StuController extends Controller
             }
 
             return response()->json(['status' => 'success', 'alias' => $alias]);
-            
+
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e], 500);
         }
@@ -132,84 +139,119 @@ class StuController extends Controller
     public function redirect(Request $request, $alias)
     {
         $ip_address = generate_random_ip("1.150.113.16");
-        
         $cacheKey = "link_STU:{$alias}";
 
+        // Cache link data
         $link_data = Cache::remember($cacheKey, 60, function () use ($alias) {
             return $this->STURepository
                 ->with(['level'])
                 ->findLinkActive($alias);
         });
-
-        $SEO = null;
-        
         if (!$link_data) {
-            return abort(404);
+            abort(404);
         }
-    
+
+        $userLevelAuto = UserSetting::get('auto_level', 0, $link_data->user_id);
+        if ($userLevelAuto && $link_data->user_id > 0) {
+            $dataLevel = STULevel::find($userLevelAuto);
+            if ($dataLevel) {
+                $link_data->level = $dataLevel;
+            }
+        }
+
+        // Get user agent data with fallback
+        $data_user_agent = $this->getUserAgentData($request, $ip_address);
+
+        // Cache user agent data
+        Cache::put("user_agent:{$ip_address}", $data_user_agent, 3600);
+
+        // Get pages based on configuration
+        $pages = $this->getRedirectPages($link_data, $data_user_agent);
+
+        if (empty($pages)) {
+            return redirect('/');
+        }
+
+        // Set cookies and redirect
+        $this->setRedirectCookies($link_data, $data_user_agent);
+
+        $page_decode = Arr::random($pages);
+
+        return response('', 302)
+            ->header('Location', $page_decode . '?alias=' . $alias);
+    }
+
+    /**
+     * Get user agent data with error handling
+     */
+    private function getUserAgentData(Request $request, string $ip_address): array
+    {
+        // Get device info with fallback
         try {
-            $get_data_device = $this->getDeviceInfo();
+            $device_info = $this->getDeviceInfo();
         } catch (\Exception $e) {
             Log::error('Error getting device info: ' . $e->getMessage());
-            $get_data_device = [
+            $device_info = [
                 'operating_system' => 'unknown',
                 'device' => 'unknown',
                 'browser' => 'unknown',
             ];
         }
-    
+
+        // Get IP data with fallback
         try {
-            $data_ip = $this->geoIPService->getCountry($ip_address);
+            $ip_data = $this->geoIPService->getCountry($ip_address);
         } catch (\Exception $e) {
-            Log::error('Error checking proxy/VPN: ' . $e->getMessage());
-            $data_ip = [
+            Log::error('Error getting IP data ['.$ip_address.']: ' . $e->getMessage());
+            $ip_data = [
                 'ip_address' => $ip_address,
                 'country' => 'unknown',
                 'iso_code' => 'unknown',
             ];
         }
-    
-        $data_user_agent = [
-            'operating_system' => $get_data_device['operating_system'] ?? 'unknown',
-            'device' => $get_data_device['device'] ?? 'unknown',
-            'browser' => $get_data_device['browser'] ?? 'unknown',
-            'country' => $data_ip['iso_code'] ?? 'unknown',
+
+        return [
+            'operating_system' => $device_info['operating_system'] ?? 'unknown',
+            'device' => $device_info['device'] ?? 'unknown',
+            'browser' => $device_info['browser'] ?? 'unknown',
+            'country' => $ip_data['iso_code'] ?? 'unknown',
             'referer' => $request->headers->get('referer', 'direct')
         ];
-    
-        Cache::remember("user_agent:".$ip_address, 60*60, function () use ($data_user_agent) {
-            return $data_user_agent;
-        });
-    
-        $data_pageload_configs = json_decode($link_data->level->pageload_config) ?? [];
-        $chose_config = $this->getConfig($data_pageload_configs, $data_user_agent);
-        if ($chose_config && $chose_config?->link == "[auto]") {
-            $data_post_links = $this->postService->getAllPostLinks();
-            $pages = $data_post_links;
-        } else {
-            $pages = $this->getMatchingPages($data_pageload_configs, $data_user_agent);
-        }
-
-        if (!empty($pages)) {
-            $page_decode = Arr::random($pages);
-            Cookie::queue('_stu', '1', 60); 
-            if (isset($chose_config->axaj) && !empty($chose_config->axaj) && $chose_config->axaj == "on") {
-                Cookie::queue('_stuAxaj', '1', 60); 
-            } else {
-                Cookie::queue('_stuAxaj', '0', 60); 
-            }
-            Cookie::queue(Cookie::forget('_note'));
-
-            return response('', 302)
-            ->header('Location', route('stu.redirect').
-                    "?url=" . base64_encode(urlencode($page_decode . '?a=' . $alias)) .
-                    "&SEO=" . base64_encode(json_encode($SEO))
-                );
-        }
-    
-        return redirect('/');
     }
-    
+
+    /**
+     * Get redirect pages based on configuration
+     */
+    private function getRedirectPages($link_data, array $data_user_agent): array
+    {
+        $pageload_configs = json_decode($link_data->level->pageload_config) ?? [];
+        $chosen_config = $this->getConfig($pageload_configs, $data_user_agent);
+
+        if ($chosen_config && $chosen_config->link === "[auto]") {
+            return $this->postService->getAllPostLinks();
+        }
+
+        return $this->getMatchingPages($pageload_configs, $data_user_agent);
+    }
+
+    /**
+     * Set redirect cookies based on configuration
+     */
+    private function setRedirectCookies($link_data, array $data_user_agent): void
+    {
+        $pageload_configs = json_decode($link_data->level->pageload_config) ?? [];
+        $chosen_config = $this->getConfig($pageload_configs, $data_user_agent);
+
+        Cookie::queue('_stu', '1', 60);
+        Cookie::queue(Cookie::forget('_note'));
+
+        $ajax_enabled = isset($chosen_config->axaj) &&
+                    !empty($chosen_config->axaj) &&
+                    $chosen_config->axaj === "on";
+
+        Cookie::queue('_stuAxaj', $ajax_enabled ? '1' : '0', 60);
+    }
+
     private function getMatchingPages($configs, $user_agent)
     {
         foreach ($configs as $config) {
@@ -230,7 +272,7 @@ class StuController extends Controller
     }
     private function check($cond, $type, $val) {
         $user_agent = $this->getDeviceInfo();
-      
+
         if ($type == "block") {
             if ($cond == "device") {
                 $devices = explode(",", $val);
@@ -278,7 +320,7 @@ class StuController extends Controller
             }
 
         }
-        
+
         return true;
     }
     private function configMatches($config, $user_agent)
@@ -286,31 +328,31 @@ class StuController extends Controller
         if ($config->active !== 'on') {
             return false;
         }
-    
+
         $checks = [
             ['field' => 'country', 'value' => $user_agent['country'], 'all' => '[all]', 'block' => 'block_country'],
             ['field' => 'device', 'value' => $user_agent['device'], 'all' => '[all]', 'block' => 'block_device'],
             ['field' => 'os', 'value' => $user_agent['operating_system'], 'all' => '[all]', 'block' => 'block_os'],
         ];
-    
+
         foreach ($checks as $check) {
             if (!$this->matchesField($config, $check['field'], $check['value'], $check['all'], $check['block'])) {
                 return false;
             }
         }
-    
+
         return true;
     }
-    
+
     private function matchesField($config, $field, $value, $all, $block)
     {
         $fieldValues = array_map('strtolower', explode(',', $config->$field));
         $blockValues = array_map('strtolower', explode(',', $config->$block));
-    
+
         return (in_array(strtolower($value), $fieldValues) || $config->$field == $all) &&
                (!in_array(strtolower($value), $blockValues) || $config->$block == '[no]');
     }
-    
+
     public function getDeviceInfo()
     {
         $agent = new Agent();
@@ -329,7 +371,7 @@ class StuController extends Controller
         ];
     }
     public function count(Request $request, $alias)
-    {   
+    {
         try {
             $ip_address = $request->ip();
             $ip_address = generate_random_ip("1.150.113.16");
@@ -345,13 +387,13 @@ class StuController extends Controller
             }
 
             $cacheKey = "link_STU:{$alias}";
-    
+
             $link_data = Cache::remember($cacheKey, 60, function () use ($alias) {
                 return $this->STURepository
                     ->with(['level'])
                     ->findLinkActive($alias);
             });
-            
+
             if (!$link_data) {
                 return response()->json([
                     'status' => 'error',
@@ -383,9 +425,21 @@ class StuController extends Controller
             //     'date' => Carbon::today()->toDateString()
             // ], $link_data->level->click_value);
 
-            $checkProxyVPN = checkProxyVPN($ip_address);
+            if (Setting::get('stu_proxycheck_enabled', 0) == 1) {
+                $checkProxyVPN = checkProxyVPN($ip_address);
+            } else {
+                $checkProxyVPN = ['result' => 'turn off'];
+            }
 
             $loged = (array) $loged;
+
+            $userLevelAuto = UserSetting::get('auto_level', 0, $link_data->user_id);
+            if ($userLevelAuto && $link_data->user_id > 0) {
+                $dataLevel = STULevel::find($userLevelAuto);
+                if ($dataLevel) {
+                    $link_data->level = $dataLevel;
+                }
+            }
 
             $rate = $link_data->level->rates()->where("country_code", "=", $loged['country'])->first();
             if (!$rate) {
@@ -394,27 +448,24 @@ class StuController extends Controller
             if (isset($loged['device']) && $loged['device'] == "Desktop") {
                 $revenue = (float) $rate->rate[0] / 1000;
                 $limit = $rate?->daily_limit[0] ?? 1;
-
             } else {
                 $revenue = (float) $rate->rate[1] / 1000;
                 $limit = $rate?->daily_limit[1] ?? 1;
             }
 
-            
             if (count($accessed) >= $limit) {
                 return response()->json([
                     'status' => 'error',
                     'message'=> 'limited click, '.'clicked today '.count($accessed)
                 ]);
             }
-            
+
             $create_data = [
                 'user_id' => $link_data->user_id,
                 'parent_id' => $link_data->id, //static_id
                 'link_id' => $link_data->id, //link_id
-                'is_earn' => 1,
+                'level_id' => $link_data->level_id,
                 'revenue' => $revenue,
-                'reason' => 1,
                 'ip_address' => $ip_address,
                 'referral' => $loged['referer'],
                 'country' => $loged['country'],
@@ -440,14 +491,13 @@ class StuController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message'=> $e->getMessage()    
+                'message'=> $e->getMessage()
             ]);
-        }  
+        }
     }
     public function fetch(Request $request, $alias)
     {
-
-        // try {
+        try {
             $lang = $request->get('lang') ?? 'vi';
             // Hàm encodeURIComponent và decodeURIComponent
             function encodeURIComponent($str)
@@ -455,23 +505,23 @@ class StuController extends Controller
                 $revert = array('%21' => '!', '%2A' => '*', '%27' => "'", '%28' => '(', '%29' => ')');
                 return strtr(rawurlencode($str), $revert);
             }
-    
+
             function decodeURIComponent($str)
             {
                 return rawurldecode($str);
             }
-    
+
             // Hàm mã hóa và giải mã
             function ecSTU($text)
             {
                 return base64_encode(encodeURIComponent($text));
             }
-    
+
             function dcSTU($encodedText)
             {
                 return decodeURIComponent(base64_decode($encodedText));
             }
-    
+
             // Tạo danh sách nút và biểu tượng trực tiếp
             $nameButton = [
                 'yt' => ecSTU(transLang('stu.dc.yt', $lang)),
@@ -489,10 +539,10 @@ class StuController extends Controller
                 'fbl' => ecSTU(transLang('stu.dc.fbl', $lang)),
                 'dc' => ecSTU(transLang('stu.dc.dc', $lang)),
                 'zl' => ecSTU(transLang('stu.dc.zl', $lang)),
-            
+
                 'lnk' => ecSTU(transLang('stu.dc.lnk', $lang))
             ];
-            
+
             $iconButon = [
                 'yt' => ecSTU('yt'),
                 'ytl' => ecSTU('ytl'),
@@ -509,13 +559,13 @@ class StuController extends Controller
                 'dc' => ecSTU('dc'),
                 'lnk' => ecSTU('lnk')
             ];
-        
-            $result = Cache::remember("link_STU:{$alias}", 60, function () use ($alias) {
+
+            $result = Cache::remember("_link_STU:{$alias}", 60, function () use ($alias) {
                 return $this->STURepository
                     ->with(['level'])
                     ->findLinkActive($alias);
             });
-            
+
             if (empty($result)) {
                 return response()->json([
                     'status' => 'error',
@@ -523,14 +573,22 @@ class StuController extends Controller
                     'data' => null
                 ], 404);
             }
-    
+
             $user_id = $result->user_id;
             $dtSTU = json_decode($result->data, true);
-    
+
+            $userLevelAuto = UserSetting::get('auto_level', 0, $user_id);
+            if ($userLevelAuto && $user_id > 0) {
+                $dataLevel = STULevel::find($userLevelAuto);
+                if ($dataLevel) {
+                    $result->level = $dataLevel;
+                }
+            }
+
             if (!isset($result->level) && empty($result->level)) {
                 return response()->json(['message' => 'Error config']);
             }
-    
+
             $config = json_decode($result->level->config);
             $_config = [];
 
@@ -565,7 +623,7 @@ class StuController extends Controller
                             $_config[$typeName][$cnt] = $confs;
                             $cnt++;
                         }
-                        
+
                     }
                 }
 
@@ -617,25 +675,25 @@ class StuController extends Controller
                             'https://yeumoney.com/QL_api.php?token=5b539c82581a36409cab82695111565f5df92ee284414b49d4d22ff7990efefb&url='
                         ]
                     ]
-                    
+
                 ]
             ];
-    
+
             // Xử lý nút bấm và liên kết
             $text_BTN = [];
             $pattern = '/\d{1}[a-zA-Z]$/';
-    
+
             foreach (['btn' => $dtSTU['btn'] ?? [], 'lnk' => $dtSTU['lnk'] ?? []] as $type => $items) {
                 if (!is_array($items)) continue;
-    
+
                 foreach ($items as $key => $value) {
                     $key_ = preg_replace('/\d+/', '', $key);
-    
+
                     if (preg_match($pattern, $key)) {
                         $text_BTN[$key] = $value;
                         continue;
                     }
-    
+
                     $res['data'][$type][$key] = [
                         'url' => $value,
                         'ic' => $iconButon[$key_] ?? ecSTU('yt'),
@@ -643,7 +701,7 @@ class StuController extends Controller
                     ];
                 }
             }
-    
+
             // Xử lý dữ liệu khác
             $other = $dtSTU['oth'] ?? [];
             $res['data']['oth'] = [
@@ -656,41 +714,79 @@ class StuController extends Controller
                 'exp' => $other['exp'] ?? false,
                 'sty' => $other['sty'] ?? ''
             ];
-    
+
             // Xử lý thông tin người dùng
             $ip_address = $request->ip();
             $ip_address = "1.150.113.16";
             $loged = Cache::get("user_agent:". $ip_address);
             if (!$loged) {
                 return response()->json([
-                    'status' => 'success',
+                    'status' => 'error',
                     'message' => 'Link Expired...'
                 ], 200);
             }
-    
+
             $res['data']['info']['country'] = $loged['country'];
             $res['data']['info']['device'] = $loged['device'];
             $res['data']['info']['os'] = $loged['operating_system'];
             $res['data']['info']['browser'] = $loged['browser'];
-    
+            $res['web'] = [
+                'url' => '#',
+                'name' => 'Link4Sub',
+                'icon' => 'https://link4sub.com/images/favicon.png',
+                'languages' => [
+                    [
+                        'code' => 'vi',
+                        'name' => 'Tiếng Việt',
+                        'icon' => '/core/img/flags/vn.svg'
+                    ],
+                    [
+                        'code' => 'en',
+                        'name' => 'English',
+                        'icon' => '/core/img/flags/vn.svg'
+                    ],
+                    [
+                        'code' => 'fr',
+                        'name' => 'Français',
+                        'icon' => '/core/img/flags/vn.svg'
+                    ],
+                    [
+                        'code' => 'es',
+                        'name' => 'Español',
+                        'icon' => '/core/img/flags/vn.svg'
+                    ],
+                    [
+                        'code' => 'de',
+                        'name' => 'Deutsch',
+                        'icon' => '/core/img/flags/vn.svg'
+                    ],
+                    [
+                        'code' => 'ru',
+                        'name' => 'Русский',
+                        'icon' => '/core/img/flags/vn.svg'
+                    ]
+                ],
+                'currentLanguage' => 'vi',
+            ];
             return response()->json([
                 'status' => 'success',
                 'message' => 'Link fetched successfully',
-                'data' => $res
+                'data' => $res,
+                'isLogged' => $loged ? true : false,
             ], 200);
-    
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => $e,
-        //         'data' => null
-        //     ], 500);
-        // }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e,
+                'data' => null
+            ], 500);
+        }
     }
     private function getRefererDomain(): string|null
     {
         $referer = request()->headers->get('referer');;
-   
+
         $domain = $referer ? parse_url($referer, PHP_URL_HOST) : null;
 
         return $domain;

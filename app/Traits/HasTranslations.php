@@ -4,6 +4,18 @@ namespace App\Traits;
 
 trait HasTranslations
 {
+    public function __get($key)
+    {
+        if (
+            property_exists($this, 'translatable') &&
+            in_array($key, $this->translatable)
+        ) {
+            return $this->translation()?->$key;
+        }
+
+        return parent::__get($key);
+    }
+
     public function translations()
     {
         $baseName = class_basename($this);
@@ -14,14 +26,14 @@ trait HasTranslations
     public function translation($locale = null)
     {
         $locale = $locale ?: app()->getLocale();
-    
+
         $translations = $this->getRelationValue('translations');
-    
+
         if ($translations) {
             return $translations->firstWhere('lang_code', $locale)
                 ?? $translations->firstWhere('lang_code', 'en');
         }
-    
+
         return $this->translations()
             ->where('lang_code', $locale)
             ->first()
@@ -29,11 +41,11 @@ trait HasTranslations
             ->where('lang_code', 'en')
             ->first();
     }
-    
+
     public function hasTranslation($locale): bool
     {
         return $this->translations
             ->where('lang_code', $locale)
-            ->isNotEmpty(); 
+            ->isNotEmpty();
     }
 }

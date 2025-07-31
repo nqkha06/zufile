@@ -14,7 +14,15 @@
   <input class="form-control" placeholder="" id="datepicker-icon-prepend"/>
   </div>
 @endsection
+@push('styles')
+<style>
+    .hiddenRow {
+        padding: 0 !important;
+    }
 
+</style>
+
+@endpush
 @section('content')
 <div class="row row-deck row-cards">
   @php
@@ -27,184 +35,114 @@
   $STUCpm = $STUViews > 0 ? ($STURevenue/$STUViews)*1000 : 0;
   $NOTECpm = $NOTERevenue > 0 ? ($NOTERevenue/$NOTEViews)*1000 : 0;
   @endphp
-  <div class="col-6 col-lg-2">
-    <div class="card">
-      <div class="card-body py-3">
-        <div class="d-flex align-items-center">
-          <div class="subheader">DOANH THU</div>
-        </div>
-        <div class="h1 mb-0">${{ round($STURevenue + $NOTERevenue, 3) }}</div>
-        <div class="d-flex mt-3 justify-content-between flex-column">
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-blue me-2"></span>
-              <div class="text-secondary">STU</div>
-            </div>
-            <div class="fw-bold">${{ round($STURevenue, 3) }}</div>
-          </div>
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-green me-2"></span>
-              <div class="text-secondary">NOTE</div>
-            </div>
-            <div class="fw-bold">${{ round($NOTERevenue, 3) }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-6 col-lg-2">
-    <div class="card">
-      <div class="card-body py-3">
-        <div class="d-flex align-items-center">
-          <div class="subheader">LƯỢT XEM</div>
-        </div>
-        <div class="d-flex align-items-baseline">
-          <div class="h1 mb-0 me-2">{{ $NOTEViews + $STUViews }}</div>
 
-        </div>
-        <div class="d-flex mt-3 justify-content-between flex-column">
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-blue me-2"></span>
-              <div class="text-secondary">STU</div>
-            </div>
-            <div class="fw-bold">{{ $STUViews }}</div>
-          </div>
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-green me-2"></span>
-              <div class="text-secondary">NOTE</div>
-            </div>
-            <div class="fw-bold">{{ $NOTEViews }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-6 col-lg-2">
-    <div class="card">
-      <div class="card-body py-3">
-        <div class="d-flex align-items-center">
-          <div class="subheader">CPM</div>
-        </div>
-        <div class="d-flex align-items-baseline">
-          <div class="h1 mb-0 me-2">${{ round(($STUCpm + $NOTECpm > 0) ? ($STUCpm + $NOTECpm)/2 : 0, 3)  }}</div>
-        </div>
-        <div class="d-flex mt-3 justify-content-between flex-column">
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-blue me-2"></span>
-              <div class="text-secondary">STU</div>
-            </div>
-            <div class="fw-bold">${{ round($STUCpm, 3) }}</div>
-          </div>
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-green me-2"></span>
-              <div class="text-secondary">NOTE</div>
-            </div>
-            <div class="fw-bold">${{ round($NOTECpm, 3) }}</div>
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  <div class="col-6 col-lg-2">
-    <div class="card">
-      <div class="card-body py-3">
-        <div class="d-flex align-items-center">
-          <div class="subheader">Liên kết mới</div>
-        </div>
-        @php
-            $STUCount = $data['links']['STU']->count();
-            $NOTECount = $data['links']['NOTE']->count();
-        @endphp
-        <div class="h1 mb-0">{{ $STUCount + $NOTECount }}</div>
-        <div class="d-flex mt-3 justify-content-between flex-column">
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-blue me-2"></span>
-              <div class="text-secondary">STU</div>
-            </div>
-            <div class="fw-bold">{{ $STUCount }}</div>
-          </div>
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-green me-2"></span>
-              <div class="text-secondary">NOTE</div>
-            </div>
-            <div class="fw-bold">{{ $NOTECount }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-6 col-lg-2">
-    <div class="card">
-      <div class="card-body py-3">
-        <div class="d-flex align-items-center">
-          <div class="subheader">NGƯỜI DÙNG</div>
-        </div>
-        <div class="d-flex align-items-baseline">
-          <div class="h1 mb-0 me-2">{{ $data['users']['new'] }}</div>
-        </div>
-        <div class="d-flex mt-3 justify-content-between flex-column">
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-blue me-2"></span>
-              <div class="text-secondary">Giới thiệu</div>
-            </div>
-            <div class="fw-bold">- -</div>
-          </div>
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-green me-2"></span>
-              <div class="text-secondary">Trực tiếp</div>
-            </div>
-            <div class="fw-bold">- -</div>
-          </div>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  <div class="col-6 col-lg-2">
-    <div class="card">
-      <div class="card-body py-3">
-        @php
-          $WDCountD = $data['wd']->where('type', 0)->count();
-          $WDCountF = $data['wd']->where('type', 1)->count();
-        @endphp
-        <div class="d-flex align-items-center">
-          <div class="subheader">ĐƠN RÚT</div>
-        </div>
-        <div class="d-flex align-items-baseline">
-          <div class="h1 mb-0 me-2">{{ $WDCountD + $WDCountF }}</div>
-        </div>
-        <div class="d-flex mt-3 justify-content-between flex-column">
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-red me-2"></span>
-              <div class="text-secondary">Nhanh</div>
-            </div>
-            <div class="fw-bold">{{ $WDCountF }}</div>
-          </div>
-          <div class="d-flex justify-content-between fs-5">
-            <div class="d-flex align-items-center">
-              <span class="bullet bg-cyan me-2"></span>
-              <div class="text-secondary">Bình thường</div>
-            </div>
-            <div class="fw-bold">{{ $WDCountD }}</div>
-          </div>
-        </div>
-      </div>
-      {{-- <div id="chart-revenue-bg" class="chart-sm"></div> --}}
-    </div>
-  </div>
+ @php
+    $cards = [
+      [
+        'title' => 'DOANH THU',
+        'main' => '$' . round($STURevenue + $NOTERevenue, 3),
+        'metrics' => [
+          ['label' => 'STU', 'color' => 'blue', 'value' => '$' . round($STURevenue, 3)],
+          ['label' => 'NOTE', 'color' => 'green', 'value' => '$' . round($NOTERevenue, 3)],
+        ],
+        'levels' => [
+          'STU' => $levels,
+          'NOTE' => $note_levels,
+        ],
+        'levelValue' => 'revenue'
+      ],
+      [
+        'title' => 'LƯỢT XEM',
+        'main' => $NOTEViews + $STUViews,
+        'metrics' => [
+          ['label' => 'STU', 'color' => 'blue', 'value' => $STUViews],
+          ['label' => 'NOTE', 'color' => 'green', 'value' => $NOTEViews],
+        ],
+        'levels' => [
+          'STU' => $levels,
+          'NOTE' => $note_levels,
+        ],
+        'levelValue' => 'clicks'
+      ],
+      [
+        'title' => 'CPM',
+        'main' => '$' . round(($STUCpm + $NOTECpm) > 0 ? ($STUCpm + $NOTECpm) / 2 : 0, 3),
+        'metrics' => [
+          ['label' => 'STU', 'color' => 'blue', 'value' => '$' . round($STUCpm, 3)],
+          ['label' => 'NOTE', 'color' => 'green', 'value' => '$' . round($NOTECpm, 3)],
+        ],
+        'levels' => [
+          'STU' => $levels,
+          'NOTE' => $note_levels,
+        ],
+        'levelValue' => 'revenue'
+      ],
+      [
+        'title' => 'Liên kết mới',
+        'main' => $data['links']['STU']->count() + $data['links']['NOTE']->count(),
+        'metrics' => [
+          ['label' => 'STU', 'color' => 'blue', 'value' => $data['links']['STU']->count()],
+          ['label' => 'NOTE', 'color' => 'green', 'value' => $data['links']['NOTE']->count()],
+        ],
+        'levels' => [
+          'STU' => $levels,
+          'NOTE' => $note_levels,
+        ],
+        'levelValue' => 'count' // fix lại tên rõ nghĩa hơn thay vì '0'
+      ]
+    ];
+@endphp
 
-  <div class="col-md-12 col-lg-12">
+@foreach($cards as $card)
+  <div class="col-12 col-lg-3">
+    <div class="card h-100">
+      <div class="card-body py-3">
+        <div class="d-flex align-items-center mb-2">
+          <div class="subheader">{{ $card['title'] }}</div>
+        </div>
+        <div class="h1 mb-3">{{ $card['main'] }}</div>
+
+        @foreach($card['metrics'] as $metric)
+          <div class="d-flex justify-content-between align-items-center fs-6 mb-2">
+            <div class="d-flex align-items-center">
+              <span class="bullet bg-{{ $metric['color'] }} me-2"></span>
+              <div class="text-secondary">{{ $metric['label'] }}</div>
+            </div>
+            <div class="fw-bold">{{ $metric['value'] }}</div>
+          </div>
+        @endforeach
+      </div>
+
+      @foreach($card['levels'] as $type => $levelsGroup)
+        <div class="card-body py-2 border-top">
+          @foreach($levelsGroup as $level)
+            @php
+              $levelData = ($data['level'][$type] ?? collect())->where('level_id', $level->id)->first();
+              $value = 0;
+
+              if ($card['levelValue'] === 'revenue') {
+                $value = $levelData->revenue ?? 0;
+              } elseif ($card['levelValue'] === 'clicks') {
+                $value = $levelData->clicks ?? 0;
+              } elseif ($card['levelValue'] === 'count') {
+                $levelData = $data['level']['new'][$type]->where('level_id', $level->id)->first();
+                $value = $levelData->count ?? 0;
+              }
+            @endphp
+            <div class="d-flex justify-content-between text-muted small">
+              <div>{{ $type }} - {{ $level->name }}</div>
+              <div class="fw-semibold">{{ is_numeric($value) ? (Str::startsWith($card['levelValue'], 'revenue') ? '$' . round($value, 3) : $value) : '-' }}</div>
+            </div>
+          @endforeach
+        </div>
+      @endforeach
+    </div>
+  </div>
+@endforeach
+
+
+
+  <div class="col-md-12 col-lg-6">
     <div class="card">
       <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs flex-row-reverse" data-bs-toggle="tabs">
@@ -229,66 +167,113 @@
             <table class="table table-vcenter">
               <thead>
                 <tr>
-                  <th>#Người dùng</th>
-                  <th>#Liên kết</th>
-                  <th>#Lượt xem</th>
-                  <th>#Thu nhập</th>
-                  <th>#Cấp độ</th>
+                  <th>No.</th>
+                  <th>Bí danh</th>
+                  <th>Lượt xem</th>
+                  <th>Thu nhập</th>
+                  <th>##</th>
                 </tr>
               </thead>
               @foreach ($data['links']['popNOTE'] as $key=>$val)
               <tr>
-                <td class="text-secondary"><a href="{{ route('admin.users.show', $val->user->id) }}">{{ $val->user->name }}</a></td>
-                <td class="text-secondary">{{ $val->total_clicks }}</td>
-
+                <td class="text-secondary">{{ ++$key }}</td>
                 <td>
-                  {{ Setting::get('note_url', '') }}/{{ $val->alias }}
-                  <a href="{{ route('note.show', $val->alias) }}" target="_blank" class="ms-1" aria-label="Open website">
+                  <a href="{{ route('admin.stu.show', $val->link->id) }}">{{ $val->link->alias }}</a>
+                  <a href="{{ route('stu.show', $val->link->alias) }}" target="_blank" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
-                <td class="text-secondary">{{ $val->total_clicks }}</td>
-                <td class="text-secondary">${{ round($val->total_revenue, 3) }}</td>
-                <td class="text-secondary">{{ isset($val->level->name) ? $val->level->name : '' }}</td>
+                <td class="text-secondary">{{ $val->clicks }}</td>
+                <td class="text-secondary">${{ round($val->revenue, 3) }}</td>
+                <td class="text-secondary " data-bs-toggle="collapse" data-bs-target="#stu_details{{ $key }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                <path d="M6 9l6 6l6 -6"></path>
+                              </svg>
+                </td>
 
               </tr>
+
+              <tr>
+                <td colspan="5" class="hiddenRow">
+                    <div class="collapse out" id="stu_details{{ $key }}">
+                        <div class="card card-body">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-secondary">Người dùng:</span>
+                                <span class="text-secondary">{{ $val->link->user->name }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-secondary">Cấp độ:</span>
+                                <span class="text-secondary">{{ isset($val->link->level->name) ? $val->link->level->name : '' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-secondary">Ngày tạo:</span>
+                                <span class="text-secondary">{{ $val->link->created_at }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+
               @endforeach
             </table>
           </div>
-          <div class="card-footer d-flex align-items-center">
-            {{ $data['links']['popNOTE']->links('pagination.tabler') }}
-          </div>
+
         </div>
         <div class="tab-pane active show" id="tabs-profile-ex4">
           <div class="table-responsive">
+
             <table class="table table-vcenter">
               <thead>
                 <tr>
-                  <th>STT</th>
-                  <th>Người tạo</th>
+                  <th>No.</th>
                   <th>Bí danh</th>
-                  <th>Cấp độ</th>
                   <th>Lượt xem</th>
                   <th>Thu nhập</th>
+                  <th>##</th>
                 </tr>
               </thead>
               @if ($data['links']['popSTU']->count() > 0)
               @foreach ($data['links']['popSTU'] as $key=>$val)
               <tr>
                 <td class="text-secondary">{{ ++$key }}</td>
-                <td class="text-secondary"><a target="_blank" href="{{ route('admin.users.show', $val->user->id) }}">{{ $val->user->name }}</a></td>
-
                 <td>
-                  <a href="{{ route('admin.stu.show', $val->id) }}">{{ route('stu.show', $val->alias) }}</a>
-                  <a href="{{ route('stu.show', $val->alias) }}" target="_blank" class="ms-1" aria-label="Open website">
+                  <a href="{{ route('admin.stu.show', $val->link->id) }}">{{ $val->link->alias }}</a>
+                  <a href="{{ route('stu.show', $val->link->alias) }}" target="_blank" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
-                <td class="text-secondary">{{ $val->level->name }}</td>
-                <td class="text-secondary">{{ $val->total_clicks }}</td>
-                <td class="text-secondary">${{ round($val->total_revenue, 3) }}</td>
+                <td class="text-secondary">{{ $val->clicks }}</td>
+                <td class="text-secondary">${{ round($val->revenue, 3) }}</td>
+                <td class="text-secondary " data-bs-toggle="collapse" data-bs-target="#stu_details{{ $key }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-1">
+                                <path d="M6 9l6 6l6 -6"></path>
+                              </svg>
+                </td>
+
               </tr>
-              @endforeach 
+
+              <tr>
+                <td colspan="5" class="hiddenRow">
+                    <div class="collapse out" id="stu_details{{ $key }}">
+                        <div class="card card-body">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-secondary">Người dùng:</span>
+                                <span class="text-secondary">{{ $val->link->user->name }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-secondary">Cấp độ:</span>
+                                <span class="text-secondary">{{ isset($val->link->level->name) ? $val->link->level->name : '' }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-secondary">Ngày tạo:</span>
+                                <span class="text-secondary">{{ $val->link->created_at }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
+                </tr>
+
+              @endforeach
               @else
               <tr>
                 <td colspan="20">KHÔNG CÓ DỮ LIỆU</td>
@@ -296,9 +281,7 @@
               @endif
             </table>
           </div>
-          <div class="card-footer d-flex align-items-center">
-            {{ $data['links']['popSTU']->links('pagination.tabler') }}
-          </div>
+
 
         </div>
       </div>
@@ -345,7 +328,7 @@
               </td>
             </tr>
             @endfor
-          
+
           </tbody>
         </table>
       </div>
@@ -488,6 +471,8 @@ $dataChart = $data['dataChart']['stats'];
       element: document.getElementById('datepicker-icon-prepend'),
       autoApply: false,
       singleMode: false,
+    "linkedCalendars": true,
+
       buttonText: {
         apply: "Áp dụng",
         cancel: "Huỷ",

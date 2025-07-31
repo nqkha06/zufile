@@ -10,11 +10,11 @@
     <meta name="author" content="@yield('meta_author', 'Your Name')">
 
     <!-- Favicon -->
-    <link href='/images/1721055856.png' rel='apple-touch-icon' sizes='120x120' />
-    <link href='/images/1721055856.png' rel='apple-touch-icon' sizes='152x152' />
-    <link href='/images/1721055856.png' rel='icon' type='image/x-icon' />
-    <link href='/images/1721055856.png' rel='shortcut icon' type='image/x-icon' />
-    
+    <link href='{{ Setting::get("web_favicon") ? asset(Setting::get("web_favicon")) : "#" }}' rel='apple-touch-icon' sizes='120x120' />
+    <link href='{{ Setting::get("web_favicon") ? asset(Setting::get("web_favicon")) : "#" }}' rel='apple-touch-icon' sizes='152x152' />
+    <link href='{{ Setting::get("web_favicon") ? asset(Setting::get("web_favicon")) : "#" }}' rel='icon' type='image/x-icon' />
+    <link href='{{ Setting::get("web_favicon") ? asset(Setting::get("web_favicon")) : "#" }}' rel='shortcut icon' type='image/x-icon' />
+
     @php
     $ogMetaTags = [
         'og:type' => 'og_type',
@@ -70,11 +70,11 @@
     </script>
 </script>
 
-    
+
 </head>
 
 <body class="oGrd bD onIt onPg {{ str_contains(request()->url(), '/blog/') || str_contains(request()->url(), '/pages/') ? 'onIt' : 'onId' }} " id="mainCont" style="padding-right: 0px;">
-    <script>/*<![CDATA[*/ 
+    <script>/*<![CDATA[*/
     if (STUstatus === true) {
         document.body.classList.add('stu');
     }
@@ -104,7 +104,7 @@
                                 @yield('sidebar')
                             </aside>
                             @endif
-                        
+
                         </div>
                     </div>
                 </div>

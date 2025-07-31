@@ -28,7 +28,7 @@ td img {
     transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển tiếp */
     scale: 1.3;
 }
-    
+
 td img:hover {
     transform: scale(1.1); /* Phóng to ảnh khi di chuột */
 }
@@ -59,9 +59,9 @@ td img:hover {
                             <option value="">[-- Trạng thái --]</option>
                             @foreach ($baseStatus as $status)
                                 <option value="{{ $status->value }}" @selected(old('status', request('status')) == $status->value)>{{ $status->label() }}</option>
-                                
+
                             @endforeach
-    
+
                         </select>
                     </div>
                     <div class="col-sm-2 d-flex align-items-end gap-1 mb-2">
@@ -103,7 +103,7 @@ td img:hover {
                             <td>
                                 <div class="btn-list flex-nowrap">
                                     <a href="{{ route('admin.posts.edit', $value->id) }}" class="btn">Chỉnh sửa</a>
-                                    
+
                                     <form action="{{ route('admin.posts.destroy', $value->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
@@ -118,14 +118,14 @@ td img:hover {
                     @endforeach
                 @else
                 <tr>
-                    <td colspan="20">KHÔNG CÓ DỮ LIỆU</td>    
+                    <td colspan="20">KHÔNG CÓ DỮ LIỆU</td>
                 </tr>
                 @endif
 
             </tbody>
             </table>
         </div>
-    
+
         <div class="card-footer d-flex align-items-center">
             {{ $posts->links('pagination.tabler') }}
         </div>

@@ -18,12 +18,12 @@ class RegisteredUserController extends Controller
     public function handleReferral($refCode, Request $request)
     {
         $referrer = User::where('id', $refCode)->first();
-    
+
         if ($referrer) {
             $request->session()->put('referrer_id', $referrer->id);
-  
+
         }
-        
+
         return redirect()->route('auth.register');
     }
     /**
@@ -49,13 +49,21 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $referrer_id = $request->session()->get('referrer_id', null);
+        $referrer_id = $request->session()->get('referrer_id', 0);
 
         $user = User::create([
             'name' => $request->name,
             'email' => strtolower($request->email),
             'password' => Hash::make($request->password),
             'referred_by' => $referrer_id,
+        ]);
+
+        $user->plans()->create([
+            'plan_id' => config('plans.default_free_id', 1), // ví dụ ID = 1
+            'started_at' => now(),
+            'expires_at' => null,
+            'price_paid' => 0,
+            'is_active' => true,
         ]);
 
         event(new Registered($user));

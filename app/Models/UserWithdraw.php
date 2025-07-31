@@ -5,11 +5,10 @@ namespace App\Models;
 use App\Enums\InvoiceStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\QueryScopes;
 
 class UserWithdraw extends Model
 {
-    use HasFactory, QueryScopes;
+    use HasFactory;
     const UPDATED_AT = null;
     protected $casts = [
         'status' => InvoiceStatusEnum::class,

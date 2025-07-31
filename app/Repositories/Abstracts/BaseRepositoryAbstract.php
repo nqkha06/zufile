@@ -207,7 +207,7 @@ class BaseRepositoryAbstract implements BaseRepositoryInterface
     public function with(array $with): BaseRepositoryInterface
     {
         $this->with = $with;
-        
+
         return $this;
     }
 
@@ -286,8 +286,8 @@ class BaseRepositoryAbstract implements BaseRepositoryInterface
         $model = $this->find($id);
         return $model->update($payload);
      }
- 
- 
+
+
      public function delete(int $id = 0){
          return $this->find($id)->delete();
      }
@@ -325,22 +325,22 @@ class BaseRepositoryAbstract implements BaseRepositoryInterface
     protected function applyFilterConditions(array $conditions): Builder
     {
         $query = $this->getQuery();
-    
+
         if (empty($conditions)) {
             return $query;
         }
-    
+
         $conditions = $this->parseConditions($conditions);
 
         foreach ($conditions as $data) {
             list($field, $operator, $val) = $data;
-    
+
             $operator = preg_replace('/\s\s+/', ' ', trim($operator));
-    
+
             $exploded = explode(' ', $operator);
             $condition = strtoupper(trim($exploded[0]));
             $operator = trim($exploded[1] ?? '=');
-    
+
             // Detect if it's an orWhere condition
             $isOrWhere = false;
             if (str_starts_with($condition, 'OR')) {
@@ -348,7 +348,7 @@ class BaseRepositoryAbstract implements BaseRepositoryInterface
                 $condition = str_replace('OR', '', $condition);
             }
             $whereMethod = $isOrWhere ? 'orWhere' : 'where';
-    
+
             switch ($condition) {
                 case 'NULL':
                     $query->{$whereMethod . 'Null'}($field);
@@ -418,10 +418,10 @@ class BaseRepositoryAbstract implements BaseRepositoryInterface
                     $query->{$whereMethod}($field, $condition, $val);
             }
         }
-    
+
         return $query;
     }
-    
+
 
     /**
      * @return Builder
@@ -539,5 +539,10 @@ class BaseRepositoryAbstract implements BaseRepositoryInterface
         if (!$value instanceof Closure && !is_null($value)) {
             // throw new RepositoryException("Invalid closure provided.");
         }
+    }
+
+    public function query(): Builder
+    {
+        return $this->getQuery();
     }
 }
