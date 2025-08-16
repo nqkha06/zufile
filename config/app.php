@@ -172,6 +172,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         App\Providers\ViewComposerServiceProvider::class,
+        App\Providers\CaptchaServiceProvider::class,
 
     ])->toArray(),
 
@@ -446,5 +447,6 @@ return [
         'ZM' => 'Zambia',
         'ZW' => 'Zimbabwe'
     ),
-    'DEFAULT_LANG_ADMIN' => env("DEFAULT_LANG_ADMIN")
+    'DEFAULT_LANG_ADMIN' => env("DEFAULT_LANG_ADMIN"),
+    'CPM_RATE' => env("CPM_RATE", 0.0001),
 ];

@@ -129,7 +129,7 @@
                                                 Statistic
                                             </a>
                                             <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item"
+                                                {{-- <a class="dropdown-item"
                                                     href="{{ route('admin.stu.index', ['user' => $user->id]) }}">
                                                     Xem liên kết
                                                 </a>
@@ -137,7 +137,7 @@
                                                 <a class="dropdown-item"
                                                     href="{{ route('admin.note.index', ['user' => $user->id]) }}">
                                                     Xem ghi chú
-                                                </a>
+                                                </a> --}}
                                                 <a class="dropdown-item"
                                                     href="{{ route('admin.invoices.index', ['user' => $user->id]) }}">
                                                     Xem đơn rút

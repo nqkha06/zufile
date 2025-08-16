@@ -1,32 +1,32 @@
 @extends('layouts.member_2')
 
-@section('title', __('Account settings'))
+@section('title', __('member/account.page_title'))
 
 @section('content')
     <div class="divide-y divide-black/5">
         <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
-                <h2 class="text-base font-semibold leading-7">Account Information</h2>
-                <p class="mt-1 tm-sm">Settings relating to your account information.</p>
+                <h2 class="text-base font-semibold leading-7">{{ __('member/account.account_info.title') }}</h2>
+                <p class="mt-1 tm-sm">{{ __('member/account.account_info.description') }}</p>
             </div>
 
             <form class="account md:col-span-2 sm:max-w-xl">
                 <div class="space-y-6 md:space-y-8">
                     <div>
                         <div class="field space-y-1">
-                            <div>Display name</div>
+                            <div>{{ __('member/account.account_info.display_name') }}</div>
                             <input class="" type="text" name="name" autocomplete="off" value="Ngô Quốc Kha">
                         </div>
-                        <p class="tm-sm">Can be changed once every 14 days.</p>
+                        <p class="tm-sm">{{ __('member/account.account_info.name_change_limit') }}</p>
                     </div>
                     <div>
                         <div class="field space-y-1">
-                            <div>Email address</div>
+                            <div>{{ __('member/account.account_info.email_address') }}</div>
                             <input class="" type="email" name="email" autocomplete="off"
                                 value="ngo********@g****.com" disabled="disabled">
                         </div>
                         <button type="button" class="text-blue-600 hover:text-blue-500 leading-6" data-bs-toggle="modal"
-                            data-bs-target="#SndXKi">Change email</button>
+                            data-bs-target="#SndXKi">{{ __('member/account.account_info.change_email') }}</button>
                         <div class="modal fade" tabindex="-1" aria-hidden="true" id="SndXKi">
                             <div class="modal-dialog">
                                 <div class="content">
@@ -38,15 +38,14 @@
                                                     <img src="/images/sections/email.svg" alt="Email"
                                                         class="h-48 mx-auto" loading="lazy">
                                                     <div>
-                                                        <p>Change email</p>
-                                                        <p class="tm-sm">We'll send you a link to your current email
-                                                            address, in order to change it.</p>
+                                                        <p>{{ __('member/account.account_info.email_modal.title') }}</p>
+                                                        <p class="tm-sm">{{ __('member/account.account_info.email_modal.description') }}</p>
                                                     </div>
                                                     <div class="grid grid-cols-2 gap-4">
                                                         <button type="button" class="button"
-                                                            id="IEiLQL">Continue</button>
+                                                            id="IEiLQL">{{ __('member/account.account_info.email_modal.continue') }}</button>
                                                         <button type="button" class="button secondary"
-                                                            data-bs-dismiss="modal">Cancel</button>
+                                                            data-bs-dismiss="modal">{{ __('member/account.account_info.email_modal.cancel') }}</button>
                                                     </div>
                                                     <script>
                                                         const button = document.getElementById('IEiLQL');
@@ -79,12 +78,11 @@
                                                             fill="#E3E3E3"></path>
                                                     </svg>
                                                     <div>
-                                                        <p>Email has been sent</p>
-                                                        <p class="tm-sm">If you're not receiving emails, check your spam
-                                                            inbox. If you still don't find it you can request it again.</p>
+                                                        <p>{{ __('member/account.account_info.email_modal.sent_title') }}</p>
+                                                        <p class="tm-sm">{{ __('member/account.account_info.email_modal.sent_description') }}</p>
                                                     </div>
                                                     <button type="button" class="button secondary"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                        data-bs-dismiss="modal">{{ __('member/account.account_info.email_modal.close') }}</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,15 +94,15 @@
                 </div>
 
                 <div class="mt-8 flex">
-                    <button type="submit" class="button !w-auto">Save</button>
+                    <button type="submit" class="button !w-auto">{{ __('member/account.account_info.save') }}</button>
                 </div>
             </form>
         </div>
 
         {{-- <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
-                <h2 class="text-base font-semibold leading-7">Download page options </h2>
-                <p class="mt-1 tm-sm">Options for settings on the download page for your files.</p>
+                <h2 class="text-base font-semibold leading-7">{{ __('member/account.download_options.title') }}</h2>
+                <p class="mt-1 tm-sm">{{ __('member/account.download_options.description') }}</p>
             </div>
 
             <form class="account md:col-span-2 sm:max-w-xl">
@@ -112,7 +110,7 @@
 
                 <div class="space-y-6 md:space-y-8">
                     <div class="field flex items-center justify-between">
-                        <label for="relate-file">Display related file at download</label>
+                        <label for="relate-file">{{ __('member/account.download_options.related_files') }}</label>
                         <label for="relate-file"
                             class="relative h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 bg-blue-600"
                             role="switch" aria-checked="true">
@@ -125,7 +123,7 @@
                 </div>
 
                 <div class="mt-8 flex">
-                    <button type="submit" class="button !w-auto">Save</button>
+                    <button type="submit" class="button !w-auto">{{ __('member/account.account_info.save') }}</button>
                 </div>
             </form>
         </div> --}}
@@ -133,8 +131,8 @@
         <div id="upload-section"
             class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
-                <h2 class="text-base font-semibold leading-7">Upload options </h2>
-                <p class="mt-1 tm-sm">Options to customize such as default file settings when uploading etc.</p>
+                <h2 class="text-base font-semibold leading-7">{{ __('member/account.upload_options.title') }}</h2>
+                <p class="mt-1 tm-sm">{{ __('member/account.upload_options.description') }}</p>
             </div>
 
             <form class="account md:col-span-2 sm:max-w-xl">
@@ -145,8 +143,8 @@
 
                     <div class="field flex items-center justify-between">
                         <label for="upload-as-private">
-                            <div>Upload as private</div>
-                            <p class="tm-xs">Uploaded files will be set as private by default.</p>
+                            <div>{{ __('member/account.upload_options.private_upload.title') }}</div>
+                            <p class="tm-xs">{{ __('member/account.upload_options.private_upload.description') }}</p>
                         </label>
                         <label for="upload-as-private"
                             class="bg-gray-200 relative h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
@@ -160,15 +158,15 @@
                 </div>
 
                 <div class="mt-8 flex">
-                    <button type="submit" class="button !w-auto">Save</button>
+                    <button type="submit" class="button !w-auto">{{ __('member/account.account_info.save') }}</button>
                 </div>
             </form>
         </div>
 
         <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
-                <h2 class="text-base font-semibold leading-7">Change password</h2>
-                <p class="mt-1 tm-sm">Update your password associated with your account.</p>
+                <h2 class="text-base font-semibold leading-7">{{ __('member/account.password.title') }}</h2>
+                <p class="mt-1 tm-sm">{{ __('member/account.password.description') }}</p>
             </div>
 
             <form id="change-password" class="md:col-span-2 sm:max-w-xl">
@@ -177,27 +175,26 @@
             </div>
                         <div class="space-y-6 md:space-y-8">
                 <div class="field space-y-1">
-            <label for="current-password">Current password</label>
+            <label for="current-password">{{ __('member/account.password.current') }}</label>
             <input class="" type="password" name="current_password" id="current-password" autocomplete="current-password" />
         </div>
                 <div class="field space-y-1">
-            <label for="new-password">New password</label>
+            <label for="new-password">{{ __('member/account.password.new') }}</label>
             <input class="" type="password" name="password" id="new-password" autocomplete="new-password" />
-            <p class="tm-xs">Use 8 or more characters with at least a number or symbol</p>
+            <p class="tm-xs">{{ __('member/account.password.requirements') }}</p>
     </div>
             </div>
 
             <div class="mt-8 flex">
-                <button type="submit" class="button !w-auto">Save</button>
+                <button type="submit" class="button !w-auto">{{ __('member/account.account_info.save') }}</button>
             </div>
                     </form>
         </div>
 {{--
         <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
-                <h2 class="text-base font-semibold leading-7">Linked account</h2>
-                <p class="mt-1 tm-sm">Here are the external accounts that you have linked to/with your account. You can use
-                    them to authenticate.</p>
+                <h2 class="text-base font-semibold leading-7">{{ __('member/account.linked_account.title') }}</h2>
+                <p class="mt-1 tm-sm">{{ __('member/account.linked_account.description') }}</p>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 md:col-span-2 text-center gap-4">
@@ -226,12 +223,12 @@
                                 d="M10.5795 15.5801C10.3795 15.5801 10.1895 15.5001 10.0495 15.3601L7.21945 12.5301C6.92945 12.2401 6.92945 11.7601 7.21945 11.4701C7.50945 11.1801 7.98945 11.1801 8.27945 11.4701L10.5795 13.7701L15.7195 8.6301C16.0095 8.3401 16.4895 8.3401 16.7795 8.6301C17.0695 8.9201 17.0695 9.4001 16.7795 9.6901L11.1095 15.3601C10.9695 15.5001 10.7795 15.5801 10.5795 15.5801Z"
                                 class="fill-green-600"></path>
                         </svg>
-                        <span class="align-middle">Linked</span>
+                        <span class="align-middle">{{ __('member/account.linked_account.linked') }}</span>
                     </div>
                     <form class="rPDJMg">
                         <input type="hidden" name="_token" value="misu5cL8BwNUMMdmz2M5f6GfBs3NCVegMiu84hcS"
                             autocomplete="off"> <button type="submit" name="client" value="google"
-                            class="button secondary mt-auto">Unlink</button>
+                            class="button secondary mt-auto">{{ __('member/account.linked_account.unlink') }}</button>
                     </form>
                 </div>
 
@@ -240,14 +237,13 @@
 
         <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
-                <h2 class="text-base font-semibold leading-7">Delete account</h2>
-                <p class="mt-1 tm-sm">No longer want to use our service? You can delete your account here. This action is
-                    not reversible. All information related to this account will be deleted permanently.</p>
+                <h2 class="text-base font-semibold leading-7">{{ __('member/account.delete_account.title') }}</h2>
+                <p class="mt-1 tm-sm">{{ __('member/account.delete_account.description') }}</p>
             </div>
 
             <div class="flex items-start md:col-span-2">
                 <button type="submit" class="button !w-auto !bg-red-600 hover:!bg-red-700" data-bs-toggle="modal"
-                    data-bs-target="#delete-modal">Yes, delete my account</button>
+                    data-bs-target="#delete-modal">{{ __('member/account.delete_account.button') }}</button>
                 <div class="modal fade" tabindex="-1" aria-hidden="true" id="delete-modal">
                     <div class="modal-dialog">
                         <div class="content">
@@ -255,14 +251,13 @@
                                 <div class="text-center space-y-6">
                                     <img src="/images/sections/bye.svg" alt="Bye" class="h-48 mx-auto"
                                         loading="lazy">
-                                    <p>Are you sure you want to delete your account?</p>
-                                    <p class="tm-sm">All files that have been uploaded cannot be restored, and usernames
-                                        and emails cannot be used anymore.</p>
+                                    <p>{{ __('member/account.delete_account.modal.title') }}</p>
+                                    <p class="tm-sm">{{ __('member/account.delete_account.modal.description') }}</p>
                                     <div class="grid grid-cols-2 gap-4">
                                         <button type="button" class="button !bg-red-500 hover:!bg-red-400"
-                                            id="delete-account">Delete</button>
+                                            id="delete-account">{{ __('member/account.delete_account.modal.confirm') }}</button>
                                         <button type="button" class="button secondary"
-                                            data-bs-dismiss="modal">Cancel</button>
+                                            data-bs-dismiss="modal">{{ __('member/account.delete_account.modal.cancel') }}</button>
                                     </div>
                                 </div>
                             </div>

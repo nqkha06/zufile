@@ -45,6 +45,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'plan_expires_at' => 'datetime',
+        'used_storage' => 'integer',
+        'balance' => 'float',
+
     ];
 
     public function settings()
@@ -78,40 +81,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserWithdraw::class);
     }
-    public function STUlinks()
-    {
-        return $this->hasMany(StuLink::class);
-    }
-    public function NOTELinks()
-    {
-        return $this->hasMany(NOTELink::class);
-    }
 
-    public function STUstats()
-    {
-        return $this->hasManyThrough(
-            StuLinkClick::class,
-            StuLink::class,
-            'user_id',
-            'link_id',
-        );
-    }
-    public function STUstatics()
-    {
-        return $this->hasMany(
-            StuAnalysis::class,
 
-        );
-    }
-    public function NOTEStats()
-    {
-        return $this->hasManyThrough(
-            NOTEStatistics::class,
-            NOTELink::class,
-            'user_id',
-            'link_id',
-        );
-    }
     public function referrals()
     {
         return $this->hasMany(User::class, 'referred_by');
@@ -128,6 +99,11 @@ class User extends Authenticatable
     public function files()
     {
         return $this->hasMany(File::class);
+    }
+
+    public function downloadAccesses()
+    {
+        return $this->hasMany(DownloadAccesses::class, 'user_id');
     }
 
     public function getUsedStorageFormattedAttribute()
@@ -203,13 +179,13 @@ class User extends Authenticatable
      */
     public function isPlanExpiringSoon(int $days = 7): bool
     {
-        if (!$this->plan_expires_at) {
+        if (!$this->plan_expires_at || $this->plan_expires_at->isPast()) {
             return false;
         }
 
-        return $this->plan_expires_at->isFuture() &&
-               $this->plan_expires_at->diffInDays(now()) <= $days;
+        return now()->diffInDays($this->plan_expires_at) <= $days;
     }
+
 
     /**
      * Get days until expiration (negative if expired)
@@ -297,7 +273,7 @@ class User extends Authenticatable
     /**
      * Get effective plan name for display
      */
-    public function getDisplayPlanName(): string
+    public function getDisplayPlanName()
     {
         $plan = $this->getDisplayPlan();
 

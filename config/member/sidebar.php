@@ -1,4 +1,6 @@
 <?php
+use App\Facades\Setting;
+
 // config/sidebar.php
 return [
     // [
@@ -24,8 +26,6 @@ return [
     [
         'section' => null,
         'items' => [
-            ['title' => 'File Manager', 'href' => '/u/drive/1/home', 'icon_svg' => 'trash'],
-
             ['title' => 'Trash', 'href' => '/u/trash', 'icon_svg' => 'trash'],
         ],
     ],
@@ -46,14 +46,14 @@ return [
     [
         'section' => 'Our services',
         'items' => [
-            ['title' => 'Link4sub', 'href' => 'https://link4sub.com/?utm_source=safefileku', 'icon_img' => 'https://link4sub.com/images/1721055856.png'],
-            ['title' => 'Vuotnhanh', 'href' => 'https://vuotnhanh.com/?utm_source=safefileku', 'icon_img' => 'https://vuotnhanh.com/images/app/logo.png'],
+            ['title' => 'Link4sub', 'href' => 'https://link4sub.com/?utm_source=zufile', 'icon_img' => 'https://link4sub.com/images/1721055856.png'],
+            ['title' => 'Vuotnhanh', 'href' => 'https://vuotnhanh.com/?utm_source=zufile', 'icon_img' => 'https://vuotnhanh.com/images/app/logo.png'],
         ],
     ],
-    [
-        'section' => 'Partnership',
-        'items' => [
-            ['title' => 'SafelinkU', 'href' => 'https://safelinku.com/?utm_source=safefileku', 'icon_img' => 'https://safelinku.com/favicon.ico'],
-        ],
-    ],
+    // [
+    //     'section' => 'Partnership',
+    //     'items' => [
+    //         ['title' => 'Partnership', 'href' => 'https://example.com/?utm_source=zufile', 'icon_img' => 'https://example.com/favicon.ico'],
+    //     ],
+    // ],
 ];

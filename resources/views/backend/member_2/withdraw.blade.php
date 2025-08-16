@@ -32,7 +32,7 @@
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-blue-700 dark:text-blue-300">New Payment Method Available: <b>USDT
+                    <p class="text-sm font-medium text-blue-700 dark:text-blue-300">{{ __('member/withdraw.new_payment_method') }} <b>USDT
                             (BEP20)</b></p>
                 </div>
             </div>
@@ -42,17 +42,17 @@
             <div class="flex flex-col justify-between">
                 <div class="space-y-4">
                     <div>
-                        <div>Balance</div>
+                        <div>{{ __('member/withdraw.balance') }}</div>
                         <div class="t-xl">{{ currencyFormat(Auth::user()?->balance, '$') }}</div>
                     </div>
 
                     <div class="grid grid-cols-2">
                         <div>
-                            <div class="text-sm">Pending</div>
+                            <div class="text-sm">{{ __('member/withdraw.pending') }}</div>
                             <div class="font-medium">{{ currencyFormat($totalPending, '$') }}</div>
                         </div>
                         <div>
-                            <div class="text-sm">Total Paid</div>
+                            <div class="text-sm">{{ __('member/withdraw.total_paid') }}</div>
                             <div class="font-medium">{{ currencyFormat($totalCompleted, '$') }}</div>
                         </div>
                     </div>
@@ -61,19 +61,24 @@
                 <form action="{{ route('u.withdraw.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="amount" value="{{ Auth::user()?->balance }}" required>
-                    <button type="submit" class="button mt-4">Withdraw
-                    balance</button>
+                    <button type="submit" class="button mt-4">{{ __('member/withdraw.withdraw_balance') }}
+                    </button>
                 </form>
             </div>
 
             <div class="min-w-0">
                 <div class="bcard overflow-hidden !p-0">
                     <div class="p-4">
-                        <div class="t-lg mb-2">Payment method</div>
+                        <div class="t-lg mb-2">{{ __('member/withdraw.payment_method') }}</div>
                         <div class="flex gap-2 items-center">
                             @if ($currentMethod)
                                 <div class="shrink-0">
-                                    <svg class="shadow rounded shrink-0" viewBox="0 0 70 50" fill="none"
+                                    <svg width="80" style=" stroke: rgb(96, 96, 96);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1;" class="shadow rounded shrink-0" viewBox="0 0 24 24" fill="none"><path d="M12.37 2.15009L21.37 5.75006C21.72 5.89006 22 6.31006 22 6.68006V10.0001C22 10.5501 21.55 11.0001 21 11.0001H3C2.45 11.0001 2 10.5501 2 10.0001V6.68006C2 6.31006 2.28 5.89006 2.63 5.75006L11.63 2.15009C11.83 2.07009 12.17 2.07009 12.37 2.15009Z" stroke-miterlimit="10"></path><path d="M22 22H2V19C2 18.45 2.45 18 3 18H21C21.55 18 22 18.45 22 19V22Z" stroke-miterlimit="10"></path><path d="M4 18V11" stroke-miterlimit="10"></path><path d="M8 18V11" stroke-miterlimit="10"></path><path d="M12 18V11" stroke-miterlimit="10"></path><path d="M16 18V11" stroke-miterlimit="10"></path><path d="M20 18V11" stroke-miterlimit="10"></path><path d="M1 22H23" stroke-miterlimit="10"></path><path d="M12 8.5C12.8284 8.5 13.5 7.82843 13.5 7C13.5 6.17157 12.8284 5.5 12 5.5C11.1716 5.5 10.5 6.17157 10.5 7C10.5 7.82843 11.1716 8.5 12 8.5Z" stroke-miterlimit="10"></path>
+</svg>
+                                    {{-- <svg class="shadow rounded shrink-0" viewBox="0 0 70 50" fill="none"
                                         aria-hidden="true" width="80">
                                         <path
                                             d="M66 0H4C1.79086 0 0 1.79086 0 4V46C0 48.2091 1.79086 50 4 50H66C68.2091 50 70 48.2091 70 46V4C70 1.79086 68.2091 0 66 0Z"
@@ -87,7 +92,7 @@
                                         <path fill-rule="evenodd" clip-rule="evenodd"
                                             d="M31 27.5204L32.1916 19.9777C32.2963 19.3154 32.6587 19.0001 33.3787 19.0001H40.196C41.3245 19.0001 42.2362 19.1762 42.9507 19.5007C42.2657 24.1383 39.2662 26.715 35.3385 26.715H31.9727C31.5298 26.715 31.1988 26.9415 31 27.5204Z"
                                             fill="#1B2E7F"></path>
-                                    </svg>
+                                    </svg> --}}
 
                                 </div>
                                 <div class="min-w-0">
@@ -103,14 +108,14 @@
                                     @endif
                                 </div>
                             @else
-                                <div class="mx-auto text-zinc-600 dark:text-zinc-300">You don't have a payment method yet
+                                <div class="mx-auto text-zinc-600 dark:text-zinc-300">{{ __('member/withdraw.no_payment_method') }}
                                 </div>
                             @endif
                         </div>
                     </div>
                     <button data-bs-toggle="modal" data-bs-target="#edit-payment-method"
                         class="block w-full text-center font-medium border-t border-zinc-200 dark:border-zinc-700 px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-950 overflow-hidden">
-                        {{ $currentMethod ? 'Change' : 'Add' }}</button>
+                        {{ $currentMethod ? __('member/withdraw.change') : __('member/withdraw.add') }}</button>
                 </div>
             </div>
         </div>
@@ -128,26 +133,24 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium text-blue-700 dark:text-blue-300">Earnings will be processed every
-                            Monday. But if the balance + earnings are still below the minimum withdrawal, it will be
-                            processed the following week.</p>
+                        <p class="text-sm font-medium text-blue-700 dark:text-blue-300">{{ __('member/withdraw.earnings_notice') }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <div>
-            <h2 class="t-lg mb-2">Transaction history</h2>
+            <h2 class="t-lg mb-2">{{ __('member/withdraw.transaction_history') }}</h2>
             @if ($invoices->count())
                 <div class="bcard !p-0 px-4 lg:px-6 divide-y divide-zinc-100 dark:divide-zinc-800 overflow-y-auto max-h-80">
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Payment Account</th>
-                                <th>Status</th>
+                                <th>{{ __('member/withdraw.table_id') }}</th>
+                                <th>{{ __('member/withdraw.table_date') }}</th>
+                                <th>{{ __('member/withdraw.table_amount') }}</th>
+                                <th>{{ __('member/withdraw.table_payment_account') }}</th>
+                                <th>{{ __('member/withdraw.table_status') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -178,7 +181,7 @@
                                 </path>
                                 <path d="M2 21.9985H22"></path>
                             </svg>
-                            <p class="tm-sm">There is no transaction yet</p>
+                            <p class="tm-sm">{{ __('member/withdraw.no_transaction') }}</p>
                         </div>
                     </li>
                 </ul>
@@ -201,7 +204,7 @@
                 <div class="panel">
                     <form class="space-y-4" action="{{ route('u.payment.update') }}" method="POST"
                         id="paymentForm">
-                        <div class="t-lg">Payment Method</div>
+                        <div class="t-lg">{{ __('member/withdraw.payment_method') }}</div>
                         <div class="field space-y-1">
                             @csrf
                             @method('PUT')
@@ -228,8 +231,8 @@
 
                         </div>
                         <div class="grid grid-cols-2 gap-2">
-                            <button type="submit" class="button">Save</button>
-                            <button type="button" class="button secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="button">{{ __('member/withdraw.save') }}</button>
+                            <button type="button" class="button secondary" data-bs-dismiss="modal">{{ __('member/withdraw.cancel') }}</button>
                         </div>
                     </form>
                 </div>
@@ -312,7 +315,7 @@
                         <div class="panel">
                             <form id="ZNjHHK" class="space-y-4">
                                 <div class="bg-blue-50 dark:bg-blue-950 p-4 rounded-md flex justify-between">
-                                    <div>Balance</div>
+                                    <div>{{ __('member/withdraw.balance') }}</div>
                                     <div class="text-blue-500 dark:text-blue-400">{{ currencyFormat(Auth::user()?->balance, '$', 2) }}</div>
                                 </div>
                                 <div class="flex items-center gap-1 text-4xl justify-center">
@@ -324,8 +327,8 @@
                                         class="inline-block outline-0 w-auto appearance-none dark:bg-zinc-900"
                                         required="" style="width: 76px;">
                                 </div>
-                                <p class="tm-xs">*If there is a payment fee, it will be borne by the user.</p>
-                                <button type="submit" class="button">Submit</button>
+                                <p class="tm-xs">{{ __('member/withdraw.payment_fee_notice') }}</p>
+                                <button type="submit" class="button">{{ __('member/withdraw.submit') }}</button>
                             </form>
                         </div>
                     </div>

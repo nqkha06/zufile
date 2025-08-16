@@ -17,14 +17,14 @@
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <p class="text-sm font-medium text-blue-700 dark:text-blue-300">Tính năng đang bảo trì, vui lòng quay lại sau : (</p>
+                    <p class="text-sm font-medium text-blue-700 dark:text-blue-300">{{ __('member/referral.maintenance') }}</p>
                 </div>
             </div>
         </div> --}}
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bcard space-y-4">
-                <div class="t-lg mb-2">Your Invite Link</div>
+                <div class="t-lg mb-2">{{ __('member/referral.invite_link') }}</div>
                 <div class="flex rounded-md shadow-sm">
                     <input
                         class="block w-full rounded-none dark:bg-zinc-900 rounded-l-md border-0 py-1.5 px-3 text-zinc-900 dark:text-zinc-100 ring-1 ring-inset ring-zinc-300 dark:ring-zinc-600 sm:text-sm/6 outline-none"
@@ -41,29 +41,42 @@
                                 d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z">
                             </path>
                         </svg>
-                        <span>Copy</span>
+                        <span>{{ __('member/referral.copy') }}</span>
                     </button>
                 </div>
             </div>
             <div class="space-y-4">
                 <div>
-                    <div class="text-sm">Total user</div>
+                    <div class="text-sm">{{ __('member/referral.total_user') }}</div>
                     <div class="font-medium">0</div>
                 </div>
                 <div>
-                    <div class="text-sm">Total earn</div>
+                    <div class="text-sm">{{ __('member/referral.total_earn') }}</div>
                     <div class="font-medium">$0.00</div>
                 </div>
             </div>
         </div>
 
-        <p class="tm-sm">The referral program is a great way to spread the word of this great service and to earn even more
-            money with your files! Refer friends and receive 10% bonus of their earnings for life!</p>
+        <p class="tm-sm">{{ __('member/referral.description') }}</p>
 
         <div>
-            <div class="t-lg">Users</div>
-            <p class="tm-sm">List of users that you have referred.</p>
+            <div class="t-lg">{{ __('member/referral.users') }}</div>
+            <p class="tm-sm">{{ __('member/referral.users_description') }}</p>
             <ul class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                @if ($referrals->count() > 0)
+                    @foreach ($referrals as $referral)
+                    <li class="py-4">
+            <div class="grid sm:grid-cols-2 gap-2">
+                <div class="flex justify-between gap-x-3 sm:block">
+                    <div class="flex items-start gap-x-3">
+                        <div>{{ $referral->name }}</div>
+                                            </div>
+                    <div class="mt-1 tm-xs">Joined at {{ $referral->created_at->format('M d, Y, h:i A') }}</div>
+                </div>
+            </div>
+        </li>
+                    @endforeach
+                @else
                 <li>
                     <div class="space-y-8 text-center mx-auto p-4 sm:p-6 lg:p-8 min-h-full">
                         <svg class="w-40 h-40 mx-auto text-gray-200" viewBox="0 0 24 24" fill="none"
@@ -78,9 +91,10 @@
                             </path>
                             <path d="M22 22L21 21"></path>
                         </svg>
-                        <p class="text-gray-400 text-sm">There is no referral yet</p>
+                        <p class="text-gray-400 text-sm">{{ __('member/referral.no_referral') }}</p>
                     </div>
                 </li>
+                @endif
             </ul>
 
         </div>
@@ -88,33 +102,3 @@
     </div>
 
 @endsection
-
-@push('scripts')
-    <script>
-        (function() {
-            const target = document.getElementById('kt_referral_link_input');
-            const button = target.nextElementSibling;
-
-            var clipboard = new ClipboardJS(button, {
-                target: target,
-                text: function() {
-                    return target.value;
-                }
-            });
-
-            clipboard.on('success', function(e) {
-                const currentLabel = button.innerHTML;
-
-                if (button.innerHTML === 'Copied!') {
-                    return;
-                }
-
-                button.innerHTML = 'Copied!';
-
-                setTimeout(function() {
-                    button.innerHTML = currentLabel;
-                }, 3000)
-            });
-        })()
-    </script>
-@endpush

@@ -58,13 +58,9 @@ class RegisteredUserController extends Controller
             'referred_by' => $referrer_id,
         ]);
 
-        $user->plans()->create([
-            'plan_id' => config('plans.default_free_id', 1), // ví dụ ID = 1
-            'started_at' => now(),
-            'expires_at' => null,
-            'price_paid' => 0,
-            'is_active' => true,
-        ]);
+        $user->plan_id = config('plans.default_free_id', 1);
+        $user->plan_expires_at = null;
+        $user->save();
 
         event(new Registered($user));
 

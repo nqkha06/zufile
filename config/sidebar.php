@@ -1,12 +1,7 @@
 <?php
 
 return [
-    [
-        'title' => 'Trang chủ',
-        'url' => 'admin.index',
-        'icon' => '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>',
-        'permission' => 'view_all_dashboard',
-    ],
+
     [
         'title' => 'Trang tổng quan',
         'url' => 'admin.dashboard.index',
@@ -21,35 +16,13 @@ return [
         'url' => 'admin.access.index',
 
     ],
+
     [
-        'title' => 'Top BXH',
-        'icon' => '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medal"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4v3m-4 -3v6m8 -6v6" /><path d="M12 18.5l-3 1.5l.5 -3.5l-2 -2l3 -.5l1.5 -3l1.5 3l3 .5l-2 2l.5 3.5z" /></svg>',
-        'permission' => 'view_admin_ranking',
-        'children' => [
-            [
-                'title' => 'Top users',
-                'url' => 'admin.top-users.index'
-            ],
-            [
-                'title' => 'Top links',
-                'url' => 'admin.popular.stu'
-            ]
-        ]
-    ],
-    [
-        'title' => 'Liên kết',
+        'title' => 'Quản lí FILE',
         'icon' => '<svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"stroke-width="2"stroke-linecap="round"stroke-linejoin="round"class="icon icon-tabler icons-tabler-outline icon-tabler-link"><path stroke="none"d="M0 0h24v24H0z"fill="none"></path><path d="M9 15l6 -6"></path><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"></path><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"></path></svg>',
         'permission' => 'view_all_stu',
-        'children' => [
-            [
-                'title' => 'STULinks',
-                'url' => 'admin.stu.index'
-            ],
-            [
-                'title' => 'NOTELinks',
-                'url' => 'admin.note.index'
-            ]
-        ]
+        'url' => 'admin.drive.index',
+
     ],
     [
         'title' => 'Hoá đơn',
@@ -114,19 +87,10 @@ return [
 
     ],
     [
-        'title' => 'Quản lý cấp độ',
+        'title' => 'Plans',
         'icon' => '<svg xmlns="http://www.w3.org/2000/svg"width="24"height="24"viewBox="0 0 24 24"fill="none"stroke="currentColor"stroke-width="2"stroke-linecap="round"stroke-linejoin="round"class="icon icon-tabler icons-tabler-outline icon-tabler-settings-2"><path stroke="none"d="M0 0h24v24H0z"fill="none"></path><path d="M19.875 6.27a2.225 2.225 0 0 1 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z"></path><path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"></path></svg>',
         'permission' => 'view_all_dashboard',
-        'children' => [
-            [
-                'title' => 'SubUnlock',
-                'url' => 'admin.levels.index'
-            ],
-            [
-                'title' => 'Note',
-                'url' => 'admin.note_levels.index'
-            ]
-        ]
+        'url' => 'admin.plans.index'
     ],
     [
         'title' => 'Trang',
@@ -153,13 +117,7 @@ return [
             ]
         ]
     ],
-    [
-        'title' => 'Widget',
-        'icon' => '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-fidget-spinner"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 16v.01" /><path d="M6 16v.01" /><path d="M12 5v.01" /><path d="M12 12v.01" /><path d="M12 1a4 4 0 0 1 2.001 7.464l.001 .072a3.998 3.998 0 0 1 1.987 3.758l.22 .128a3.978 3.978 0 0 1 1.591 -.417l.2 -.005a4 4 0 1 1 -3.994 3.77l-.28 -.16c-.522 .25 -1.108 .39 -1.726 .39c-.619 0 -1.205 -.14 -1.728 -.391l-.279 .16l.007 .231a4 4 0 1 1 -2.212 -3.579l.222 -.129a3.998 3.998 0 0 1 1.988 -3.756l.002 -.071a4 4 0 0 1 -1.995 -3.265l-.005 -.2a4 4 0 0 1 4 -4z" /></svg>',
-        'url' => 'admin.widgets.index',
-        'permission' => 'view_all_dashboard',
 
-    ],
     [
         'title' => 'Layout',
         'icon' => '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-layout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>',
@@ -187,12 +145,6 @@ return [
             // ]
         ]
     ],
-    [
-        'title' => 'Gửi Email',
-        'icon' => '<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" /><path d="M3 7l9 6l9 -6" /></svg>',
-        'url' => 'admin.send-emails.index',
-        'permission' => 'view_all_dashboard',
 
-    ],
     // Thêm các mục menu khác ở đây
 ];

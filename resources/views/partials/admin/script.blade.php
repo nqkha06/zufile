@@ -19,15 +19,5 @@
     <link href="{{ URL('/') }}/css/notyf.css" rel="stylesheet">
 
 	@include('partials.stu.config')
-	<script>
-	    const STULv = [
-    @forEach($levels as $key=>$value)
-    {
-        id: '{{ $value['id'] }}',
-        name: '{{ $value['name'] }}',
-        minimumPages: '{{ $value['minimum_pages'] }}',
-    },
-    @endforEach
-];
-</script>
+
 	<script src="{{ asset('backend/member/js/stu-config.js') }}"></script>

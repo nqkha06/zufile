@@ -20,4 +20,5 @@ return [
     'tool_create_token' => 'Tạo Token API',
     'tool_quick_link' => 'Quick Link',
     'tool_dev_api' => 'Developer API',
+    'close_sidebar' => 'Đóng thanh bên',
 ];

@@ -12,6 +12,7 @@ class File extends Model
     protected $fillable = [
         'user_id',
         'folder_id',
+        'upload_id',
         'alias',
         'name',
         'extension',
@@ -21,6 +22,11 @@ class File extends Model
         'path',
         'is_public',
         'download_count',
+        'status',
+    ];
+
+    protected $attributes = [
+        'status' => 'pending', // Trạng thái mặc định
     ];
 
     // Người upload

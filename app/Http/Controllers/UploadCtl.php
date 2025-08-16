@@ -55,7 +55,7 @@ class UploadCtl extends Controller
         $s3 = $this->s3();
 
         $generateAlias = Str::random(10);
-        $key = 'uploads/'.$generateAlias.'/'.$fileName;
+        $key = $user->id . '/' . $generateAlias . '-' . $fileName;
 
         $create = $s3->createMultipartUpload([
             'Bucket' => env('AWS_BUCKET'),
@@ -93,6 +93,7 @@ class UploadCtl extends Controller
         File::create([
             'user_id'       => $r->user()->id,
             'folder_id'     => $r->input('dir') == 'root' ? null : $parentFolder->id,
+            'upload_id'    => $uploadId,
             'alias'         => $generateAlias,
             'name'          => pathinfo($original, PATHINFO_FILENAME),
             'extension'     => $ext,
@@ -102,7 +103,7 @@ class UploadCtl extends Controller
             'path'          => $key,      // dùng key làm path
             'is_public'     => UserSetting::get('private_upload', 0) == 0 ? 1 : 0,
             'download_count'=> 0,
-            // 'status'        => 'UPLOADING',
+            'status'        => 'pending', // Trạng thái ban đầu
         ]);
 
 
@@ -137,7 +138,7 @@ class UploadCtl extends Controller
         /*-------------------------------------------
         * 2. Presign url kèm header Content‑Disposition
         *------------------------------------------*/
-        $url = Storage::disk('s3')->temporaryUrl(
+        $url = Storage::disk(config('filesystems.default'))->temporaryUrl(
             $key,
             now()->addMinutes(30),
             [
@@ -146,8 +147,8 @@ class UploadCtl extends Controller
             ]
         );
 
-        // FileUpload::where('upload_id',$uploadId)
-        //     ->update(['status'=>'DONE']);
+        File::where('upload_id',$uploadId)
+            ->update(['status'=>'completed']);
         $file = File::where('user_id', $r->user()->id)
                 ->where('path', $key)
                 ->first();
@@ -171,6 +172,20 @@ class UploadCtl extends Controller
 
     protected function s3(): S3Client
     {
-        return Storage::disk('s3')->getClient();
+        return new S3Client([
+            'version' => 'latest',
+            'region' => env('AWS_DEFAULT_REGION', 'auto'),
+            'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
+            'http' => [
+                'verify' => false, // Disable SSL verification
+                'timeout' => 120,
+                'connect_timeout' => 60,
+            ],
+        ]);
     }
 }

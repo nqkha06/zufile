@@ -87,14 +87,20 @@ class PlanService
     /**
      * Downgrade to free plan
      */
-    public function downgradeToFreePlan(User $user): bool
+    public function downgradeToFreePlan(User $user, $planId): bool
     {
+        $planTarget = Plan::find($planId);
+        if (!$planTarget) {
+            throw new \Exception('Invalid plan for downgrade');
+        }
         $freePlan = Plan::where('price', 0)->first();
 
         if (!$freePlan) {
             throw new \Exception('Free plan not found');
         }
-
+        $user->plan_id = $planId;
+        $user->save();
+        return true;
         return DB::transaction(function () use ($user, $freePlan) {
             $oldPlan = $user->plan;
 

@@ -1,33 +1,33 @@
 @extends('layouts.member_2')
 
-@section('title', __('member/upgrade.title'))
+@section('title', __('member/plan.title'))
 
 @section('content')
     <div class="px-4 py-6 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
 
 
-        <h2 class="t-lg">Your Subscription</h2>
+        <h2 class="t-lg">{{ __('member/plan.your_subscription') }}</h2>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
             <div class="bcard">
                 <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-lg font-medium">{{ $currentPlan->plan->name ?? 'Free' }}</h3>
-                    <div class="badge green">Active</div>
+                    <h3 class="text-lg font-medium">{{ $currentPlan->plan->name ?? __('member/plan.plans.free') }}</h3>
+                    <div class="badge green">{{ __('member/plan.active') }}</div>
                 </div>
 
                 <div class="space-y-2 tm-sm">
                     <div class="flex justify-between">
-                        <span>Billing</span>
+                        <span>{{ __('member/plan.billing') }}</span>
                         <span class="font-semibold">{{ $currentPlan->price_paid ?? 0 }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span>Ends on</span>
-                        <span class="font-semibold">{{ $currentPlan?->expires_at?->format('M d, Y') ?? 'Unlimited' }}</span>
+                        <span>{{ __('member/plan.ends_on') }}</span>
+                        <span class="font-semibold">{{ $currentPlan?->expires_at?->format('M d, Y') ?? __('member/plan.unlimited') }}</span>
                     </div>
 
                     <div class="flex justify-between">
-                        <span>Renew</span>
+                        <span>{{ __('member/plan.renew') }}</span>
                         <span class="font-semibold">Auto</span>
                     </div>
                 </div>
@@ -116,14 +116,14 @@
                                                         d="M22 12.5H19C17.9 12.5 17 13.4 17 14.5C17 15.6 17.9 16.5 19 16.5H22">
                                                     </path>
                                                 </svg>
-                                                <span>Balance ($0.00)</span>
+                                                <span>Balance (${{ number_format(auth()->user()->balance, 2) }})</span>
                                             </button>
                                         </li>
 
                                         <li>
                                             <button class="w-full" data-id="{{ $plan->id }}" data-method="paypal">
                                                 <img class="size-6 shrink-0"
-                                                    src="https://cdn.safefileku.com/paypal-icon.png" alt="PayPal">
+                                                    src="{{ asset("core/icons/banks/paypal-icon.webp") }}" alt="PayPal">
                                                 <span>PayPal</span>
                                             </button>
                                         </li>

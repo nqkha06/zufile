@@ -6,19 +6,17 @@
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:gap-y-20">
                     <div class="relative z-10 mx-auto max-w-2xl lg:col-span-7 lg:max-w-none lg:pt-6 xl:col-span-6">
-                        <h1 class="text-4xl font-medium tracking-tight text-white">Free Simple File sharing and
-                            Storage.</h1>
-                        <p class="mt-6 text-lg text-blue-50">Upload your Image, Video, Music, Document, Config, and App
-                            Share with everyone.</p>
+                        <h1 class="text-4xl font-medium tracking-tight text-white">{{ __('landing/index.hero.title') }}</h1>
+                        <p class="mt-6 text-lg text-blue-50">{{ __('landing/index.hero.subtitle') }}</p>
                         <div class="mt-8 space-y-4">
-                            <a href="/register" rel="nofollow"
+                            <a href="{{ route('auth.register') }}" rel="nofollow"
                                 class="flex items-center gap-1 text-white border w-fit rounded py-2 px-6 hover:bg-white hover:text-blue-600 transition-colors mx-auto lg:mx-0">
                                 <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                     stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                                 </svg>
-                                <span>Start uploading</span>
+                                <span>{{ __('landing/index.hero.start_uploading') }}</span>
                             </a>
                         </div>
                     </div>
@@ -41,7 +39,7 @@
 
                         <div
                             class="w-full [mask-image:linear-gradient(to_bottom,white_60%,transparent)] lg:absolute left-1/2 top-4 lg:-translate-x-1/2 lg:-top-16 lg:ml-12 xl:-top-14 xl:ml-0">
-                            <img src="https://cdn.safefileku.com/hero.svg" class="pointer-events-none"
+                            <img src="{{ asset("core/img/landing/hero.svg") }}" class="pointer-events-none"
                                 alt="hero" />
                         </div>
                     </div>
@@ -53,9 +51,8 @@
         <section class="bg-white py-24 sm:py-32">
             <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
                 <div class="mx-auto max-w-2xl sm:text-center">
-                    <h2 class="text-3xl font-medium tracking-tight text-gray-900">The benefits you will get.</h2>
-                    <p class="mt-2 text-lg text-gray-600">Safefileku is more than just a file store. Check out the
-                        benefits you can get to make your life simple and easy.</p>
+                    <h2 class="text-3xl font-medium tracking-tight text-gray-900">{{ __('landing/index.benefits.title') }}</h2>
+                    <p class="mt-2 text-lg text-gray-600">{{ __('landing/index.benefits.subtitle') }}</p>
                 </div>
                 <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
                     <div class="relative lg:row-span-2">
@@ -64,17 +61,15 @@
                             class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
                             <div class="px-8 pb-3 pt-8 sm:px-10 sm:pb-0 sm:pt-10">
                                 <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                                    Mobile friendly</p>
-                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Easily access and
-                                    manage your files from any mobile device. Simple navigation makes uploading and
-                                    sharing on the go quick and effortless.</p>
+                                    {{ __('landing/index.benefits.mobile.title') }}</p>
+                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">{{ __('landing/index.benefits.mobile.description') }}</p>
                             </div>
                             <div
                                 class="relative min-h-[30rem] w-full grow [container-type:inline-size] max-lg:mx-auto max-lg:max-w-sm">
                                 <div
                                     class="absolute inset-x-10 bottom-0 top-10 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl">
                                     <img class="size-full object-cover object-top"
-                                        src="https://cdn.safefileku.com/mobile-preview.png" alt="">
+                                        src="{{ asset("core/img/landing/mobile-preview.webp") }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -88,15 +83,13 @@
                             class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
                             <div class="px-8 pt-8 sm:px-10 sm:pt-10">
                                 <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                                    Full speed</p>
-                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">No waiting for
-                                    uploads or downloads. Our fast servers handle your files quickly so you can get back
-                                    to what matters.</p>
+                                    {{ __('landing/index.benefits.speed.title') }}</p>
+                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">{{ __('landing/index.benefits.speed.description') }}</p>
                             </div>
                             <div
                                 class="flex flex-1 items-center justify-center px-8 max-lg:pb-12 max-lg:pt-10 sm:px-10 lg:pb-2">
                                 <img class="w-full max-lg:max-w-xs"
-                                    src="https://cdn.safefileku.com/bento-performance.png" alt="">
+                                    src="{{ asset("core/img/landing/bento-performance.webp") }}" alt="">
                             </div>
                         </div>
                         <div
@@ -109,15 +102,13 @@
                             class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]">
                             <div class="px-8 pt-8 sm:px-10 sm:pt-10">
                                 <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                                    Earning</p>
-                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Make money while
-                                    using storage. Share files, invite friends, and complete simple tasks to earn
-                                    rewards or free space.</p>
+                                    {{ __('landing/index.benefits.earning.title') }}</p>
+                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">{{ __('landing/index.benefits.earning.description') }}</p>
                             </div>
                             <div
                                 class="flex flex-1 items-center justify-center [container-type:inline-size] max-lg:py-6 lg:pb-2">
                                 <img class="h-[min(152px,40cqw)] object-cover"
-                                    src="https://cdn.safefileku.com/bento-earning.svg" alt="">
+                                    src="{{ asset("core/img/landing/bento-earning.svg") }}" alt="">
                             </div>
                         </div>
                         <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
@@ -129,14 +120,12 @@
                             class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
                             <div class="px-8 pb-3 pt-8 sm:px-10 sm:pb-0 sm:pt-10">
                                 <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">
-                                    Security</p>
-                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Your files stay
-                                    protected with strong encryption. Multiple security layers keep your personal
-                                    information safe from threats.</p>
+                                    {{ __('landing/index.benefits.security.title') }}</p>
+                                <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">{{ __('landing/index.benefits.security.description') }}</p>
                             </div>
                             <div class="relative min-h-[30rem] w-full grow mt-4">
                                 <img class="size-full object-cover object-top"
-                                    src="https://cdn.safefileku.com/bento-security.svg" alt="">
+                                    src="{{ asset("core/img/landing/bento-security.svg") }}" alt="">
                             </div>
                         </div>
                         <div
@@ -150,9 +139,8 @@
         <section id="pricing" class="py-20 sm:py-32 bg-gray-50">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl sm:text-center">
-                    <h2 class="text-3xl font-medium tracking-tight text-gray-900">More space, extra benefits.</h2>
-                    <p class="mt-2 text-lg text-gray-600">Choose the perfect storage plan for your needs with our
-                        flexible pricing options.</p>
+                    <h2 class="text-3xl font-medium tracking-tight text-gray-900">{{ __('landing/index.pricing.title') }}</h2>
+                    <p class="mt-2 text-lg text-gray-600">{{ __('landing/index.pricing.subtitle') }}</p>
                 </div>
                 <div class="isolate mx-auto mt-10 flex justify-center gap-6 flex-wrap">
                     @foreach ($plans as $plan)
@@ -162,36 +150,36 @@
         </div>
         <p class="flex items-baseline gap-x-1 mb-6">
             <span class="text-xl font-semibold tracking-tight">${{ number_format($plan->price, 2) }}</span>
-            <span class="text-sm/6 font-semibold text-gray-600">/month</span>
+            <span class="text-sm/6 font-semibold text-gray-600">/{{ __('landing/index.pricing.month') }}</span>
         </p>
         <a href="{{ $plan->price == 0 ? '/register' : '/u/upgrade' }}" class="button {{ $plan->price == 0 ? '' : 'outline' }}">
-            {{ $plan->price == 0 ? 'Get started today' : 'Buy plan' }}
+            {{ $plan->price == 0 ? __('landing/index.pricing.get_started_today') : __('landing/index.pricing.buy_plan') }}
         </a>
         <ul role="list" class="mt-6 space-y-2 text-sm/6 text-gray-600">
             <li class="flex gap-x-3">
                 <svg class="h-6 w-5 flex-none text-blue-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
     <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/>
 </svg>
-                {{ formatBytes($plan->storage_limit) }} of storage
+                {{ formatBytes($plan->storage_limit) }} {{ __('landing/index.pricing.of_storage') }}
             </li>
             <li class="flex gap-x-3">
                 <svg class="h-6 w-5 flex-none text-blue-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
     <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/>
 </svg>
-                {{ formatBytes($plan->file_size_limit) }} per file
+                {{ formatBytes($plan->file_size_limit) }} {{ __('landing/index.pricing.per_file') }}
             </li>
             <li class="flex gap-x-3">
                 <svg class="h-6 w-5 flex-none text-blue-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
     <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/>
 </svg>
-            {{ $plan->file_keep_forever ? 'File stored forever' : "File stored {$plan->file_keep_days} days no activity" }}
+            {{ $plan->file_keep_forever ? __('landing/index.pricing.file_stored_forever') : __('landing/index.pricing.file_stored_days', ['days' => $plan->file_keep_days]) }}
             </li>
             @if ($plan->ads_reduced)
                 <li class="flex gap-x-3">
                     <svg class="h-6 w-5 flex-none text-blue-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
     <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd"/>
 </svg>
-                    Ads reduced
+                    {{ __('landing/index.pricing.ads_reduced') }}
                 </li>
             @endif
         </ul>
@@ -205,11 +193,11 @@
         <section id="get-started-free" class="relative overflow-hidden bg-blue-600 py-20 sm:py-28">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="mx-auto max-w-md sm:text-center">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Get started for FREE</h2>
-                    <p class="mt-4 text-lg text-blue-50">Sign up today and enjoy our services without any cost.</p>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{{ __('landing/index.get_started.title') }}</h2>
+                    <p class="mt-4 text-lg text-blue-50">{{ __('landing/index.get_started.subtitle') }}</p>
                     <div class="mt-8 flex justify-center">
                         <a class="rounded-lg px-8 py-4 text-blue-600 bg-white font-semibold transition-all hover:shadow-lg hover:-translate-y-2"
-                            href="/register">Register free</a>
+                            href="/register">{{ __('landing/index.get_started.register_free') }}</a>
                     </div>
                 </div>
             </div>
@@ -288,9 +276,8 @@
         <section class="py-20 sm:py-32 bg-white">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl sm:text-center">
-                    <h2 class="text-3xl font-medium tracking-tight text-gray-900">We accept Payment.</h2>
-                    <p class="mt-2 text-lg text-gray-600">Maximize your online You can receive payments through Paypal
-                        and PAYEER for all countries. And Dana, Gopay, OVO, ShopeePay for Indonesia.</p>
+                    <h2 class="text-3xl font-medium tracking-tight text-gray-900">{{ __('landing/index.payment.title') }}</h2>
+                    <p class="mt-2 text-lg text-gray-600">{{ __('landing/index.payment.subtitle') }}</p>
                 </div>
                 <div class="mx-auto space-y-6 mt-16 max-w-2xl sm:mt-20 md:gap-y-10 lg:max-w-none">
                     <div class="flex justify-center gap-6 flex-wrap">

@@ -26,14 +26,14 @@ class ViewComposerServiceProvider extends ServiceProvider
             ['backend.member.*', 'backend.member_2.*','backend.admin.*'],
             'App\Http\ViewComposers\SettingComposer'
         );
-        View::composer(
-            ['backend.member.*', 'backend.member_2.*', 'backend.admin.*', 'clients.*'],
-            'App\Http\ViewComposers\STULevelComposer'
-        );
-        View::composer(
-            ['backend.member.*', 'backend.member_2.*', 'backend.admin.*', 'clients.*'],
-            'App\Http\ViewComposers\NOTELevelComposer'
-        );
+        // View::composer(
+        //     ['backend.member.*', 'backend.member_2.*', 'backend.admin.*', 'clients.*'],
+        //     'App\Http\ViewComposers\STULevelComposer'
+        // );
+        // View::composer(
+        //     ['backend.member.*', 'backend.member_2.*', 'backend.admin.*', 'clients.*'],
+        //     'App\Http\ViewComposers\NOTELevelComposer'
+        // );
         View::composer(
             ['backend.member.*', 'backend.member_2.*', 'backend.admin.*', 'layouts.blog2'],
             'App\Http\ViewComposers\BaseStatusComposer'

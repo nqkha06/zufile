@@ -94,6 +94,7 @@
         </div>
 
         <div class="flex items-center justify-end gap-x-8">
+            @if (in_array(Route::currentRouteName(), ['u.files.home', 'u.files.show']))
             <button type="button" data-bs-toggle="modal" data-bs-target="#upload" aria-expanded="false">
                 <span class="sr-only">Upload</span>
                 <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -102,13 +103,21 @@
                         d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
                 </svg>
             </button>
+            @else
+            <a id="upload-link" class="!text-white" href="{{ route('u.files.home') }}#upload">
+                <span class="sr-only">Upload</span>
+                <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"></path>
+                </svg>
+            </a>
+            @endif
 
 
             <div class="dropdown">
                 <button type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" class="dropdown-toggle">
                     <span class="sr-only">Your profile</span>
                     <img class="rounded-full z-10 size-8 bg-blue-800 relative"
-                        src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220,0,20,20%22%20width=%2296%22%20height=%2296%22%3E%3Crect%20height=%2220%22%20width=%2220%22%20fill=%22hsl%28285,25%25,50%25%29%22/%3E%3Ctext%20fill=%22white%22%20x=%2210%22%20y=%2214.4%22%20font-size=%2212%22%20font-family=%22-apple-system,BlinkMacSystemFont,Trebuchet%20MS,Roboto,Ubuntu,sans-serif%22%20text-anchor=%22middle%22%3EN%3C/text%3E%3C/svg%3E"
+                        src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220,0,20,20%22%20width=%2296%22%20height=%2296%22%3E%3Crect%20height=%2220%22%20width=%2220%22%20fill=%22hsl%28285,25%25,50%25%29%22/%3E%3Ctext%20fill=%22white%22%20x=%2210%22%20y=%2214.4%22%20font-size=%2212%22%20font-family=%22-apple-system,BlinkMacSystemFont,Trebuchet%20MS,Roboto,Ubuntu,sans-serif%22%20text-anchor=%22middle%22%3E{{ Auth::user()?->name[0] ?? '' }}%3C/text%3E%3C/svg%3E"
                         alt="profile">
                 </button>
                 <div class="dropdown-menu" role="menu" aria-orientation="vertical" tabindex="-1">
@@ -127,12 +136,14 @@
                         <div class="dropdown dropend">
                             <button class="dropdown-item flex justify-between w-full" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span>Language</span>
-                                <span id="current-language" class="tm capitalize">VI</span>
+                                <span id="current-language" class="tm capitalize">{{ str_replace('_', '-', app()->getLocale()) }}</span>
                             </button>
                             <div class="dropdown-menu sub-dropdown-menu" role="menu" aria-orientation="vertical" tabindex="-1">
                                 <div class="py-1" role="none">
-                                    <a href="#" class="dropdown-item" role="menuitem" tabindex="-1">Tiếng Việt</a>
-                                    <a href="#" class="dropdown-item active" role="menuitem" tabindex="-1">English</a>
+                                    @foreach (Language::getSupportedLanguages() as $lang)
+                                    <a href="{{ route('lang.switcher', $lang->code) }}" class="dropdown-item" role="menuitem" tabindex="-1">{{ $lang->name }}</a>
+
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -141,7 +152,7 @@
                             class="dropdown-item" role="menuitem" tabindex="-1">Feedback</button>
                     </div>
                     <div class="py-1" role="none">
-                        <a href="https://safefileku.com/logout" class="dropdown-item" role="menuitem"
+                        <a href="{{ route("auth.logout") }}" class="dropdown-item" role="menuitem"
                             tabindex="-1">Log out</a>
                     </div>
                 </div>

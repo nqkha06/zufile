@@ -31,7 +31,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return redirect()->route('u.files.home')
+            ->withSuccess('Bạn đã đăng nhập thành công!');
     }
 
     /**

@@ -29,7 +29,7 @@ Route::middleware(['auth'])->prefix('u')->group(function () {
     Route::post('folders/{alias}', [UController::class, 'updateFolder'])->name('u.folders.update');
     Route::delete('folders/{alias}', [UController::class, 'deleteFolder'])->name('u.folders.delete');
 
-    Route::get('files', [UController::class, 'files'])->name('member.u.files');
+    Route::get('files', [UController::class, 'files'])->name('u.files');
     Route::post('files/{alias}', [UController::class, 'update'])->name('u.files.update');
     Route::delete('files/{alias}', [FileController::class, 'destroy'])->name('u.files.destroy');
     Route::get('drive/1/home', [FileController::class, 'index'])->name('u.files.home');

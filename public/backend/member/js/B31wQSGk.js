@@ -51,6 +51,7 @@ class T {
             p.dataset.key = a;
             const s = this.item.name.split("."),
                 n = s.splice(-1);
+
             e = {
                 key: a,
                 name: s.join("."),
@@ -1234,7 +1235,8 @@ class P {
 
             // xong!
             this.state = 'complete';
-            this.element.complete(this.key);   // hoặc trả url tuỳ bạn
+            const aa = this.key.split('/')[1].split('-')[0];
+            this.element.complete(aa);   // hoặc trả url tuỳ bạn
             typeof this.onComplete === 'function' && this.onComplete();
 
         } catch (err) {
@@ -1413,51 +1415,24 @@ function A() {
         return
     }
     console.log("[upload] start upload"), a.start()
+
 }
 
 function u(t = null) {
     t && (m = m.filter(a => a != t), console.log("[upload] remove from queue", m.length), g = !1), g || A(), document.activeElement.blur();
 
-    // Sử dụng helper function để chuyển đổi modal an toàn
-    switchModal("#upload", w);
-}
-
-// Helper function để chuyển đổi modal an toàn
-function switchModal(fromModalId, toModalElement) {
-    const fromModal = document.querySelector(fromModalId);
+    const fromModal = document.querySelector("#upload");
     const dismissButton = fromModal?.querySelector("button[data-bs-dismiss='modal']");
-
     if (dismissButton) {
-        console.log("[modal] switching from", fromModalId);
         dismissButton.click();
-
-        // Đợi modal đóng hoàn toàn
-        fromModal.addEventListener('hidden.bs.modal', function () {
-            // Xóa backdrop còn sót lại
-            setTimeout(() => {
-                const backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) {
-                    backdrop.remove();
-                }
-                document.body.classList.remove('modal-open');
-                document.body.style.overflow = '';
-                document.body.style.paddingRight = '';
-
-                // Mở modal mới
-                if (toModalElement && !toModalElement.classList.contains("show")) {
-                    new L(toModalElement).show();
-                }
-            }, 150);
-        }, { once: true });
-    } else {
-        // Nếu không có dismiss button, mở modal mới luôn
-        if (toModalElement && !toModalElement.classList.contains("show")) {
-            new L(toModalElement).show();
-        }
     }
+    // Sử dụng helper function để chuyển đổi modal an toàn
+    // switchModal("#upload", w);
 }
 
 b.addEventListener("change", () => {
+    new L(w).show();
+
     if (!b.files) return;
     const t = Object.values(b.files);
     b.value = null, t.forEach(a => {

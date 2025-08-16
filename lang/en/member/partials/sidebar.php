@@ -17,4 +17,5 @@ return [
     'account_pass' => 'Change Password',
     'support' => 'Support',
     'tools' => 'Tools',
+    'close_sidebar' => 'Close sidebar',
 ];

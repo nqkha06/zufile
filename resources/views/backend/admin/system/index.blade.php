@@ -11,7 +11,7 @@
                         <button class="list-group-item list-group-item-action d-flex align-items-center active"
                             data-tab="tab_web">Cấu hình WEB</button>
                         <button class="list-group-item list-group-item-action d-flex align-items-center"
-                            data-tab="tab_stu">Cấu hình STU</button>
+                            data-tab="tab_stu">Cấu hình Ads download</button>
                         <button class="list-group-item list-group-item-action d-flex align-items-center"
                             data-tab="tab_note">Cấu hình NOTE</button>
                         <button class="list-group-item list-group-item-action d-flex align-items-center"
@@ -88,7 +88,7 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6 mb-3">
                                         <div class="form-label">Logo</div>
-                                        <input type="file" id="featured-logo" class="form-control" name="web_logo">
+                                        <input type="file" id="site-logo" class="form-control" name="site_logo">
                                     </div>
 
                                 </div>
@@ -107,31 +107,19 @@
                         <div id="tab_stu" class="d-none">
                             <div class="row">
                                 <div class="mb-4 col-12">
-                                    <div class="form-label required">URL Ngắn</div>
-                                    <input type="url" class="form-control" name="stu_url"
-                                        value="{{ old('stu_url', $settings['stu_url'] ?? env('APP_URL')) }}">
+                                    <div class="form-label required">Direct button</div>
+                                    <input type="text" class="form-control"
+                                        value="{{ old('direct_link_onclick_btn', Setting::get("direct_link_onclick_btn")) }}"
+                                        name="direct_link_onclick_btn">
                                 </div>
                                 <div class="mb-4 col-12">
-                                    <div class="form-label required">Độ dài Alias</div>
-                                    <input type="number" class="form-control" name="stu_length"
-                                        value="{{ old('stu_length', $settings['stu_length'] ?? 4) }}">
+                                    <div class="form-label required">Direct link fake button</div>
+                                    <input type="text" class="form-control" name="direct_link_fake_btn"
+                                        value="{{ old('direct_link_fake_btn', Setting::get('direct_link_fake_btn')) }}">
                                 </div>
 
 
-                                <div class="mb-4 col-12">
-                                    <div class="form-label">proxycheck.io KEY</div>
-                                    <input type="text" class="form-control" name="stu_proxycheck_key"
-                                        value="{{ old('stu_proxycheck_key', Setting::get('stu_proxycheck_key') ?? env('APP_URL')) }}">
-                                </div>
-                                <div class="mb-4 col-12">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" name="stu_proxycheck_enabled"
-                                            id="stu_proxycheck_enabled" value="1"
-                                            {{ old('stu_proxycheck_enabled', Setting::get('stu_proxycheck_enabled')) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="stu_proxycheck_enabled">Bật kiểm tra
-                                            Proxy?</label>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                         <div id="tab_note" class="d-none">

@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\SystemController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\WidgetController;
 use App\Http\Controllers\FileEditorController;
+use App\Http\Controllers\Admin\PlanController;
 
 Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function () {
 
@@ -37,19 +38,7 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
     Route::get('/', [App\Http\Controllers\Admin\HomeController::class, 'index'])->name('admin.index');
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard.index');
 
-    Route::prefix('note')->group( function () {
-        Route::get('/', [App\Http\Controllers\Admin\NOTEController::class, 'index'])->name('admin.note.index');
-        Route::get('/{id}', [App\Http\Controllers\Admin\NOTEController::class, 'show'])->name('admin.note.show');
-        Route::put('/{alias}/restore', [App\Http\Controllers\Admin\NOTEController::class, 'restore'])->name('admin.note.restore');
-        Route::delete('/{alias}/soft-delete', [App\Http\Controllers\Admin\NOTEController::class, 'softDelete'])->name('admin.note.softDelete');
-    });
-
-    Route::prefix('stu')->group( function () {
-        Route::get('/', [App\Http\Controllers\Admin\STUController::class, 'index'])->name('admin.stu.index');
-        Route::get('/{id}', [App\Http\Controllers\Admin\STUController::class, 'show'])->name('admin.stu.show');
-        Route::put('/{alias}/restore', [App\Http\Controllers\Admin\STUController::class, 'restore'])->name('admin.stu.restore');
-        Route::delete('/{alias}/soft-delete', [App\Http\Controllers\Admin\STUController::class, 'softDelete'])->name('admin.stu.softDelete');
-    });
+    Route::get('/drive', [App\Http\Controllers\Admin\DriveController::class, 'index'])->name('admin.drive.index');
 
     Route::prefix('invoices')->group( function () {
         Route::get('/', [App\Http\Controllers\Admin\InvoiceController::class, 'index'])->name('admin.invoices.index');
@@ -211,4 +200,12 @@ Route::prefix('admin')->middleware(['role:admin|super-admin'])->group(function (
     Route::get('/file-editor', [FileEditorController::class, 'index'])->name('file_editor.index');
     Route::get('/file-editor/edit/{file}', [FileEditorController::class, 'edit'])->name('file_editor.edit');
     Route::post('/file-editor/update', [FileEditorController::class, 'update'])->name('file_editor.update');
+    Route::prefix('plans')->group(function () {
+        Route::get('/', [PlanController::class, 'index'])->name('admin.plans.index');
+        Route::get('/create', [PlanController::class, 'create'])->name('admin.plans.create');
+        Route::post('', [PlanController::class, 'store'])->name('admin.plans.store');
+        Route::get('/{id}/edit', [PlanController::class, 'edit'])->name('admin.plans.edit');
+        Route::put('/{id}', [PlanController::class, 'update'])->name('admin.plans.update');
+        Route::delete('/{id}', [PlanController::class, 'destroy'])->name('admin.plans.destroy');
+    });
 });

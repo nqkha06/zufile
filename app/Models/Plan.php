@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasTranslations;
 
 class Plan extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
     protected $table = 'plans';
 
     protected $fillable = [
@@ -18,6 +19,12 @@ class Plan extends Model
         'file_keep_forever',
         'file_keep_days',
         'ads_reduced',
+    ];
+
+    // translatable attributes stored in plan_translations
+    protected $translatable = [
+        'name',
+        'description',
     ];
 
     protected $casts = [

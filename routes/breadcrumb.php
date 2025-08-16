@@ -29,11 +29,11 @@ $breadcrumbs = [
     'admin.roles.index' => __('Roles'),
     'admin.permissions.index' => __('Permissions'),
     'admin.permission-groups.index' => __('Permission groups'),
-    'admin.stu.index' => 'STU',
+    'admin.drive.index' => 'STU',
     'admin.note.index' => __('NOTE'),
     'admin.general.index' => __('General'),
     'admin.levels.index' => __('Levels'),
-    'admin.note_levels.index' => __('Quản lý cấp độ Note'),
+    'admin.plans.index' => __('Plans'),
     'admin.payment-methods.index' => __('Payment Methods'),
     'admin.categories.index' => __('Blog - Danh mục'),
     'admin.tags.index' => __('Thẻ'),
@@ -210,4 +210,17 @@ Breadcrumbs::for('admin.payment-methods.create', function (BreadcrumbTrail $trai
 Breadcrumbs::for('admin.payment-methods.edit', function (BreadcrumbTrail $trail, $method) {
     $trail->parent('admin.payment-methods.index');
     $trail->push('Edit method: '.$method->id, route('admin.payment-methods.edit', $method->id));
+});
+
+// Admin > Plans > create
+Breadcrumbs::for('admin.plans.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.plans.index');
+    $trail->push(__('Create Plan'), route('admin.plans.create'));
+});
+
+// Admin > Plans > [plan] > edit
+Breadcrumbs::for('admin.plans.edit', function (BreadcrumbTrail $trail, $plan) {
+    $trail->parent('admin.plans.index');
+    $label = $plan->name ?? ('#'.$plan->id);
+    $trail->push('Edit plan: '.$label, route('admin.plans.edit', $plan->id));
 });

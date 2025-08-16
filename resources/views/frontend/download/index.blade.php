@@ -6,30 +6,151 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
-        content="Safefileku is a cutting-edge file storage platform that revolutionizes the way you manage and share your files. Not only can you securely store your important documents, images, videos, and more, but you can also earn rewards for sharing your files with others." />
-    <meta property="og:site_name" content="Safefileku" />
+        content="{{ Setting::get('web_description', 'Free simple file sharing and storage. Upload your image, video, music, document, config, and app share with everyone.') }}" />
+    <meta property="og:site_name" content="{{ Setting::get('web_name', config('app.name')) }}" />
     <meta property="og:title"
-        content="{{ $file->name . '.' . pathinfo($file->path, PATHINFO_EXTENSION) }} - Safefileku" />
+        content="{{ $file->name . '.' . pathinfo($file->path, PATHINFO_EXTENSION) }} - {{ Setting::get('web_name', config('app.name')) }}" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://safefileku.com/download/50QvyfkeQ4jArlZj" />
-    <meta property="og:image" content="https://cdn.safefileku.com/icon-250.png" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:image" content="{{ asset('icon-250.png') }}" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="250" />
     <meta property="og:image:height" content="250" />
-    <meta property="og:image:alt" content="Safefileku" />
+    <meta property="og:image:alt" content="{{ Setting::get('web_name', config('app.name')) }}" />
 
     <meta property="og:description"
-        content="Safefileku is a cutting-edge file storage platform that revolutionizes the way you manage and share your files. Not only can you securely store your important documents, images, videos, and more, but you can also earn rewards for sharing your files with others." />
-    <title>{{ $file->name . '.' . pathinfo($file->path, PATHINFO_EXTENSION) }} - Safefileku" /></title>
-    <link rel="icon" href="https://safefileku.com/favicon.ico" />
-    <link rel="shortcut icon" href="https://safefileku.com/favicon.ico" />
-    <link rel="apple-touch-icon" href="https://safefileku.com/apple-touch-icon.png" />
-    <link rel="canonical" href="https://safefileku.com/download/50QvyfkeQ4jArlZj" />
+        content="{{ Setting::get("web_description") }}" />
+    <title>{{ $file->name . '.' . pathinfo($file->path, PATHINFO_EXTENSION) }} - {{ Setting::get('web_name') }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}" />
+    <link rel="canonical" href="{{ route('download.index', $file->id) }}" />
     <link rel="preconnect" href="https://www.gstatic.com" />
-    <link rel="dns-prefetch" href="https://cdn.safefileku.com" />
-    <link rel="preload" as="style" href="https://safefileku.com/download/assets/css/c7b90648.css" />
-    <link rel="stylesheet" href="https://safefileku.com/download/assets/css/c7b90648.css" />
+    @vite(['resources/css/app.css'])
+    <style>
+        html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: Poppins,sans-serif;
+    font-weight: 400;
+    font-style: normal
+}
 
+#sidebar>div {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .3s
+}
+
+#sidebar>div:first-child {
+    opacity: 0
+}
+
+#sidebar>div:last-child {
+    left: -100%
+}
+
+#sidebar.active>div:first-child {
+    opacity: 1
+}
+
+#sidebar.active>div:last-child {
+    left: 0
+}
+
+.btn-share {
+    margin-right: .5rem;
+    display: flex;
+    width: -moz-fit-content;
+    width: fit-content;
+    align-items: center;
+    border-radius: .375rem;
+    padding: .25rem .75rem;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+}
+
+.RYSf {
+    border-radius: 1rem;
+    border-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: rgb(229 231 235 / var(--tw-border-opacity, 1));
+    padding: 1rem
+}
+
+@media (min-width: 1024px) {
+    .RYSf {
+        padding:1.5rem
+    }
+}
+
+[role=tooltip] {
+    display: none;
+    border-radius: .375rem;
+    --tw-bg-opacity: 1;
+    background-color: rgb(63 63 70 / var(--tw-bg-opacity, 1));
+    padding: .25rem .75rem;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+}
+
+[data-popper-arrow],[data-popper-arrow]:before {
+    position: absolute;
+    height: .5rem;
+    width: .5rem;
+    background-color: inherit
+}
+
+[data-popper-arrow] {
+    visibility: hidden
+}
+
+[data-popper-arrow]:before {
+    content: "";
+    visibility: visible;
+    --tw-rotate: 45deg;
+    transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+
+.cHNI {
+    text-align: center;
+    --tw-text-opacity: 1;
+    color: rgb(156 163 175 / var(--tw-text-opacity, 1))
+}
+
+.cHNI iframe {
+    display: inline-block
+}
+
+.cHNI small {
+    display: block
+}
+
+.hover\:text-blue-600:hover {
+    --tw-text-opacity: 1;
+    color: rgb(37 99 235 / var(--tw-text-opacity, 1))
+}
+
+.hover\:text-gray-900:hover {
+    --tw-text-opacity: 1;
+    color: rgb(17 24 39 / var(--tw-text-opacity, 1))
+}
+
+.hover\:underline:hover {
+    text-decoration-line: underline
+}
+
+.group:hover .group-hover\:block {
+    display: block
+}
+
+
+
+    </style>
     <script>
         var uid = '1223';
     </script>
@@ -64,9 +185,10 @@
 <body>
     <header class="bg-white border-b border-gray-200">
         <nav class="mx-auto flex max-w-6xl items-center justify-between py-6 px-4 lg:p-6" aria-label="Global">
-            <a href="{{ Setting::get("web_url", config("app.url")) }}" class="-m-1.5 p-1.5">
-                <span class="sr-only">{{ Setting::get("web_name", config("app.name", "")) }}</span>
-                <img src="https://cdn.safefileku.com/logo.svg" alt="logo" width="176">
+            <a href="{{ Setting::get("web_url", config("app.url")) }}" class="-m-1.5 p-1.5 flex gap-2 items-center">
+                <img class="rounded-lg" src="{{ asset(Setting::get("site_logo")) }}" alt="logo" width="40px" height="40px" />
+                <span class="text-xl font-bold">{{ Setting::get("web_name", config("app.name", "")) }}</span>
+
             </a>
 
             <a href="{{ route("auth.register") }}" type="submit"
@@ -154,7 +276,7 @@
                         <script>
                             document.getElementById('btn-share-link').addEventListener('click', function() {
                                 navigator.share({
-                                    title: 'Download {{ $file->name . '.' . pathinfo($file->path, PATHINFO_EXTENSION) }} - Safefileku',
+                                    title: 'Download {{ $file->name . '.' . pathinfo($file->path, PATHINFO_EXTENSION) }} - {{ Setting::get('web_name', config('app.name')) }}',
                                     url: '{{ url()->full() }}',
                                 });
                             });
@@ -163,28 +285,16 @@
                 </section>
 
 
-                <div class="cHNI">
+                {{-- <div class="cHNI">
                     <small><em>advertisement</em></small>
                     <div style="width:300px;height:100px;margin:0 auto;">
-                        {{-- <script>
-                            (function(mih) {
-                                var d = document,
-                                    s = d.createElement('script'),
-                                    l = d.scripts[d.scripts.length - 1];
-                                s.settings = mih || {};
-                                s.src =
-                                    "\/\/political-effort.com\/b.XjVCsydaGllM0\/YUWedAinYvWN5AuGZSXzIu\/de\/m-9EuSZyUklMkTPMTCYHxrMDTfEpz\/OoTlgktGNujBE\/x\/MhTYMr5YOdQb";
-                                s.async = true;
-                                s.referrerPolicy = 'no-referrer-when-downgrade';
-                                l.parentNode.insertBefore(s, l);
-                            })({})
-                        </script> --}}
+
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="hidden lg:block space-y-4">
-                    <a href="https://safefileku.com" aria-label="Safefileku">
-                        <img src="https://cdn.safefileku.com/download-section.png" alt=""
+                    <a href="{{ url('/') }}" aria-label="{{ Setting::get('web_name', config('app.name')) }}">
+                        <img src="{{ asset('core/img/download/zufile.png') }}" alt=""
                             class="rounded-2xl w-full h-auto" loading="lazy" />
                     </a>
                     {{-- <section>
@@ -193,7 +303,7 @@
                             <a href="/download/MiubTjD58svFUo3M"
                                 class="border rounded-2xl p-6 flex gap-2 items-center">
                                 <div class="shrink-0">
-                                    <img src="https://cdn.safefileku.com/icons/png.svg" alt="icon" width="64"
+                                    <img src="{{ asset('core/img/icons/png.svg') }}" alt="icon" width="64"
                                         height="64">
                                 </div>
                                 <div class="overflow-hidden">
@@ -219,55 +329,43 @@
                     <h2 class="text-lg font-bold mb-4">Download</h2>
                     @if (Cookie::get('captcha_verified_' . $file->alias))
                         <div class="text-center space-y-1">
-                <button
-                    id="download"
-                    class="bg-blue-400 text-white font-semibold px-6 py-2 rounded-md"
-                                                            onclick="window.open('https://infobel.site/redirect/go', '_blank')"
-                                    >Getting...</button>
+                            <button
+                                id="download"
+                                class="bg-blue-400 text-white font-semibold px-6 py-2 rounded-md"
+                                        onclick="window.open('{{ Setting::get('direct_link_onclick_btn', '#') }}', '_blank')"
+                                                >Getting...
+                            </button>
+                        <div>
+                            @if (!empty(Setting::get('direct_link_fake_btn', null)))
+                            <div class="text-gray-400">
+                                <small><em>advertisement</em></small>
+                            </div>
+                            <a href="{{ Setting::get('direct_link_fake_btn', '#') }}" rel="nofollow" target="_blank" class="bg-blue-600 text-white font-semibold px-3 py-1.5 rounded-md text-xs">Fast Download</a>
+                            @endif
 
-                                <div>
-                    <div class="text-gray-400">
-                        <small><em>advertisement</em></small>
-                    </div>
-                                        <a href="https://nanoushaks.net/4/6761212" rel="nofollow" target="_blank" class="bg-blue-600 text-white font-semibold px-3 py-1.5 rounded-md text-xs">Fast Download</a>
-                </div>
-
-                <div class="adsbygoogle" style="height: 5px; width: 5px; position: absolute;"></div>
-            </div>
+                        <div class="adsbygoogle" style="height: 5px; width: 5px; position: absolute;"></div>
 
                     @else
                         <form method="POST" action="{{ route('download.verify-captcha', $file->alias) }}" class="text-center space-y-4">
-                        @csrf
-                        <div>
-                            <div class="g-recaptcha" data-sitekey="{{ config('services.turnstile.site_key') }}" data-size="flexible"
-                                data-theme="light" id="recaptcha-element"></div>
+                            @csrf
+                            <div>
+                                <div class="g-recaptcha" data-sitekey="{{ config('services.turnstile.site_key') }}" data-size="flexible"
+                                    data-theme="light" id="recaptcha-element"></div>
 
-                        </div>
-                        <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-md">I'm a
-                            Human</button>
-                    </form>
+                            </div>
+                            <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-md">I'm a
+                                Human</button>
+                        </form>
                     @endif
                 </section>
 
 
-                <div class="cHNI">
+                {{-- <div class="cHNI">
                     <small><em>advertisement</em></small>
                     <div style="width:300px;height:250px;margin:0 auto;">
-                        {{-- <script>
-                            (function(ygy) {
-                                var d = document,
-                                    s = d.createElement('script'),
-                                    l = d.scripts[d.scripts.length - 1];
-                                s.settings = ygy || {};
-                                s.src =
-                                    "\/\/political-effort.com\/bxXQVEs\/d.GxlN0GYqWKdUiSYkWc5JujZ\/X\/IY\/keDmR9_u\/ZrUQlWkYPkTiYCx\/MTT\/Em0RMuDAcCt\/NajMEMxvMMTvQbwyOJAT";
-                                s.async = true;
-                                s.referrerPolicy = 'no-referrer-when-downgrade';
-                                l.parentNode.insertBefore(s, l);
-                            })({})
-                        </script> --}}
+
                     </div>
-                </div>
+                </div> --}}
 
                 <section class="RYSf space-y-4">
                     <h2 class="text-lg font-bold">Information</h2>
@@ -309,8 +407,8 @@
             </div>
 
             <div class="block lg:hidden space-y-4">
-                <a href="https://safefileku.com" aria-label="Safefileku">
-                    <img src="https://cdn.safefileku.com/download-section.png" alt=""
+                <a href="{{ url('/') }}" aria-label="{{ Setting::get('web_name', config('app.name')) }}">
+                    <img src="{{ asset('core/img/download/zufile.png') }}" alt=""
                         class="rounded-2xl w-full h-auto" loading="lazy" />
                 </a>
                 {{-- <section>
@@ -318,7 +416,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <a href="/download/MiubTjD58svFUo3M" class="border rounded-2xl p-6 flex gap-2 items-center">
                             <div class="shrink-0">
-                                <img src="https://cdn.safefileku.com/icons/png.svg" alt="icon" width="64"
+                                <img src="{{ asset('core/img/icons/png.svg') }}" alt="icon" width="64"
                                     height="64">
                             </div>
                             <div class="overflow-hidden">
@@ -360,8 +458,8 @@
         @endif
 
         <div class="mt-10 text-center text-xs gap-6 columns-2 flex justify-center">
-            <a href="https://safefileku.com/terms" class="leading-6 text-gray-500 hover:text-gray-900">Terms of Use</a>
-            <a href="https://safefileku.com/privacy" class="leading-6 text-gray-500 hover:text-gray-900">Privacy Policy</a>
+            <a href="{{ url('/terms') }}" class="leading-6 text-gray-500 hover:text-gray-900">Terms of Use</a>
+            <a href="{{ url('/privacy') }}" class="leading-6 text-gray-500 hover:text-gray-900">Privacy Policy</a>
         </div>
         <p class="mt-4 text-center text-xs leading-5 text-gray-500">© 2025 {{ Setting::get("web_name") }}. All rights reserved.</p>
     </footer>

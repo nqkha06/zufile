@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\AccessRepositoryInterface;
 
-use App\Models\StuAnalysis;
+use App\Models\DownloadAccesses;
 use Illuminate\Support\Facades\DB;
 
 
@@ -16,7 +16,7 @@ class AccessRepository extends BaseRepository implements AccessRepositoryInterfa
 {
     protected $model;
 
-    public function __construct(StuAnalysis $model) {
+    public function __construct(DownloadAccesses $model) {
         $this->model = $model;
     }
     /**

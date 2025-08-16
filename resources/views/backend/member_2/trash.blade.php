@@ -1,12 +1,12 @@
 @extends('layouts.member_2')
 
-@section('title', __('Trash'))
-@section('subTitle', __('Files moved to trash will be deleted after 30 days.'))
+@section('title', __('member/trash.title'))
+@section('subTitle', __('member/trash.subtitle'))
 
 @section('nav')
     <nav id="file-tool">
     <ul id="tools" role="list">
-        <li>
+        <li data-bs-toggle="tooltip" title="{{ __('member/trash.tools.restore') }}" data-bs-placement="bottom" data-bs-trigger="hover">
             <button id="tool-restore" disabled>
                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M10.33 7.51001C10.83 7.36001 11.38 7.26001 12 7.26001C14.76 7.26001 17 9.50001 17 12.26C17 15.02 14.76 17.26 12 17.26C9.24 17.26 7 15.02 7 12.26C7 11.23 7.31 10.28 7.84 9.48001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -16,7 +16,7 @@
                 </svg>
             </button>
         </li>
-        <li>
+        <li data-bs-toggle="tooltip" title="{{ __('member/trash.tools.delete') }}" data-bs-placement="bottom" data-bs-trigger="hover">
             <button id="tool-delete" disabled>
                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

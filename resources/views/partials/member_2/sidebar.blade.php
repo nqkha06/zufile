@@ -11,7 +11,7 @@
     </a>
         <button type="button" data-toggle="sidebar"
             class="-m-2.5 p-2.5 text-white hover:bg-white/10 rounded-md lg:hidden">
-            <span class="sr-only">Close sidebar</span>
+            <span class="sr-only">{{ __('member/partials/sidebar.close_sidebar') }}</span>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
                     d="M15.0001 19.9201L8.48009 13.4001C7.71009 12.6301 7.71009 11.3701 8.48009 10.6001L15.0001 4.08008"
@@ -28,7 +28,8 @@
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
                         <li>
-                            <a href="/u/drive/1/home" {{-- class="active" --}}>
+<a href="/u/drive/1/home" @class(['active' => url('/u/drive/1/home') === request()->url()
+])>
                                 <svg class="size-6 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round">

@@ -1,7 +1,7 @@
 @extends('layouts.member_2')
 
-@section('title', __('Statistics'))
-@section('subTitle', __('The data will be updated every hour.'))
+@section('title', __('member/statistics.title'))
+@section('subTitle', __('member/statistics.subtitle'))
 
 @section('content')
     <div class="px-4 py-6 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-6">
@@ -10,10 +10,10 @@
         <div class="lg:flex gap-6 justify-center">
             <div class="space-y-4 shrink-0 mb-6">
                 <div class="bcard sm">
-                    <div class="tm-sm">Total Download</div>
+                    <div class="tm-sm">{{ __('member/statistics.total_download') }}</div>
                     <div class="t-xl" id="slVJfk">
                         <span role="status">
-                            <span class="sr-only">Loading...</span>
+                            <span class="sr-only">{{ __('member/statistics.loading') }}</span>
                             <svg class="animate-spin h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24"
                                 aria-hidden="true">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="bcard sm">
-                    <div class="tm-sm">Paid download</div>
+                    <div class="tm-sm">{{ __('member/statistics.paid_download') }}</div>
                     <div class="t-xl" id="PSMtgh">
                         <span role="status">
                             <span class="sr-only">Loading...</span>
@@ -93,7 +93,33 @@
                     </div>
                     <select name="month" id="WXYcqZ"
                         class="text-right bg-transparent w-auto ring-0 focus:ring-0 hidden -my-1.5 -mx-3 dark:text-zinc-100 dark:bg-zinc-900">
-                        <option value="2025-07">July 2025</option>
+                        @php
+                            $join_at = \Carbon\Carbon::parse(Auth::user()->created_at);
+                            $current_month = \Carbon\Carbon::now()->month;
+                            $current_year = \Carbon\Carbon::now()->year;
+                            $start_month = $join_at->month;
+                            $start_year = $join_at->year;
+                            $months = [];
+                            for ($year = $start_year; $year <= $current_year; $year++)
+                            {
+                                $start = ($year == $start_year) ? $start_month : 1;
+                                $end = ($year == $current_year) ? $current_month : 12;
+                                for ($month = $start; $month <= $end; $month++)
+                                {
+                                    $months[] = [
+                                        'year' => $year,
+                                        'month' => $month,
+                                        'name' => \Carbon\Carbon::createFromDate($year, $month, 1)->format('F Y'),
+                                    ];
+                                }
+                            }
+                        @endphp
+                        @foreach ($months as $month)
+                            <option value="{{ $month['year'] }}-{{ str_pad($month['month'], 2, '0', STR_PAD_LEFT) }}"
+                                {{ $month['year'] == $current_year && $month['month'] == $current_month ? 'selected' : '' }}>
+                                {{ $month['name'] }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 
@@ -149,15 +175,12 @@
             </div>
         </div>
     </div>
-        {{-- <script src="{{ asset('backend/member/js/statistics.js') }}"></script> --}}
 
 @endsection
 
 
 @push('scripts')
-    <script>stag('r', '2025-07');</script>
-
-    {{-- <script src="{{ asset('backend/member/js/DDzrBGya.js') }}"></script> --}}
+    <script>stag('r', '2025-08');</script>
 
     <script type="module" src="{{ asset('backend/member/js/DDzrBGya.js') }}"></script>
     <script type="module" src="{{ asset('backend/member/js/statistics.js') }}"></script>

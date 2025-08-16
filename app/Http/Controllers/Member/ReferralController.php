@@ -8,7 +8,9 @@ class ReferralController extends Controller
 {
     public function index()
     {
-        return view('backend.member_2.referral');
+        $referrals = auth()->user()->referrals()->get();
+
+        return view('backend.member_2.referral', compact('referrals'));
     }
 
     public function ref($id)

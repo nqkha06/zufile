@@ -128,10 +128,6 @@ class PlanController extends Controller
      */
     public function renew(Request $request)
     {
-        $request->validate([
-            'duration' => 'required|integer|min:1|max:365',
-        ]);
-
         $user = Auth::user();
 
         if (!$user->plan_id || $user->plan_id === 1) {
@@ -139,7 +135,7 @@ class PlanController extends Controller
         }
 
         try {
-            $duration = $request->input('duration', 30);
+            $duration = 30;
             $plan = $user->plan;
             $pricePaid = $plan->price * ($duration / 30);
 
@@ -160,12 +156,15 @@ class PlanController extends Controller
     /**
      * Downgrade to free plan
      */
-    public function downgrade()
+    public function downgrade(Request $request)
     {
+        $request->validate([
+            'plan_id' => 'required|integer|exists:plans,id',
+        ]);
         $user = Auth::user();
 
         try {
-            $success = $this->planService->downgradeToFreePlan($user);
+            $success = $this->planService->downgradeToFreePlan($user, $request->input('plan_id', 1));
 
             if ($success) {
                 return redirect()->route('plans.index')->with('success',

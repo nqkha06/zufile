@@ -14,7 +14,6 @@ class Folder extends Model
         'parent_id',
         'alias',
         'name',
-        'path',
     ];
 
     // Người tạo folder

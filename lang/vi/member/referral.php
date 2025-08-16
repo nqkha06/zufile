@@ -20,4 +20,15 @@ return [
 
     'account' => 'Tài khoản',
     'joined'  => 'Tham gia lúc',
+
+    'maintenance' => 'Tính năng đang bảo trì, vui lòng quay lại sau : (',
+    'invite_link' => 'Liên kết mời của bạn',
+    'copy' => 'Sao chép',
+    'total_user' => 'Tổng số người dùng',
+    'total_earn' => 'Tổng thu nhập',
+    'description' => 'Chương trình giới thiệu là một cách tuyệt vời để quảng bá dịch vụ hấp dẫn này và kiếm thêm thu nhập từ các tệp tin của bạn. Giới thiệu bạn bè và nhận ngay 10% hoa hồng trọn đời từ doanh thu rút tiền hợp lệ của họ!',
+    'users' => 'Người dùng',
+    'users_description' => 'Danh sách người dùng mà bạn đã giới thiệu.',
+    'no_referral' => 'Chưa có người được giới thiệu',
+    'copied' => 'Đã sao chép!'
 ];
