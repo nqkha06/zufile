@@ -23,5 +23,6 @@ return [
     'save' => 'Save',
     'cancel' => 'Cancel',
     'payment_fee_notice' => 'If there is a payment fee, it will be borne by the user.',
-    'submit' => 'Submit'
+    'submit' => 'Submit',
+    'withdraw_min_amount' => 'Insufficient balance to withdraw',
 ];

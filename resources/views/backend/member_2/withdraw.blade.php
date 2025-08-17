@@ -149,7 +149,7 @@
                                 <th>{{ __('member/withdraw.table_id') }}</th>
                                 <th>{{ __('member/withdraw.table_date') }}</th>
                                 <th>{{ __('member/withdraw.table_amount') }}</th>
-                                <th>{{ __('member/withdraw.table_payment_account') }}</th>
+                                {{-- <th>{{ __('member/withdraw.table_payment_account') }}</th> --}}
                                 <th>{{ __('member/withdraw.table_status') }}</th>
                             </tr>
                         </thead>
@@ -159,7 +159,7 @@
                                     <td>{{ $invoice->id }}</td>
                                     <td>{{ $invoice->created_at->format('H:i, d/m/Y') }}</td>
                                     <td>{{ currencyFormat($invoice->amount) }}</td>
-                                    <td>{{ '' }}</td>
+                                    {{-- <td>{{ '' }}</td> --}}
                                     <td>{{ $invoice->status->label() }}</td>
                                 </tr>
                             @endforeach
@@ -218,7 +218,7 @@
                                         </option>
                                         @foreach ($paymentMethods as $m)
                                             <option value="{{ $m->id }}" @selected($currentMethod && $m->id === $currentMethod->id)>
-                                                {{ $m->translation()?->name }}
+                                                {{ $m->translation()?->name . ' (Min pay: ' . currencyFormat($m->min_withdraw_amount) . ')' }}
                                             </option>
                                         @endforeach
                                     </select>

@@ -23,5 +23,6 @@ return [
     'save' => 'Lưu',
     'cancel' => 'Hủy',
     'payment_fee_notice' => 'Nếu có phí thanh toán, người dùng sẽ chịu phí đó.',
-    'submit' => 'Gửi'
+    'submit' => 'Gửi',
+    'withdraw_min_amount' => 'Số dư không đủ để rút tiền',
 ];

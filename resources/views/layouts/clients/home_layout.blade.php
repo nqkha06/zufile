@@ -19,7 +19,7 @@
     <meta property="og:image" content="{{ asset('icon-250.png') }}" />
     @endif
 
-    <title>@yield('title', config("app.name"))</title>
+    <title>@yield('title', Setting::get("web_name", config('app.name'))) </title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}" />
