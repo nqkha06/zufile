@@ -57,7 +57,7 @@
     <div class="flex h-16 gap-x-6 px-4 sm:px-6 lg:px-8 text-white dark:border-b border-zinc-700">
         <div class="flex items-center lg:hidden">
             <button type="button" data-toggle="sidebar" class="-m-2.5 p-2.5 text-white hover:bg-white/10 rounded-md">
-                <span class="sr-only">Open sidebar</span>
+                <span class="sr-only">{{ __('header.open_sidebar') }}</span>
                 <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd"
                         d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z"
@@ -88,7 +88,7 @@
                             </style> --}}
                     <input id="search-field"
                         class="autofill:shadow-[0_0_0_50px_#2563eb_inset] dark:autofill:shadow-[0_0_0_50px_#18181b_inset] autofill:[-webkit-text-fill-color:white] block h-full w-full border-0 bg-transparent py-0 pl-8 pr-0 focus:ring-0 sm:text-sm outline-none placeholder:text-blue-400 dark:placeholder:text-zinc-700"
-                        placeholder="Search..." type="search" name="q" value="">
+                        placeholder="{{ __('header.search_placeholder') }}" type="search" name="q" value="">
                 </div>
             </form>
         </div>
@@ -96,7 +96,7 @@
         <div class="flex items-center justify-end gap-x-8">
             @if (in_array(Route::currentRouteName(), ['u.files.home', 'u.files.show']))
             <button type="button" data-bs-toggle="modal" data-bs-target="#upload" aria-expanded="false">
-                <span class="sr-only">Upload</span>
+                <span class="sr-only">{{ __('header.upload') }}</span>
                 <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                     aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -105,7 +105,7 @@
             </button>
             @else
             <a id="upload-link" class="!text-white" href="{{ route('u.files.home') }}#upload">
-                <span class="sr-only">Upload</span>
+                <span class="sr-only">{{ __('header.upload') }}</span>
                 <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"></path>
                 </svg>
@@ -115,27 +115,26 @@
 
             <div class="dropdown">
                 <button type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" class="dropdown-toggle">
-                    <span class="sr-only">Your profile</span>
+                    <span class="sr-only">{{ __('header.your_profile') }}</span>
                     <img class="rounded-full z-10 size-8 bg-blue-800 relative"
                         src="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220,0,20,20%22%20width=%2296%22%20height=%2296%22%3E%3Crect%20height=%2220%22%20width=%2220%22%20fill=%22hsl%28285,25%25,50%25%29%22/%3E%3Ctext%20fill=%22white%22%20x=%2210%22%20y=%2214.4%22%20font-size=%2212%22%20font-family=%22-apple-system,BlinkMacSystemFont,Trebuchet%20MS,Roboto,Ubuntu,sans-serif%22%20text-anchor=%22middle%22%3E{{ Auth::user()?->name[0] ?? '' }}%3C/text%3E%3C/svg%3E"
                         alt="profile">
                 </button>
                 <div class="dropdown-menu" role="menu" aria-orientation="vertical" tabindex="-1">
                     <div class="px-4 py-3" role="none">
-                        <p class="tm-sm" role="none">Signed in as</p>
+                        <p class="tm-sm" role="none">{{ __('header.signed_in_as') }}</p>
                         <p class="truncate text-sm font-medium text-black dark:text-white" role="none">
                             {{ Auth::user()?->name ?? '' }}</p>
                     </div>
                     <div class="py-1" role="none">
-                        <a href="/u/account" class="dropdown-item" role="menuitem" tabindex="-1">Account
-                            settings</a>
+                        <a href="/u/account" class="dropdown-item" role="menuitem" tabindex="-1">{{ __('header.account_settings') }}</a>
                         <button id="theme-switch" class="dropdown-item flex justify-between" role="menuitem" tabindex="-1">
-                            <div>Theme</div>
+                            <div>{{ __('header.theme') }}</div>
                             <div id="current-theme" class="tm capitalize"></div>
                         </button>
                         <div class="dropdown dropend">
                             <button class="dropdown-item flex justify-between w-full" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span>Language</span>
+                                <span>{{ __('header.language') }}</span>
                                 <span id="current-language" class="tm capitalize">{{ str_replace('_', '-', app()->getLocale()) }}</span>
                             </button>
                             <div class="dropdown-menu sub-dropdown-menu" role="menu" aria-orientation="vertical" tabindex="-1">
@@ -149,11 +148,11 @@
                         </div>
 
                         <button type="button" data-bs-toggle="modal" data-bs-target="#feedback"
-                            class="dropdown-item" role="menuitem" tabindex="-1">Feedback</button>
+                            class="dropdown-item" role="menuitem" tabindex="-1">{{ __('header.feedback') }}</button>
                     </div>
                     <div class="py-1" role="none">
                         <a href="{{ route("auth.logout") }}" class="dropdown-item" role="menuitem"
-                            tabindex="-1">Log out</a>
+                            tabindex="-1">{{ __('header.log_out') }}</a>
                     </div>
                 </div>
             </div>

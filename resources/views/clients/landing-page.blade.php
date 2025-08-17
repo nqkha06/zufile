@@ -197,7 +197,7 @@
                     <p class="mt-4 text-lg text-blue-50">{{ __('landing/index.get_started.subtitle') }}</p>
                     <div class="mt-8 flex justify-center">
                         <a class="rounded-lg px-8 py-4 text-blue-600 bg-white font-semibold transition-all hover:shadow-lg hover:-translate-y-2"
-                            href="/register">{{ __('landing/index.get_started.register_free') }}</a>
+                            href="{{ route('auth.register') }}">{{ __('landing/index.get_started.register_free') }}</a>
                     </div>
                 </div>
             </div>

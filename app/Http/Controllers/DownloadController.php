@@ -24,7 +24,9 @@ class DownloadController extends Controller
     public function index(Request $request, $alias)
     {
         $file = File::where('alias', $alias)->firstOrFail();
-
+        if ($file->is_public == 0) {
+            return abort(403, 'Access denied to this file.');
+        }
         return view('frontend.download.index', ['file' => $file]);
     }
 

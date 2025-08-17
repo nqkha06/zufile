@@ -109,19 +109,62 @@ const w = (e, t = null) => {
         }(r.id == "tool-share" || r.id == "tool-download") && t && t.type == "folder" || (r.disabled = !e)
     })
 };
-document.body.addEventListener("click", e => {
-    if (e.target.name == "item") n = {
-        key: e.target.value,
-        element: e.target.parentElement,
-        type: e.target.dataset.type,
-        name: e.target.dataset.name,
-        private: e.target.dataset.private == "true"
-    }, n.type == "file" && (n.ext = e.target.dataset.ext), C.dataset.key = e.target.value, C.dataset.private = e.target.dataset.private == "true", w(!0, n);
-    else {
-        if (e.target.closest("#tools") || document.body.classList.contains("modal-open")) return;
-        n && (document.querySelector('[name="item"]:checked').checked = !1, w(!1), n = null)
+document.body.addEventListener("click", (e) => {
+     const btn = e.target.closest("button.upld-share");
+    if (btn) {
+        let keyyy = btn.dataset.key;
+        let inputttt = document.querySelector(`input[name="item"][value="${keyyy}"]`);
+
+        if (!inputttt) return;
+        n = {
+            key: inputttt.value,
+            element: inputttt.parentElement,
+            type: inputttt.dataset.type,
+            name: inputttt.dataset.name,
+            private: inputttt.dataset.private === "true"
+        }
+    }
+
+    if (e.target.name === "item") {
+        // Tạo object chứa thông tin item
+        n = {
+            key: e.target.value,
+            element: e.target.parentElement,
+            type: e.target.dataset.type,
+            name: e.target.dataset.name,
+            private: e.target.dataset.private === "true"
+        };
+
+        // Nếu là file thì thêm đuôi file
+        if (n.type === "file") {
+            n.ext = e.target.dataset.ext;
+        }
+
+        // Gán key và private vào element C
+        C.dataset.key = e.target.value;
+        C.dataset.private = e.target.dataset.private === "true";
+
+        // Kích hoạt xử lý với item đã chọn
+        w(true, n);
+
+    } else {
+
+        // Nếu click trong #tools hoặc đang mở modal thì bỏ qua
+        if (e.target.closest("#tools") || document.body.querySelector(".modal-backdrop.fade.show")) {
+            return;
+        }
+
+        // Nếu đang có item được chọn thì bỏ chọn nó
+        if (n) {
+            const selectedItem = document.querySelector('[name="item"]:checked');
+            if (selectedItem) selectedItem.checked = false;
+
+            w(false); // Hủy xử lý
+            n = null; // Reset
+        }
     }
 });
+
 const q = document.getElementById("modal-move");
 q.querySelector("form").addEventListener("submit", e => {
     e.preventDefault();

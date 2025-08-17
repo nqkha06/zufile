@@ -128,14 +128,19 @@
                                         @endforeach
                                     </div>
                                 @endif
-
                                 <div class="mt-8 flex flex-col gap-4 text-center">
+
+                                @guest
                                     <a href="{{ route('auth.login') }}"
                                         class="rounded py-1.5 px-6 text-sm font-semibold outline-2 outline-offset-2 overflow-hidden !text-white border border-white">Log
                                         in</a>
                                     <a href="{{ route('auth.register') }}"
                                         class="rounded py-1.5 px-6 text-sm font-semibold outline-2 outline-offset-2 overflow-hidden bg-white !text-blue-600 border border-white">Register</a>
-                                </div>
+                                @else
+                                <a href="{{ route('u.files.home') }}" class="rounded py-1.5 px-6 text-sm font-semibold outline-2 outline-offset-2 overflow-hidden !text-white border border-white">File Manager</a>
+                                @endguest
+                                                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -170,6 +175,8 @@
     <!-- Google tag (gtag.js) -->
     <script type="module" src={{ asset("js/script.js") }}></script>
     <script type="module" src={{ asset("backend/member/js/DDzrBGya.js") }}></script>
+        @vite(['resources/js/app.js'])
+
 </body>
 
 </html>

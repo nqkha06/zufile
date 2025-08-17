@@ -10,7 +10,7 @@
             </div>
     <form method="POST" action="/report" class="space-y-4">
         @csrf
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
                 <label for="name">Name / Company name<span class="text-red-600">*</span></label>
                 <input type="text" name="name" id="name" required>

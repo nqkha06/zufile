@@ -62,7 +62,8 @@ class T {
                 is_private: options.upload_private
             }
         } else e = a, p.dataset.key = a.key;
-        p.dataset.private = options.upload_private, p.classList.remove("hidden"), i.prepend($(e));
+        p.dataset.private = options.upload_private, p.classList.remove("hidden");
+         i.prepend($(e));
         const l = document.getElementById("empty");
         l.classList.contains("hidden") || l.classList.add("hidden")
     }
