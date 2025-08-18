@@ -1192,7 +1192,7 @@ var xr = [Xe, fr, qe, Be, ir, er, ur, He, nr]
 });
 let ce, pe = !1;
 const Er = new Date().getTime()
-  , Ar = 1
+  , Ar = 7
   , K = document.getElementById("download")
   , Qt = () => {
     let e = new Date().getTime() - Er

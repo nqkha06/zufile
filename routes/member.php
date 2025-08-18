@@ -31,6 +31,8 @@ Route::middleware(['auth'])->prefix('u')->group(function () {
 
     Route::get('files', [UController::class, 'files'])->name('u.files');
     Route::post('files/{alias}', [UController::class, 'update'])->name('u.files.update');
+    Route::get('files/{alias}/download', [UController::class, 'download'])->name('u.files.download');
+
     Route::delete('files/{alias}', [FileController::class, 'destroy'])->name('u.files.destroy');
     Route::get('drive/1/home', [FileController::class, 'index'])->name('u.files.home');
     Route::get('drive/search', [FileController::class, 'search'])->name('u.files.search');

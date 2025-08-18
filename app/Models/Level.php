@@ -22,11 +22,7 @@ class Level extends Model
         'status' => BaseStatusEnum::DRAFT
     ];
 
-    public function links() {
-        return $this->hasMany(StuLink::class);
-    }
-
     public function rates() {
-        return $this->hasMany(STULevelRate::class);
+        return $this->hasMany(STULevelRate::class, 'level_id', 'id');
     }
 }

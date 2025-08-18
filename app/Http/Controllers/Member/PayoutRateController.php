@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\LevelRepositoryInterface as LevelRepository;
 use App\Enums\BaseStatusEnum;
-use App\Repositories\Interfaces\NOTELevelRepositoryInterface as NoteLevelRepository;
 use App\Facades\UserSetting;
 
 class PayoutRateController extends Controller
@@ -14,21 +13,21 @@ class PayoutRateController extends Controller
     protected $levelRepository;
     protected $noteLevelRepository;
 
-    public function __construct(LevelRepository $levelRepository, NoteLevelRepository $noteLevelRepository)
+    public function __construct(LevelRepository $levelRepository)
     {
         $this->levelRepository = $levelRepository;
-        $this->noteLevelRepository = $noteLevelRepository;
+        // $this->noteLevelRepository = $noteLevelRepository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $autoLevel = UserSetting::get('auto_level', 0);
 
-        $dataLevels = $this->levelRepository->wherePublished()->with(['translations'])->getAll();
+        $level = $this->levelRepository->wherePublished()->with(['translations', 'rates'])->getAll();
+        $level = $level[0];
 
-        return view('backend.member_2.payout_rate', compact('dataLevels', 'autoLevel'));
+        return view('clients.payout', compact('level'));
     }
 
     public function saveAutoLevel(Request $request)

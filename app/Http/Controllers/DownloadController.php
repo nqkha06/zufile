@@ -31,78 +31,45 @@ class DownloadController extends Controller
     }
 
   public function download(Request $request, $uid, $alias)
-{
-    $file = File::where('alias', $alias)->firstOrFail();
-    $this->stats($request, $file);
+    {
+        $file = File::where('alias', $alias)->firstOrFail();
+        $this->stats($request, $file);
 
-    // Tạo tên file
-    $fileName = $file->name;
-    if (!empty($file->extension)) {
-        $fileName .= '.' . $file->extension;
+        // Tạo tên file
+        $fileName = $file->name;
+        if (!empty($file->extension)) {
+            $fileName .= '.' . $file->extension;
+        }
+
+        $safeFileName = Str::slug($file->name) . ($file->extension ? '.' . $file->extension : '');
+
+        try {
+            // Tạo presigned URL từ R2
+            $s3 = $this->s3();
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => env('AWS_BUCKET'),
+                'Key' => $file->path,
+                'ResponseContentDisposition' => 'attachment; filename="' . $safeFileName . '"',
+                'ResponseContentType' => $file->mime_type ?: 'application/octet-stream',
+            ]);
+            $presignedUrl = (string) $s3->createPresignedRequest($cmd, '+1 hour')->getUri();
+
+            // Encode URL để gửi cho Worker
+            $encodedUrl = base64_encode($presignedUrl);
+            $expire = time() + 3600;
+            $secret = env('DOWNLOAD_SECRET', 'qk_dep_trai');
+            $hash = hash_hmac('sha256', $encodedUrl . $expire, $secret);
+
+            // Tạo link CDN proxy
+            $cdnUrl = "https://cdn.zufile.com/proxy?url=" . urlencode($encodedUrl) . "&expire={$expire}&hash={$hash}";
+
+            return redirect($cdnUrl);
+
+        } catch (\Exception $e) {
+            Log::error('R2 download error: ' . $e->getMessage());
+            abort(500, 'File download failed');
+        }
     }
-
-    $safeFileName = Str::slug($file->name) . ($file->extension ? '.' . $file->extension : '');
-
-    try {
-        // Tạo presigned URL từ R2
-        $s3 = $this->s3();
-        $cmd = $s3->getCommand('GetObject', [
-            'Bucket' => env('AWS_BUCKET'),
-            'Key' => $file->path,
-            'ResponseContentDisposition' => 'attachment; filename="' . $safeFileName . '"',
-            'ResponseContentType' => $file->mime_type ?: 'application/octet-stream',
-        ]);
-        $presignedUrl = (string) $s3->createPresignedRequest($cmd, '+1 hour')->getUri();
-
-        // Encode URL để gửi cho Worker
-        $encodedUrl = base64_encode($presignedUrl);
-        $expire = time() + 3600;
-        $secret = env('DOWNLOAD_SECRET', 'qk_dep_trai');
-        $hash = hash_hmac('sha256', $encodedUrl . $expire, $secret);
-
-        // Tạo link CDN proxy
-        $cdnUrl = "https://cdn.zufile.com/proxy?url=" . urlencode($encodedUrl) . "&expire={$expire}&hash={$hash}";
-
-        return redirect($cdnUrl);
-
-    } catch (\Exception $e) {
-        Log::error('R2 download error: ' . $e->getMessage());
-        abort(500, 'File download failed');
-    }
-
-
-    $file = File::where('alias', $alias)->firstOrFail();
-    $this->stats($request, $file);
-
-    // Generate filename for download
-    $fileName = $file->name;
-    if (!empty($file->extension)) {
-        $fileName .= '.' . $file->extension;
-    }
-
-    // Create slug for safe filename
-    $safeFileName = Str::slug($file->name) . ($file->extension ? '.' . $file->extension : '');
-
-    try {
-        // Generate R2 presigned URL for download
-        $s3 = $this->s3();
-        $cmd = $s3->getCommand('GetObject', [
-            'Bucket' => env('AWS_BUCKET'),
-            'Key' => $file->path,
-            'ResponseContentDisposition' => 'attachment; filename="' . $safeFileName . '"',
-            'ResponseContentType' => $file->mime_type ?: 'application/octet-stream',
-        ]);
-
-        $presignedUrl = (string) $s3->createPresignedRequest($cmd, '+1 hour')->getUri();
-
-        return redirect($presignedUrl);
-
-    } catch (\Exception $e) {
-        Log::error('R2 download error: ' . $e->getMessage());
-        abort(500, 'File download failed');
-    }
-}
-
 
     public function verifyCaptcha(Request $request, $alias)
     {
@@ -230,76 +197,5 @@ class DownloadController extends Controller
                 'connect_timeout' => 60,
             ],
         ]);
-    }
-
-    public function directDownload(Request $request, $uid, $alias)
-    {
-        $file = File::where('alias', $alias)->firstOrFail();
-        $this->stats($request, $file);
-
-        // Generate filename for download
-        $fileName = $file->name;
-        if (!empty($file->extension)) {
-            $fileName .= '.' . $file->extension;
-        }
-
-        $safeFileName = Str::slug($file->name) . ($file->extension ? '.' . $file->extension : '');
-
-        try {
-            $s3 = $this->s3();
-
-            // Get the file content from R2
-            $result = $s3->getObject([
-                'Bucket' => env('AWS_BUCKET'),
-                'Key' => $file->path,
-            ]);
-
-            $content = $result['Body']->getContents();
-            $contentType = $result['ContentType'] ?? $file->mime_type ?? 'application/octet-stream';
-
-            return response($content)
-                ->header('Content-Type', $contentType)
-                ->header('Content-Disposition', 'attachment; filename="' . $safeFileName . '"')
-                ->header('Content-Length', strlen($content))
-                ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
-                ->header('Pragma', 'no-cache')
-                ->header('Expires', '0');
-
-        } catch (\Exception $e) {
-            Log::error('Direct download error: ' . $e->getMessage());
-            abort(500, 'File download failed');
-        }
-    }
-
-    public function streamDownload(Request $request, $uid, $alias)
-    {
-        $file = File::where('alias', $alias)->firstOrFail();
-        $this->stats($request, $file);
-
-        $safeFileName = Str::slug($file->name) . ($file->extension ? '.' . $file->extension : '');
-
-        try {
-            $s3 = $this->s3();
-
-            // Create a stream response for large files
-            return response()->streamDownload(function () use ($s3, $file) {
-                $result = $s3->getObject([
-                    'Bucket' => env('AWS_BUCKET'),
-                    'Key' => $file->path,
-                ]);
-
-                // Stream the content directly to output
-                echo $result['Body']->getContents();
-            }, $safeFileName, [
-                'Content-Type' => $file->mime_type ?? 'application/octet-stream',
-                'Cache-Control' => 'no-cache, no-store, must-revalidate',
-                'Pragma' => 'no-cache',
-                'Expires' => '0'
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Stream download error: ' . $e->getMessage());
-            abort(500, 'File download failed');
-        }
     }
 }

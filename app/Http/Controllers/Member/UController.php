@@ -7,6 +7,7 @@ use App\Models\Folder;
 use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Aws\S3\S3Client;
 
 class UController extends Controller
 {
@@ -245,4 +246,67 @@ class UController extends Controller
         return response()->json(['message' => 'Folder deleted successfully.']);
     }
 
+    public function download(Request $request, $alias)
+    {
+        $user = auth()->user();
+        $file = $user->files()->where('alias', $alias)->first();
+
+        if (!$file) {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
+
+        $fileName = $file->name;
+        if (!empty($file->extension)) {
+            $fileName .= '.' . $file->extension;
+        }
+
+        $safeFileName = Str::slug($file->name) . ($file->extension ? '.' . $file->extension : '');
+
+        try {
+            // Tạo presigned URL từ R2
+            $s3 = $this->s3();
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => env('AWS_BUCKET'),
+                'Key' => $file->path,
+                'ResponseContentDisposition' => 'attachment; filename="' . $safeFileName . '"',
+                'ResponseContentType' => $file->mime_type ?: 'application/octet-stream',
+            ]);
+            $presignedUrl = (string) $s3->createPresignedRequest($cmd, '+1 hour')->getUri();
+
+            // Encode URL để gửi cho Worker
+            $encodedUrl = base64_encode($presignedUrl);
+            $expire = time() + 3600;
+            $secret = env('DOWNLOAD_SECRET', 'qk_dep_trai');
+            $hash = hash_hmac('sha256', $encodedUrl . $expire, $secret);
+
+            // Tạo link CDN proxy
+            $cdnUrl = "https://cdn.zufile.com/proxy?url=" . urlencode($encodedUrl) . "&expire={$expire}&hash={$hash}";
+
+            return redirect($cdnUrl);
+
+        } catch (\Exception $e) {
+            Log::error('R2 download error: ' . $e->getMessage());
+            abort(500, 'File download failed');
+        }
+
+        return response()->download($file->getPath(), $file->name);
+    }
+    protected function s3(): S3Client
+    {
+        return new S3Client([
+            'version' => 'latest',
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
+            'http' => [
+                'verify' => false,
+                'timeout' => 120,
+                'connect_timeout' => 60,
+            ],
+        ]);
+    }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class STULevelRate extends Model
 {
     public $timestamps = false;
-    
+
     protected $table = 'stu_level_rates';
 
     protected $fillable = [
@@ -20,4 +20,10 @@ class STULevelRate extends Model
         'rate' => 'array',
         'daily_limit' => 'array',
     ];
+    public function country(){
+        return $this->hasOne(Country::class, 'abv', 'country_code')->withDefault([
+            'name' => __('Worldwide Deal(All Countries)'),
+            'abv' => 'ALL'
+        ]);
+    }
 }

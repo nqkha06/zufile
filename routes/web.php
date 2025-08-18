@@ -8,6 +8,7 @@ use App\Http\Controllers\UploadCtl;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\Member\PayoutRateController;
 
 Route::get('lang/{language}', function ($locale) {
 
@@ -22,6 +23,7 @@ Route::get('lang/{language}', function ($locale) {
 /* FONTEND */
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/payment-proof', [HomeController::class, 'paymentProof'])->name('home.payment-proof');
+Route::get('/payout-rates', [PayoutRateController::class, 'index'])->name('home.payout-rates');
 
 // Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 // Route::get('/blog/{slug}', [PostController::class, 'show'])->name('blog.article');
